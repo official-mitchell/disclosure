@@ -153,13 +153,69 @@ After running `npm run db:seed`:
 
 **GM:** Password: admin123
 
+## Deployment
+
+### Vercel Deployment
+
+The application is deployed on Vercel at: **https://disclosure-3pp6szwh0-alluminate.vercel.app**
+
+#### Initial Setup
+
+1. **Install Vercel CLI**:
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Login to Vercel**:
+   ```bash
+   vercel login
+   ```
+
+3. **Create Vercel Postgres Database**:
+   - Go to your Vercel project dashboard
+   - Navigate to the **Storage** tab
+   - Create a new **Postgres Database**
+   - This automatically sets `DATABASE_URL`, `POSTGRES_URL`, and `PRISMA_DATABASE_URL`
+
+4. **Set Environment Variables**:
+   ```bash
+   vercel env add GM_PASSWORD production
+   vercel env add SESSION_SECRET production
+   vercel env add BLOB_READ_WRITE_TOKEN production  # Optional
+   ```
+
+5. **Deploy**:
+   ```bash
+   vercel --prod
+   ```
+
+6. **Initialize Database Schema**:
+   ```bash
+   vercel env pull .env.production
+   DATABASE_URL=$(grep POSTGRES_URL .env.production | cut -d '=' -f2- | tr -d '"') npx prisma db push
+   ```
+
+#### Subsequent Deployments
+
+Simply push changes and deploy:
+```bash
+git add .
+git commit -m "Your commit message"
+vercel --prod
+```
+
+If schema changes are made, sync the database:
+```bash
+DATABASE_URL=$(grep POSTGRES_URL .env.production | cut -d '=' -f2- | tr -d '"') npx prisma db push
+```
+
 ## Useful Commands
 
 ```bash
 npm run dev              # Start dev server
 npm run build           # Build for production
 npx prisma studio       # Open database GUI
-npx prisma migrate dev  # Create migration
+npx prisma db push      # Push schema to database
 npm run db:seed         # Seed test data
 ```
 
@@ -173,9 +229,14 @@ npm run db:seed         # Seed test data
 
 ## Known Issues
 
-- Middleware deprecation warning (Next.js 16) - cosmetic only
+- Middleware deprecation warning (Next.js 16) - cosmetic only (will be addressed in future Next.js release)
 - PINs stored as plain text - should hash in production
 - No rate limiting yet
+
+## Recent Updates
+
+- **Next.js 16 Compatibility**: Updated all route handlers to use async params API
+- **Vercel Deployment**: Successfully deployed to production with Vercel Postgres
 
 ## License
 

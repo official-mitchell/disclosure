@@ -54,7 +54,26 @@ export default async function GMDossierEdit({ params }: PageProps) {
         <CharacterForm
           playerId={params.id}
           playerName={player.name}
-          initialData={character || undefined}
+          initialData={character ? {
+            displayName: character.displayName,
+            nationalityBloc: character.nationalityBloc,
+            occupation: character.occupation,
+            publicReputation: character.publicReputation,
+            portraitUrl: character.portraitUrl ?? undefined,
+            archetypeTitle: character.archetypeTitle,
+            permissions: character.permissions,
+            restrictions: character.restrictions,
+            backstory: character.backstory,
+            motivations: character.motivations as any,
+            formalAuthority: character.formalAuthority,
+            informalFears: character.informalFears,
+            safelyIgnore: character.safelyIgnore,
+            exposureConsequences: character.exposureConsequences,
+            privateWant: character.privateWant,
+            disclosureBelief: character.disclosureBelief,
+            canDiscuss: character.canDiscuss,
+            mustConceal: character.mustConceal,
+          } : undefined}
         />
       </main>
     </div>

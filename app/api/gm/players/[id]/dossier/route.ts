@@ -4,14 +4,15 @@ import { requireGMAuth } from '@/lib/auth';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireGMAuth();
+    const { id } = await params;
 
     const character = await prisma.character.findUnique({
       where: {
-        playerId: params.id,
+        playerId: id,
       },
       include: {
         player: {
@@ -40,10 +41,11 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireGMAuth();
+    const { id } = await params;
 
     const body = await request.json();
     const {
@@ -70,10 +72,10 @@ export async function PUT(
     // Upsert character (create if doesn't exist, update if it does)
     const character = await prisma.character.upsert({
       where: {
-        playerId: params.id,
+        playerId: id,
       },
       create: {
-        playerId: params.id,
+        playerId: id,
         displayName,
         nationalityBloc,
         occupation,
