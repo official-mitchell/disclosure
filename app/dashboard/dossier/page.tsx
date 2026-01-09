@@ -16,9 +16,16 @@ export default async function DossierRoute() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-bold text-white">
-                Catastrophic Disclosure
-              </h1>
+              <div className="flex items-center space-x-3">
+                <img
+                  src="/Catastrophic Disclosure icon.png"
+                  alt="Icon"
+                  className="w-10 h-10"
+                />
+                <h1 className="text-xl font-bold text-white">
+                  Catastrophic Disclosure
+                </h1>
+              </div>
               <Link
                 href="/dashboard"
                 className="text-gray-300 hover:text-white transition text-sm"

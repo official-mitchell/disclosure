@@ -44,6 +44,11 @@ export default function PlayerLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
+          <img
+            src="/Catastrophic Disclosure icon.png"
+            alt="Catastrophic Disclosure Icon"
+            className="mx-auto mb-4 w-24 h-24"
+          />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Player Login
           </h1>

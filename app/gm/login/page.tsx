@@ -43,7 +43,12 @@ export default function GMLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
       <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-block bg-gray-700 text-gray-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <img
+            src="/Catastrophic Disclosure icon.png"
+            alt="Catastrophic Disclosure Icon"
+            className="mx-auto mb-4 w-24 h-24"
+          />
+          <div className="inline-block bg-amber-700 text-amber-200 px-4 py-2 rounded-full text-sm font-medium mb-4">
             GAME MASTER ACCESS
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
@@ -83,7 +88,7 @@ export default function GMLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gray-700 text-white py-3 rounded-lg font-medium hover:bg-gray-600 transition disabled:bg-gray-800 disabled:cursor-not-allowed"
+            className="w-full bg-amber-600 text-white py-3 rounded-lg font-medium hover:bg-amber-700 transition disabled:bg-gray-800 disabled:cursor-not-allowed"
           >
             {loading ? 'Authenticating...' : 'Access GM Dashboard'}
           </button>

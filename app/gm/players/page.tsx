@@ -29,7 +29,12 @@ export default async function GMPlayersPage() {
               <Link href="/gm/dashboard" className="text-gray-400 hover:text-white transition">
                 ← Back
               </Link>
-              <div className="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs font-medium">
+              <img
+                src="/Catastrophic Disclosure icon.png"
+                alt="Icon"
+                className="w-8 h-8"
+              />
+              <div className="bg-amber-700 text-amber-200 px-3 py-1 rounded text-xs font-medium">
                 GM
               </div>
               <h1 className="text-xl font-bold text-white">Player Management</h1>

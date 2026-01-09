@@ -157,7 +157,9 @@ After running `npm run db:seed`:
 
 ### Vercel Deployment
 
-The application is deployed on Vercel at: **https://disclosure-3pp6szwh0-alluminate.vercel.app**
+The application is deployed on Vercel at: **https://disclosure-alluminate.vercel.app**
+
+(Individual deployments also get unique URLs like `disclosure-xxxxx-alluminate.vercel.app`, but the main production URL above always points to the latest successful deployment)
 
 #### Initial Setup
 
