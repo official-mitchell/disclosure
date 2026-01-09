@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id            String           @id @default(uuid())
+  name          String           @unique
+  pin           String
+  country       Country
+  archetype     Archetype
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  clueAssignments ClueAssignment[]
+}
+
+model Clue {
+  id               String         @id @default(uuid())
+  title            String
+  phase            Int
+  targetType       TargetType
+  targetValue      String?
+  released         Boolean        @default(false)
+  releasedAt       DateTime?
+  retracted        Boolean        @default(false)
+
+  // Metadata
+  legitimacy       Legitimacy
+  confidentiality  Confidentiality
+  originCountry    String
+
+  // Content
+  eventDate        String
+  backstory        String         @db.Text
+  imageUrl         String?
+  confidenceLevel  ConfidenceLevel
+  supportingIntel  String         @db.Text
+  source           String
+  takeaways        String[]
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  clueAssignments  ClueAssignment[]
+}
+
+model ClueAssignment {
+  id          String    @id @default(uuid())
+  clueId      String
+  playerId    String
+  assignedAt  DateTime  @default(now())
+
+  clue        Clue      @relation(fields: [clueId], references: [id], onDelete: Cascade)
+  player      Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([clueId, playerId])
+  @@index([playerId])
+  @@index([clueId])
+}
+
+enum Country {
+  RUSSIA
+  US
+  CHINA
+}
+
+enum Archetype {
+  SCIENTIST
+  SPY
+  DIPLOMAT
+  GENERAL
+  EXECUTIVE
+  JOURNALIST
+  OPERATIVE
+}
+
+enum TargetType {
+  all
+  country
+  archetype
+  player
+}
+
+enum Legitimacy {
+  verified
+  suspected
+  fabricated
+  unknown
+}
+
+enum Confidentiality {
+  top_secret
+  confidential
+  shareable_if_pressed
+  public
+}
+
+enum ConfidenceLevel {
+  confirmed
+  high
+  medium
+  low
+  unverified
+}
