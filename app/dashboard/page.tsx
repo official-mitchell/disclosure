@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getPlayerSession } from '@/lib/auth';
 import { COUNTRY_NAMES, ARCHETYPE_NAMES } from '@/lib/constants';
 import CluesDisplay from '@/components/CluesDisplay';
+import Link from 'next/link';
 
 export default async function PlayerDashboard() {
   const session = await getPlayerSession();
@@ -18,10 +19,22 @@ export default async function PlayerDashboard() {
       <nav className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-8">
               <h1 className="text-xl font-bold text-white">
                 Catastrophic Disclosure
               </h1>
+              <Link
+                href="/dashboard"
+                className="text-white border-b-2 border-blue-500 text-sm font-semibold pb-1"
+              >
+                Intelligence
+              </Link>
+              <Link
+                href="/dashboard/dossier"
+                className="text-gray-300 hover:text-white transition text-sm"
+              >
+                Dossier
+              </Link>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-300 text-sm">
@@ -43,32 +56,40 @@ export default async function PlayerDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Connection Confirmed Banner */}
         <div className="bg-green-900/50 border border-green-700 rounded-lg p-6 mb-8">
-          <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-6 w-6 text-green-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-6 w-6 text-green-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-green-100">
+                  Connection Confirmed!
+                </h2>
+                <p className="text-green-200 mt-1">
+                  You are <span className="font-bold">{session.name}</span>,{' '}
+                  <span className="font-bold">{archetypeName}</span>,{' '}
+                  <span className="font-bold">{countryName}</span>
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg font-semibold text-green-100">
-                Connection Confirmed!
-              </h2>
-              <p className="text-green-200 mt-1">
-                You are <span className="font-bold">{session.name}</span>,{' '}
-                <span className="font-bold">{archetypeName}</span>,{' '}
-                <span className="font-bold">{countryName}</span>
-              </p>
-            </div>
+            <Link
+              href="/dashboard/dossier"
+              className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded text-sm font-semibold transition"
+            >
+              View Dossier
+            </Link>
           </div>
         </div>
 

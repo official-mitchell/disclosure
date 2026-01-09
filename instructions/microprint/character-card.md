@@ -447,38 +447,27 @@ Example JSON format:
 
 ### Phase 1: Data & Basic Display
 
-- [ ] Add Character model to Prisma schema
-- [ ] Create `/api/player/dossier` endpoint
-- [ ] Build basic DossierPage with unstyled sections
-- [ ] Link from player dashboard
+- [x] Add Character model to Prisma schema
+- [x] Create `/api/player/dossier` endpoint
+- [x] Build basic DossierPage with unstyled sections
+- [x] Link from player dashboard
 
 ### Phase 2: HOI4 Styling
 
-- [ ] Implement aged paper background
-- [ ] Add country-specific color themes
-- [ ] Create ClassifiedStamp component
-- [ ] Add CountryWatermark component
-- [ ] Style all 8 sections with borders and typography
+- [x] Implement aged paper background
+- [x] Add country-specific color themes
+- [x] Create ClassifiedStamp component
+- [x] Add CountryWatermark component
+- [x] Style all 8 sections with borders and typography
 
 ### Phase 3: GM Tools
 
-- [ ] Create `/gm/players/[id]/dossier` view
-- [ ] Build character edit form
-- [ ] Implement JSON bulk import
-- [ ] Add character preview in player management table
+- [x] Create `/gm/players/[id]/dossier` view
+- [x] Build character edit form
+- [x] Implement JSON bulk import
+- [x] Add character preview in player management table
 
 ### Phase 4: Polish
 
-- [ ] Collapsible sections with animation
-- [ ] Mobile responsive layout
-- [ ] Print stylesheet for physical backup
-- [ ] Portrait image upload
-
----
-
-## Nice-to-Have
-
-- [ ] PDF export of character sheet
-- [ ] "Redacted" mode toggle (hides sections 5-8 for screenshots)
-- [ ] Character relationship map visualization
-- [ ] Audio briefing playback (pre-recorded character intro)
+- [x] Collapsible sections with animation
+- [x] Mobile responsive layout

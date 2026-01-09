@@ -306,14 +306,14 @@ _(Stored as free text string, not enum - allows flexibility)_
 
 ### 5.1 Player Admin
 
-- [ ] `/gm/players` table view
-- [ ] Inline edit or modal for player details
-- [ ] API routes: `GET/PUT /api/gm/players`
+- [x] `/gm/players` table view
+- [x] Inline edit or modal for player details
+- [x] API routes: `GET/PUT /api/gm/players`
 
 ### 5.2 Seed Data
 
-- [ ] Script to seed initial players from JSON/CSV
-- [ ] Generate random PINs for each player
+- [x] Script to seed initial players from JSON/CSV
+- [x] Generate random PINs for each player
 
 ---
 

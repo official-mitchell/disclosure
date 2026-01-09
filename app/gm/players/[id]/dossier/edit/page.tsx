@@ -1,0 +1,62 @@
+import { redirect } from 'next/navigation';
+import { requireGMAuth } from '@/lib/auth';
+import { prisma } from '@/lib/db';
+import CharacterForm from '@/components/CharacterForm';
+import Link from 'next/link';
+
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function GMDossierEdit({ params }: PageProps) {
+  await requireGMAuth();
+
+  const player = await prisma.player.findUnique({
+    where: { id: params.id },
+  });
+
+  if (!player) {
+    redirect('/gm/players');
+  }
+
+  const character = await prisma.character.findUnique({
+    where: { playerId: params.id },
+  });
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+      <nav className="bg-gray-900 border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-8">
+              <h1 className="text-xl font-bold text-white">
+                GM: {character ? 'Edit' : 'Create'} Character
+              </h1>
+              <Link
+                href={`/gm/players/${params.id}/dossier`}
+                className="text-gray-300 hover:text-white transition text-sm"
+              >
+                ← Cancel
+              </Link>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-300 text-sm">
+                Player: {player.name}
+              </span>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <CharacterForm
+          playerId={params.id}
+          playerName={player.name}
+          initialData={character || undefined}
+        />
+      </main>
+    </div>
+  );
+}

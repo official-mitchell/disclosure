@@ -20,6 +20,7 @@ model Player {
   updatedAt     DateTime         @updatedAt
 
   clueAssignments ClueAssignment[]
+  character       Character?
 }
 
 model Clue {
@@ -64,6 +65,51 @@ model ClueAssignment {
   @@unique([clueId, playerId])
   @@index([playerId])
   @@index([clueId])
+}
+
+model Character {
+  id                    String   @id @default(uuid())
+  playerId              String   @unique
+  player                Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  // Header
+  displayName           String
+  nationalityBloc       String
+  occupation            String
+  publicReputation      String   @db.Text
+  portraitUrl           String?
+
+  // Section 1: Roles
+  archetypeTitle        String
+  permissions           String[]
+  restrictions          String[]
+
+  // Section 2: Backstory
+  backstory             String   @db.Text
+
+  // Section 3: Motivations (stored as JSON)
+  motivations           Json     // [{label, description}]
+
+  // Section 4: Authority
+  formalAuthority       String
+  informalFears         String
+  safelyIgnore          String
+
+  // Section 5: Exposure
+  exposureConsequences  String   @db.Text
+
+  // Section 6: Private Want
+  privateWant           String   @db.Text
+
+  // Section 7: Disclosure
+  disclosureBelief      String   @db.Text
+
+  // Section 8: Boundaries
+  canDiscuss            String[]
+  mustConceal           String[]
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
 
 enum Country {
