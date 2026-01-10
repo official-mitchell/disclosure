@@ -8,7 +8,7 @@ Total Characters: 30
 
 | Character Name | Short Name | PIN |
 |----------------|------------|-----|
-| Amanda O’Brien | Amanda | `5098` |
+| Mitz Albarron | Mitz | `5098` |
 | Senator Bernardo Reis | Bernardo | `4199` |
 | Brea Balloon | Brea | `3103` |
 | Candace Bradley | Candace | `9878` |

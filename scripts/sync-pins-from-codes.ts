@@ -18,7 +18,7 @@ async function main() {
   const pinMap: Record<string, string> = {};
 
   for (const line of lines) {
-    // Match lines like: | Amanda O'Brien | Amanda | `2865` |
+    // Match lines like: | Mitz Albarron | Mitz | `2865` |
     const match = line.match(/\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*`(\d+)`\s*\|/);
     if (match) {
       const [, , shortName, pin] = match;

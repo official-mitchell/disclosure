@@ -3,7 +3,7 @@ Rep. Sarah Fierce 🇺🇸 American Anti-Disclosure High Ranking Politician
 Deniz Sipahi, Ph.D. 🇺🇸 American Anti-Disclosure Intel / Oligarch
 Lt. Chris Ries 🇺🇸 American Agnostic Military / Defense Contractor
 Candace Bradley 🇺🇸 American Agnostic Journalist / Media
-Amanda O’Brien 🇺🇸 American Agnostic Journalist / Media
+Mitz Albarron 🇺🇸 American Agnostic Journalist / Media
 Rep. Maria St. Germain 🇺🇸 American Agnostic High Ranking Politician
 Dr. Maya Badman 🇺🇸 American Agnostic High Ranking Scientist
 Brea Balloon 🇺🇸 American Agnostic Intel / Oligarch

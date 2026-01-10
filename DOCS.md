@@ -247,7 +247,7 @@ Section 4 ("Who do you answer to?") proved to be the most complex section to par
 </div>
 <div>
   <ul>
-    <li>Amanda O'Brien...</li>
+    <li>Mitz Albarron...</li>
   </ul>
 </div>
 ```
