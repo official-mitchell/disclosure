@@ -58,6 +58,7 @@ export default async function GMDossierEdit({ params }: PageProps) {
             displayName: character.displayName,
             nationalityBloc: character.nationalityBloc,
             occupation: character.occupation,
+            covertOccupation: character.covertOccupation ?? '',
             publicReputation: character.publicReputation,
             portraitUrl: character.portraitUrl ?? undefined,
             archetypeTitle: character.archetypeTitle,

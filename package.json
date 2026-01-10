@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "sync:characters": "tsx scripts/sync-characters.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -19,12 +20,15 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "cheerio": "^1.1.2",
     "cookie": "^1.1.1",
     "jose": "^6.1.3",
     "next": "^16.1.1",
     "prisma": "^5.22.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
     "styled-jsx": "^5.1.7",
     "swr": "^2.3.8"
   },

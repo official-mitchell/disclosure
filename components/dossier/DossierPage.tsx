@@ -23,6 +23,7 @@ interface Character {
   displayName: string;
   nationalityBloc: string;
   occupation: string;
+  covertOccupation?: string | null;
   publicReputation: string;
   portraitUrl?: string | null;
   archetypeTitle: string;
@@ -30,9 +31,9 @@ interface Character {
   restrictions: string[];
   backstory: string;
   motivations: Motivation[];
-  formalAuthority: string;
-  informalFears: string;
-  safelyIgnore: string;
+  formalAuthority: string[];
+  informalFears: string[];
+  safelyIgnore: string[];
   exposureConsequences: string;
   privateWant: string;
   disclosureBelief: string;
@@ -69,7 +70,7 @@ export default function DossierPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
-        <div className="text-white text-xl">Loading dossier...</div>
+        <div className="text-white text-xl" style={{ fontSize: '1.5625rem' }}>Loading dossier...</div>
       </div>
     );
   }
@@ -88,7 +89,7 @@ export default function DossierPage() {
   if (!character) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
-        <div className="text-white text-xl">Character not found</div>
+        <div className="text-white text-xl" style={{ fontSize: '1.5625rem' }}>Character not found</div>
       </div>
     );
   }
@@ -98,7 +99,7 @@ export default function DossierPage() {
       {/* Folder Tab Header */}
       <div className="mb-6 sm:mb-8 relative" style={{ padding: 'clamp(1rem, 3vw, 2rem)', paddingBottom: 'clamp(0.5rem, 1.5vw, 1rem)' }}>
         <div className="folder-tab inline-block px-4 sm:px-8 py-2 sm:py-3 rounded-t-lg" style={{ padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)' }}>
-          <h1 className="text-lg sm:text-2xl font-bold typewriter-font stamp-effect" style={{ color: '#2d1810' }}>
+          <h1 className="text-lg sm:text-2xl font-bold typewriter-font stamp-effect" style={{ color: '#2d1810', fontSize: 'clamp(1.125rem, 3.75vw, 2.5rem)' }}>
             CLASSIFIED PERSONNEL DOSSIER
           </h1>
         </div>
@@ -113,6 +114,7 @@ export default function DossierPage() {
         displayName={character.displayName}
         nationalityBloc={character.nationalityBloc}
         occupation={character.occupation}
+        covertOccupation={character.covertOccupation}
         publicReputation={character.publicReputation}
         portraitUrl={character.portraitUrl}
       />

@@ -39,7 +39,7 @@ export default function ClassifiedStamp({
     >
       <div
         className={`${config.border} border-4 px-4 py-2 ${config.color} font-bold text-2xl tracking-wider`}
-        style={{ fontFamily: 'Courier, monospace' }}
+        style={{ fontFamily: 'Courier, monospace', fontSize: '1.875rem' }}
       >
         {config.text}
       </div>

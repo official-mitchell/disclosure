@@ -1,8 +1,8 @@
-# Character Sheet PDF Import Feature PRD
+# Character Sheet HTML Import Feature PRD
 
 ## Problem Statement
 
-GM has 25 character sheets as PDFs following a standard 8-section format. Manually entering this data would be tedious and error-prone. We need an automated pipeline to parse PDFs and sync to the database.
+GM has around 30 character sheets exported as HTML from Notion. We need an automated pipeline to parse these HTML files and sync to the database.
 
 ## Scope
 
@@ -15,89 +15,76 @@ GM has 25 character sheets as PDFs following a standard 8-section format. Manual
 ## File Structure
 
 ```
-/characters              # PDF source directory
-  /Oscar.pdf
-  /Maria.pdf
-  /Chen.pdf
+/characters              # HTML source directory
+  /Oscar.html
+  /Maria.html
+  /Chen.html
   /...
 ```
 
 ### .gitignore Addition
 
 ```
-# Character sheet PDFs (contain game spoilers)
-/characters/*.pdf
+# Character sheet HTMLs (contain game spoilers)
+/characters/*.html
 /characters/
 ```
 
 ---
 
-## PDF Parsing Strategy
+## HTML Parsing Strategy
 
-### Expected PDF Structure
+### Notion Export Structure
 
-Each PDF follows this section pattern (based on Oscar's sheet):
+Notion exports HTML with predictable structure:
+
+- Headers become `<h1>`, `<h2>`, `<h3>` tags
+- Toggle headers (▼) become `<details><summary>` elements
+- Bullet lists become `<ul><li>` elements
+- Body text becomes `<p>` tags
+
+### Expected Section Headers
 
 ```
-[Character Name]
+<h1>Oscar</h1>
 
-▼ 0. Header
-- Name: [display_name]
-- Nationality / Bloc: [nationality_bloc]
-- Occupation: [occupation]
-- Public Reputation: [public_reputation]
+<h2>▼ 0. Header</h2>
+  <ul><li>Name: ...</li>...</ul>
 
-▼ 1. Roles, Permissions, Character Archetype
-[archetype_title]
-[bullet list of permissions]
-However...
-[bullet list of restrictions]
+<h2>▼ 1. Roles, Permissions, Character Archetype</h2>
+  ...
 
-▼ 2. Backstory
-[paragraphs of backstory text]
+<h2>▼ 2. Backstory</h2>
+  <p>...</p>
 
-▼ 3. What do you care about?
-[Label]: [description]
-[Label]: [description]
-...
+<h2>▼ 3. What do you care about?</h2>
+  ...
 
-▼ 4. Who do you answer to?
-Who has formal authority over you?
-[formal_authority]
-Who you informally fear or rely on?
-[informal_fears]
-Who you can safely ignore?
-[safely_ignore]
+<h2>▼ 4. Who do you answer to?</h2>
+  ...
 
-▼ 5. What happens to you if you are exposed?
-[exposure_consequences]
+<h2>▼ 5. What happens to you if you are exposed?</h2>
+  ...
 
-▼ 6. What do you privately want that you cannot say out loud?
-[private_want]
+<h2>▼ 6. What do you privately want that you cannot say out loud?</h2>
+  ...
 
-▼ 7. What is Disclosure? And do you believe in it?
-[disclosure_belief - often in quotes]
+<h2>▼ 7. What is Disclosure? And do you believe in it?</h2>
+  ...
 
-▼ 8. What you know vs. What you conceal
-[can_discuss bullets]
-[must_conceal bullets]
+<h2>▼ 8. What you know vs. What you conceal</h2>
+  ...
 ```
 
 ### Parsing Approach
 
-**Option A: LLM-assisted parsing (Recommended)**
+Use `cheerio` (jQuery-like HTML parser for Node) to:
 
-- Use Claude API to extract structured JSON from PDF text
-- More robust to formatting variations
-- Handles edge cases gracefully
+1. Find section headers by text content matching
+2. Extract content between sections
+3. Parse bullet lists and paragraphs
 
-**Option B: Regex-based parsing**
-
-- Faster, no API cost
-- Brittle if PDF format varies
-- Requires consistent section headers
-
-**Recommendation:** Use Option A with Claude API. The PDFs may have slight formatting differences, and LLM parsing handles ambiguity well.
+**No LLM needed** — pure deterministic DOM parsing.
 
 ---
 
@@ -115,185 +102,259 @@ pnpm exec tsx scripts/sync-characters.ts
 
 ```
 /scripts
-  /sync-characters.ts    # Main sync script
-  /parse-character-pdf.ts # PDF parsing logic
-```
-
-### Script Flow
-
-```
-1. Read /characters directory
-2. For each *.pdf file:
-   a. Extract text from PDF (pdf-parse library)
-   b. Send text to Claude API with extraction prompt
-   c. Receive structured JSON
-   d. Upsert to database (match on player name)
-3. Log results: created/updated/failed
+  /sync-characters.ts       # Main sync script
+  /parse-character-html.ts  # HTML parsing logic
 ```
 
 ### Dependencies
 
 ```json
 {
-  "pdf-parse": "^1.1.1",
-  "@anthropic-ai/sdk": "^0.24.0"
+  "cheerio": "^1.0.0"
 }
 ```
 
-### Environment Variables
-
-```
-ANTHROPIC_API_KEY=       # For PDF parsing
-```
-
 ---
 
-## Claude API Prompt for Extraction
+## Parsing Logic
+
+### parse-character-html.ts
 
 ```typescript
-const EXTRACTION_PROMPT = `
-You are parsing a character sheet PDF for a mystery game. Extract the following fields as JSON.
+import * as cheerio from "cheerio";
+import fs from "fs";
 
-The PDF has 8 numbered sections (0-8). Extract each field precisely.
-
-Return ONLY valid JSON with this structure:
-{
-  "displayName": "Full character name from Header",
-  "nationalityBloc": "Russia | US | China",
-  "occupation": "Job title and organization",
-  "publicReputation": "What they're known for",
-  
-  "archetypeTitle": "Role title from Section 1",
-  "permissions": ["array", "of", "can-do items"],
-  "restrictions": ["array", "of", "however clauses"],
-  
-  "backstory": "Full backstory text from Section 2",
-  
-  "motivations": [
-    {"label": "Label", "description": "Description"}
-  ],
-  
-  "formalAuthority": "From Section 4",
-  "informalFears": "From Section 4", 
-  "safelyIgnore": "From Section 4",
-  
-  "exposureConsequences": "Full text from Section 5",
-  
-  "privateWant": "Full text from Section 6",
-  
-  "disclosureBelief": "Full text from Section 7 (may be in quotes)",
-  
-  "canDiscuss": ["array of things they can discuss"],
-  "mustConceal": ["array of things they must hide"]
+interface CharacterData {
+  displayName: string;
+  nationalityBloc: string;
+  occupation: string;
+  publicReputation: string;
+  archetypeTitle: string;
+  permissions: string[];
+  restrictions: string[];
+  backstory: string;
+  motivations: { label: string; description: string }[];
+  formalAuthority: string;
+  informalFears: string;
+  safelyIgnore: string;
+  exposureConsequences: string;
+  privateWant: string;
+  disclosureBelief: string;
+  canDiscuss: string[];
+  mustConceal: string[];
 }
 
-PDF TEXT:
----
-{pdf_text}
----
+export function parseCharacterHtml(filePath: string): CharacterData {
+  const html = fs.readFileSync(filePath, "utf-8");
+  const $ = cheerio.load(html);
 
-Return ONLY the JSON object, no markdown formatting.
-`;
-```
+  // Helper: find section by header text pattern
+  const getSection = (pattern: RegExp) => {
+    const header = $("h2, h3")
+      .filter((_, el) => pattern.test($(el).text()))
+      .first();
+    return header.nextUntil("h2, h3");
+  };
 
----
+  // Helper: extract bullet points from a selection
+  const getBullets = ($el: cheerio.Cheerio) => {
+    return $el
+      .find("li")
+      .map((_, li) => $(li).text().trim())
+      .get();
+  };
 
-## Database Sync Logic
+  // Helper: extract field from "Label: Value" bullet
+  const extractField = (bullets: string[], prefix: string) => {
+    const line = bullets.find((b) =>
+      b.toLowerCase().startsWith(prefix.toLowerCase())
+    );
+    return line?.split(":").slice(1).join(":").trim() || "";
+  };
 
-### Matching Strategy
+  // === SECTION 0: Header ===
+  const $header = getSection(/0\.\s*Header/i);
+  const headerBullets = getBullets($header);
 
-- Match character to player by **name field**
-- PDF filename (e.g., `Oscar.pdf`) should match player's login name
-- If no matching player exists, log warning and skip
+  const displayName = extractField(headerBullets, "Name");
+  const nationalityBloc = extractField(headerBullets, "Nationality");
+  const occupation = extractField(headerBullets, "Occupation");
+  const publicReputation = extractField(headerBullets, "Public Reputation");
 
-### Upsert Behavior
+  // === SECTION 1: Roles & Permissions ===
+  const $roles = getSection(/1\.\s*Roles/i);
+  const rolesText = $roles.text();
 
-```typescript
-// Pseudocode
-for (const pdf of pdfFiles) {
-  const playerName = getNameFromFilename(pdf); // "Oscar.pdf" → "Oscar"
-  const player = await db.player.findUnique({ where: { name: playerName } });
+  // First text element is archetype title
+  const archetypeTitle = $roles.find("p").first().text().trim() || "";
 
-  if (!player) {
-    console.warn(`No player found for ${playerName}, skipping`);
-    continue;
+  // Split on "However" to separate permissions from restrictions
+  const allRolesBullets = getBullets($roles);
+  const howeverIdx = rolesText.toLowerCase().indexOf("however");
+
+  let permissions: string[] = [];
+  let restrictions: string[] = [];
+
+  if (howeverIdx > -1) {
+    let passedHowever = false;
+    $roles.children().each((_, el) => {
+      const text = $(el).text();
+      if (text.toLowerCase().includes("however")) {
+        passedHowever = true;
+        return;
+      }
+      if ($(el).is("ul")) {
+        const bullets = getBullets($(el));
+        if (passedHowever) {
+          restrictions.push(...bullets);
+        } else {
+          permissions.push(...bullets);
+        }
+      }
+    });
+  } else {
+    permissions = allRolesBullets;
   }
 
-  const parsed = await parseCharacterPdf(pdf);
+  // === SECTION 2: Backstory ===
+  const $backstory = getSection(/2\.\s*Backstory/i);
+  const backstory = $backstory
+    .find("p")
+    .map((_, p) => $(p).text().trim())
+    .get()
+    .join("\n\n");
 
-  await db.character.upsert({
-    where: { playerId: player.id },
-    create: { playerId: player.id, ...parsed },
-    update: { ...parsed },
+  // === SECTION 3: Motivations ===
+  const $motivations = getSection(/3\.\s*What do you care about/i);
+  const motivations: { label: string; description: string }[] = [];
+
+  $motivations.find("li, p").each((_, el) => {
+    const text = $(el).text().trim();
+    const colonIdx = text.indexOf(":");
+    if (colonIdx > 0 && colonIdx < 30) {
+      motivations.push({
+        label: text.slice(0, colonIdx).trim(),
+        description: text.slice(colonIdx + 1).trim(),
+      });
+    }
   });
 
-  console.log(`✓ Synced ${playerName}`);
+  // === SECTION 4: Authority ===
+  const $authority = getSection(/4\.\s*Who do you answer to/i);
+  const authorityText = $authority.text();
+
+  const formalMatch = authorityText.match(
+    /formal authority[^?]*\?\s*([^Who]*)/i
+  );
+  const informalMatch = authorityText.match(
+    /informally fear[^?]*\?\s*([^Who]*)/i
+  );
+  const ignoreMatch = authorityText.match(
+    /safely ignore[^?]*\?\s*([^]*?)(?=$|Who|\n\n)/i
+  );
+
+  const formalAuthority = formalMatch?.[1]?.trim() || "";
+  const informalFears = informalMatch?.[1]?.trim() || "";
+  const safelyIgnore = ignoreMatch?.[1]?.trim() || "";
+
+  // === SECTION 5: Exposure ===
+  const $exposure = getSection(/5\.\s*What happens.*exposed/i);
+  const exposureConsequences = $exposure
+    .find("p")
+    .map((_, p) => $(p).text().trim())
+    .get()
+    .join("\n\n");
+
+  // === SECTION 6: Private Want ===
+  const $private = getSection(/6\.\s*What do you privately want/i);
+  const privateWant = $private
+    .find("p")
+    .map((_, p) => $(p).text().trim())
+    .get()
+    .join("\n\n");
+
+  // === SECTION 7: Disclosure ===
+  const $disclosure = getSection(/7\.\s*What is Disclosure/i);
+  const disclosureBelief = $disclosure
+    .find("p")
+    .map((_, p) => $(p).text().trim())
+    .get()
+    .join("\n\n");
+
+  // === SECTION 8: Boundaries ===
+  const $boundaries = getSection(/8\.\s*What you know/i);
+
+  let canDiscuss: string[] = [];
+  let mustConceal: string[] = [];
+  let foundConceal = false;
+
+  $boundaries.children().each((_, el) => {
+    const text = $(el).text().toLowerCase();
+    if (text.includes("conceal")) foundConceal = true;
+
+    if ($(el).is("ul")) {
+      const bullets = getBullets($(el));
+      if (foundConceal) {
+        mustConceal.push(...bullets);
+      } else {
+        canDiscuss.push(...bullets);
+      }
+    }
+  });
+
+  return {
+    displayName,
+    nationalityBloc,
+    occupation,
+    publicReputation,
+    archetypeTitle,
+    permissions,
+    restrictions,
+    backstory,
+    motivations,
+    formalAuthority,
+    informalFears,
+    safelyIgnore,
+    exposureConsequences,
+    privateWant,
+    disclosureBelief,
+    canDiscuss,
+    mustConceal,
+  };
 }
 ```
 
 ---
 
-## Output Logging
+## Main Sync Script
 
-```
-$ npm run sync:characters
-
-Scanning /characters...
-Found 25 PDF files
-
-[1/25] Oscar.pdf
-  → Extracted: Dr. Oscar Morozov (Russia, Scientist)
-  → Database: UPDATED existing character
-
-[2/25] Maria.pdf
-  → Extracted: Maria Santos (US, Diplomat)
-  → Database: CREATED new character
-
-[3/25] Unknown.pdf
-  → WARNING: No player "Unknown" found, skipping
-
-...
-
-Summary:
-  Created: 12
-  Updated: 12
-  Skipped: 1
-  Failed: 0
-```
-
----
-
-## Error Handling
-
-| Error                 | Handling                            |
-| --------------------- | ----------------------------------- |
-| PDF read failure      | Log error, continue to next file    |
-| Claude API failure    | Retry once, then log and skip       |
-| Invalid JSON response | Log raw response, skip              |
-| No matching player    | Warn and skip (don't create orphan) |
-| Database error        | Log full error, abort sync          |
-
----
-
-## File: scripts/sync-characters.ts
+### scripts/sync-characters.ts
 
 ```typescript
-// Implementation skeleton
-
 import fs from "fs";
 import path from "path";
-import pdf from "pdf-parse";
-import Anthropic from "@anthropic-ai/sdk";
+import { parseCharacterHtml } from "./parse-character-html";
 import { prisma } from "../lib/db";
 
 const CHARACTERS_DIR = path.join(process.cwd(), "characters");
 
 async function main() {
+  if (!fs.existsSync(CHARACTERS_DIR)) {
+    console.error(`Directory not found: ${CHARACTERS_DIR}`);
+    console.log("Create /characters folder and add HTML exports from Notion");
+    process.exit(1);
+  }
+
   const files = fs
     .readdirSync(CHARACTERS_DIR)
-    .filter((f) => f.endsWith(".pdf"));
+    .filter((f) => f.endsWith(".html"));
 
-  console.log(`Found ${files.length} PDF files\n`);
+  if (files.length === 0) {
+    console.log("No HTML files found in /characters");
+    process.exit(0);
+  }
+
+  console.log(`Found ${files.length} HTML files\n`);
 
   let created = 0,
     updated = 0,
@@ -301,29 +362,23 @@ async function main() {
     failed = 0;
 
   for (const file of files) {
-    const playerName = path.basename(file, ".pdf");
-    console.log(`Processing ${file}...`);
+    const playerName = path.basename(file, ".html");
+    process.stdout.write(`[${file}] `);
 
     try {
-      // 1. Find matching player
       const player = await prisma.player.findUnique({
         where: { name: playerName },
       });
 
       if (!player) {
-        console.warn(`  ⚠ No player "${playerName}" found, skipping`);
+        console.log(`⚠ No player "${playerName}" — skipped`);
         skipped++;
         continue;
       }
 
-      // 2. Extract PDF text
-      const pdfBuffer = fs.readFileSync(path.join(CHARACTERS_DIR, file));
-      const pdfData = await pdf(pdfBuffer);
+      const filePath = path.join(CHARACTERS_DIR, file);
+      const characterData = parseCharacterHtml(filePath);
 
-      // 3. Parse with Claude
-      const characterData = await parseWithClaude(pdfData.text);
-
-      // 4. Upsert to database
       const existing = await prisma.character.findUnique({
         where: { playerId: player.id },
       });
@@ -335,57 +390,71 @@ async function main() {
       });
 
       if (existing) {
-        console.log(`  ✓ Updated ${characterData.displayName}`);
+        console.log(`✓ Updated "${characterData.displayName}"`);
         updated++;
       } else {
-        console.log(`  ✓ Created ${characterData.displayName}`);
+        console.log(`✓ Created "${characterData.displayName}"`);
         created++;
       }
     } catch (error) {
-      console.error(`  ✗ Failed: ${error.message}`);
+      console.log(`✗ Failed: ${error.message}`);
       failed++;
     }
   }
 
-  console.log(
-    `\nSummary: ${created} created, ${updated} updated, ${skipped} skipped, ${failed} failed`
-  );
+  console.log(`\n${"─".repeat(40)}`);
+  console.log(`Created: ${created}`);
+  console.log(`Updated: ${updated}`);
+  console.log(`Skipped: ${skipped}`);
+  console.log(`Failed:  ${failed}`);
 }
 
-async function parseWithClaude(pdfText: string): Promise<CharacterData> {
-  const client = new Anthropic();
-
-  const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 4096,
-    messages: [
-      {
-        role: "user",
-        content: EXTRACTION_PROMPT.replace("{pdf_text}", pdfText),
-      },
-    ],
-  });
-
-  const json = response.content[0].text;
-  return JSON.parse(json);
-}
-
-main().catch(console.error);
+main()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
 ```
 
 ---
 
-## Pre-requisites Before Running
+## package.json Script
+
+```json
+{
+  "scripts": {
+    "sync:characters": "tsx scripts/sync-characters.ts"
+  }
+}
+```
+
+---
+
+## Usage
+
+```bash
+# 1. Export from Notion: Page → Export → HTML
+# 2. Save to /characters/Oscar.html (filename = player login name)
+# 3. Run sync
+
+npm run sync:characters
+
+# Output:
+# Found 25 HTML files
+#
+# [Oscar.html] ✓ Created "Dr. Oscar Morozov"
+# [Maria.html] ✓ Created "Maria Santos"
+# [Unknown.html] ⚠ No player "Unknown" — skipped
+#
+# ────────────────────────────────────
+# Created: 24
+# Updated: 0
+# Skipped: 1
+# Failed:  0
+```
+
+---
+
+## Pre-requisites
 
 1. **Players must exist in database first**
-
-   - Run player seed script before character sync
-   - PDF filename must match player name exactly
-
-2. **PDF naming convention**
-
-   - `Oscar.pdf` matches player with `name: "Oscar"`
-   - Case-sensitive
-
-3. **Anthropic API key set**
-   - Required for LLM parsing
+2. **HTML filename = player login name** (`Oscar.html` → player `name: "Oscar"`)
+3. **Export as HTML from Notion** (not Markdown or PDF)

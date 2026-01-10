@@ -76,6 +76,7 @@ model Character {
   displayName           String
   nationalityBloc       String
   occupation            String
+  covertOccupation      String?
   publicReputation      String   @db.Text
   portraitUrl           String?
 
@@ -91,9 +92,9 @@ model Character {
   motivations           Json     // [{label, description}]
 
   // Section 4: Authority
-  formalAuthority       String
-  informalFears         String
-  safelyIgnore          String
+  formalAuthority       String[]
+  informalFears         String[]
+  safelyIgnore          String[]
 
   // Section 5: Exposure
   exposureConsequences  String   @db.Text

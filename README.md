@@ -211,6 +211,69 @@ If schema changes are made, sync the database:
 DATABASE_URL=$(grep POSTGRES_URL .env.production | cut -d '=' -f2- | tr -d '"') npx prisma db push
 ```
 
+## Character Sheet Import
+
+Import character sheets from Notion HTML exports into the database.
+
+### File Naming Convention
+
+**CRITICAL**: HTML files must be named **exactly** as the player's login name.
+
+Examples:
+- If the player login name is `[EXAMPLE] Alice Johnson`, the file must be `[EXAMPLE] Alice Johnson.html`
+- If the player login name is `[EXAMPLE] Boris Petrov`, the file must be `[EXAMPLE] Boris Petrov.html`
+
+The filename (without `.html`) must match the `name` field in the Player table exactly (case-sensitive, including spaces and special characters).
+
+### Step-by-Step Instructions
+
+1. **Export from Notion**
+   - Open the character sheet page in Notion
+   - Click `...` (More actions) → `Export`
+   - Select format: `HTML`
+   - Click `Export`
+
+2. **Name the file correctly**
+   - Find the player's login name in the GM Players panel or database
+   - Rename the exported HTML file to match exactly: `[PLAYER_NAME].html`
+   - Example: `[EXAMPLE] Alice Johnson.html`
+
+3. **Place in /characters directory**
+   - Move or copy the HTML file to `/characters/` folder in the project root
+   - Repeat for all character sheets
+
+4. **Run the import**
+   ```bash
+   npm run sync:characters
+   ```
+
+5. **Review the output**
+   ```
+   Found 12 HTML files
+
+   [[EXAMPLE] Alice Johnson.html] ✓ Created "Dr. Alice Johnson"
+   [[EXAMPLE] Boris Petrov.html] ✓ Updated "Boris Petrov"
+   [UnknownPlayer.html] ⚠ No player "UnknownPlayer" — skipped
+
+   ────────────────────────────────────
+   Created: 8
+   Updated: 3
+   Skipped: 1
+   Failed:  0
+   ```
+
+### Troubleshooting
+
+- **"No player found"**: The filename doesn't match any player's login name. Check the exact name in the database.
+- **Parsing errors**: Ensure the HTML export follows the expected 8-section structure (0. Header, 1. Roles, 2. Backstory, etc.)
+- **Missing fields**: The parser will leave fields empty if sections aren't found. Review the character in the database after import.
+
+### Notes
+
+- The import is **idempotent** — you can re-run it to update existing characters
+- HTML files in `/characters/` are git-ignored to prevent spoilers
+- Players must exist in the database before importing characters (run `npm run db:seed` first for test data)
+
 ## Useful Commands
 
 ```bash
@@ -219,6 +282,7 @@ npm run build           # Build for production
 npx prisma studio       # Open database GUI
 npx prisma db push      # Push schema to database
 npm run db:seed         # Seed test data
+npm run sync:characters # Import character sheets from HTML
 ```
 
 ## Routes

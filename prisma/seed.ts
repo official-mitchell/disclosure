@@ -108,6 +108,7 @@ async function main() {
         displayName: 'Dr. Alice Johnson',
         nationalityBloc: 'United States',
         occupation: 'Senior Astrophysicist, DARPA Advanced Research Division',
+        covertOccupation: 'Special Access Program Analyst - Non-Terrestrial Technology Assessment',
         publicReputation: 'Dr. Johnson is known in academic circles for her groundbreaking work in radio astronomy and her controversial theories about technosignatures. She has published extensively on the detection of non-natural electromagnetic signals and has served as a consultant to several government agencies.',
         portraitUrl: null,
         archetypeTitle: 'The Scientist: Seeker of Truth',
@@ -141,9 +142,9 @@ She joined this project believing she would help humanity prepare for contact. I
             description: 'You\'ve seen what happens to whistleblowers. Your career, your freedom, perhaps your life—all could vanish if you speak out. Sometimes courage feels like a luxury you can\'t afford.',
           },
         ],
-        formalAuthority: 'Director of Special Programs at DARPA. He can end your career with a phone call and has made it clear that operational security is paramount.',
-        informalFears: 'Your mentor, Dr. Sarah Chen (EXECUTIVE), who brought you into the program. Disappointing her feels worse than any official reprimand.',
-        safelyIgnore: 'Military brass who don\'t understand the science. They need your analysis and can\'t replace you easily.',
+        formalAuthority: ['Director of Special Programs at DARPA. He can end your career with a phone call and has made it clear that operational security is paramount.'],
+        informalFears: ['Your mentor, Dr. Sarah Chen (EXECUTIVE), who brought you into the program. Disappointing her feels worse than any official reprimand.'],
+        safelyIgnore: ['Military brass who don\'t understand the science. They need your analysis and can\'t replace you easily.'],
         exposureConsequences: `If your involvement becomes public, you face immediate termination and potential prosecution under the Espionage Act. Your security clearance will be revoked, ending your scientific career permanently.
 
 More personally, your family doesn't know what you really do. Your parents still think you study radio astronomy. Learning you've been lying for a decade—and about something this monumental—would devastate them.

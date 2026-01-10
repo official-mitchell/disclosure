@@ -2,6 +2,7 @@
 // Changes:
 // - Created: Collapsible clue card component for displaying clue details with expand/collapse functionality
 // - Updated: Restructured layout - buttons above title, Origin moved to details section, improved spacing, left-aligned list
+// - Updated: Replaced text caret (▼/▶) with SVG chevron caret matching ClueCard component, with rotation animation
 'use client';
 
 import { useState } from 'react';
@@ -65,12 +66,22 @@ export default function CollapsibleClueCard({ clue }: CollapsibleClueCardProps) 
         className="cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h3 className="dynamic-text-lg font-semibold mb-2" style={{ color: 'white' }}>
-          {clue.title}
-          <span className="ml-2" style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}>
-            {isOpen ? '▼' : '▶'}
-          </span>
-        </h3>
+        <div className="flex items-center justify-between mb-2" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
+          <h3 className="dynamic-text-lg font-semibold flex-1" style={{ color: 'white' }}>
+            {clue.title}
+          </h3>
+          <div className="flex items-center" style={{ transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+            <svg
+              style={{ width: 'clamp(1.95rem, 5.2vw, 2.6rem)', height: 'clamp(1.95rem, 5.2vw, 2.6rem)', minWidth: '31px', color: 'white' }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
         <div className="flex flex-wrap" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
           <span className="dynamic-text-base" style={{ color: 'white' }}>
             Target: <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{clue.targetType}</span>

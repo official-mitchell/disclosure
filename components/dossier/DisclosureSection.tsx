@@ -1,3 +1,5 @@
+import MarkdownText from './MarkdownText';
+
 interface DisclosureSectionProps {
   disclosureBelief: string;
   displayName: string;
@@ -14,10 +16,10 @@ export default function DisclosureSection({
       </p>
       <div className="border-2 border-amber-800 bg-amber-50/30 rounded shadow-inner" style={{ padding: 'clamp(1.25rem, 3.5vw, 2rem)' }}>
         <div className="border-l-4 border-amber-900" style={{ paddingLeft: 'clamp(1rem, 3vw, 1.5rem)' }}>
-          <p className="document-font italic text-lg sm:text-xl leading-relaxed" style={{ color: '#3d2820' }}>
-            "{disclosureBelief}"
-          </p>
-          <p className="document-font text-right text-base sm:text-lg font-semibold" style={{ color: '#2d1810', marginTop: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <div className="document-font italic text-lg sm:text-xl leading-relaxed" style={{ color: '#3d2820', fontSize: 'clamp(1.40625rem, 2.5vw, 1.5625rem)' }}>
+            "<MarkdownText content={disclosureBelief} />"
+          </div>
+          <p className="document-font text-right text-base sm:text-lg font-semibold" style={{ color: '#2d1810', marginTop: 'clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(1.25rem, 2.25vw, 1.40625rem)' }}>
             — {displayName}
           </p>
         </div>

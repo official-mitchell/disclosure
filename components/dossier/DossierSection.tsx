@@ -46,7 +46,7 @@ export default function DossierSection({
           className="w-full text-left flex items-center justify-between group hover:opacity-80 transition-opacity"
           style={{ padding: 'clamp(0.75rem, 2vw, 1rem)', borderBottom: '2px solid #92400e' }}
         >
-          <h2 className="text-xl sm:text-2xl font-bold typewriter-font stamp-effect flex-1" style={{ color: '#2d1810' }}>
+          <h2 className="text-xl sm:text-2xl font-bold typewriter-font stamp-effect flex-1" style={{ color: '#2d1810', fontSize: 'clamp(1.5625rem, 3.75vw, 2.5rem)' }}>
             <span className="inline-block transition-transform duration-200" style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
               ▶
             </span>

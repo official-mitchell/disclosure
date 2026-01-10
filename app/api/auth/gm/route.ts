@@ -17,6 +17,13 @@ export async function POST(request: NextRequest) {
     // Verify GM password from environment variable
     const gmPassword = process.env.GM_PASSWORD;
 
+    console.log('GM Login attempt:');
+    console.log('- Received password:', password);
+    console.log('- Expected password:', gmPassword);
+    console.log('- Password length received:', password.length);
+    console.log('- Password length expected:', gmPassword?.length);
+    console.log('- Match:', password === gmPassword);
+
     if (!gmPassword) {
       console.error('GM_PASSWORD not configured in environment variables');
       return NextResponse.json(

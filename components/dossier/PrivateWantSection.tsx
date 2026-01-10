@@ -1,3 +1,5 @@
+import MarkdownText from './MarkdownText';
+
 interface PrivateWantSectionProps {
   privateWant: string;
 }
@@ -8,9 +10,9 @@ export default function PrivateWantSection({
   return (
     <div className="border-2 border-amber-800 bg-gray-200/60 rounded relative" style={{ padding: 'clamp(1.25rem, 3.5vw, 2rem)', overflow: 'visible', minHeight: 'clamp(8rem, 20vw, 12rem)' }}>
       {/* Redacted overlay effect - large, light, diagonal */}
-      <div 
+      <div
         className="absolute pointer-events-none"
-        style={{ 
+        style={{
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%) rotate(12deg)',
@@ -22,9 +24,9 @@ export default function PrivateWantSection({
           REDACTED
         </span>
       </div>
-      <p className="document-font text-sm sm:text-base leading-relaxed whitespace-pre-wrap relative z-10" style={{ color: '#3d2820' }}>
-        {privateWant}
-      </p>
+      <div className="document-font text-sm sm:text-base leading-relaxed whitespace-pre-wrap relative z-10" style={{ color: '#3d2820', fontSize: 'clamp(1.09375rem, 1.625vw, 1.25rem)' }}>
+        <MarkdownText content={privateWant} />
+      </div>
     </div>
   );
 }

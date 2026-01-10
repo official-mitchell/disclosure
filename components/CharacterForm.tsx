@@ -12,6 +12,7 @@ interface CharacterFormData {
   displayName: string;
   nationalityBloc: string;
   occupation: string;
+  covertOccupation: string;
   publicReputation: string;
   portraitUrl: string;
   archetypeTitle: string;
@@ -48,6 +49,7 @@ export default function CharacterForm({
     displayName: initialData?.displayName || '',
     nationalityBloc: initialData?.nationalityBloc || '',
     occupation: initialData?.occupation || '',
+    covertOccupation: initialData?.covertOccupation || '',
     publicReputation: initialData?.publicReputation || '',
     portraitUrl: initialData?.portraitUrl || '',
     archetypeTitle: initialData?.archetypeTitle || '',
@@ -207,6 +209,24 @@ export default function CharacterForm({
               className="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
               required
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Covert Occupation (optional)
+            </label>
+            <input
+              type="text"
+              value={formData.covertOccupation}
+              onChange={(e) =>
+                setFormData({ ...formData, covertOccupation: e.target.value })
+              }
+              className="w-full bg-gray-900 border border-red-900/30 rounded px-3 py-2 text-white"
+              placeholder="Leave blank if character has no covert occupation"
+            />
+            <p className="text-xs text-gray-400 mt-1">
+              If the character has a secret occupation different from their public one, enter it here.
+            </p>
           </div>
 
           <div className="md:col-span-2">
