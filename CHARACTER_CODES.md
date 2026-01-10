@@ -13,7 +13,7 @@ Total Characters: 30
 | Brea Balloon | Brea | `3103` |
 | Candace Bradley | Candace | `9878` |
 | Dr. Cara (Huang) | Cara | `1753` |
-| Lt. Chris Ries | Carson | `2552` |
+| Lt. Chris Ries | ChrisR | `2552` |
 | Deniz Sipahi, Ph.D. | Deniz | `4273` |
 | Admiral Diego (Kuznetsov) | Diego | `9167` |
 | Eliza Karimov | Eliza | `4998` |
