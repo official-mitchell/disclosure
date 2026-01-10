@@ -24,14 +24,51 @@ export default async function ViewAsPlayerPage({ params }: { params: Promise<{ p
       released: true,
       retracted: false,
       OR: [
-        { targetType: 'all' },
-        { targetType: 'country', targetValue: player.country },
-        { targetType: 'archetype', targetValue: player.archetype },
+        // Target all (all target fields are null/empty)
         {
-          targetType: 'player',
+          targetCountry: null,
+          targetArchetypes: { isEmpty: true },
+          targetDemeanor: null,
+          targetPlayer: null,
+        },
+        // Target specific player OR assigned to player
+        {
           OR: [
-            { targetValue: player.id },
-            { clueAssignments: { some: { playerId: player.id } } },
+            { targetPlayer: player.id },
+            {
+              clueAssignments: {
+                some: {
+                  playerId: player.id,
+                },
+              },
+            },
+          ],
+        },
+        // Target with country and/or archetype filters
+        // This requires ALL specified filters to match (AND logic)
+        {
+          AND: [
+            // If targetCountry is set, must match player's country
+            {
+              OR: [
+                { targetCountry: null },
+                { targetCountry: player.country as any },
+              ],
+            },
+            // If targetArchetypes is set, must include player's archetype
+            {
+              OR: [
+                { targetArchetypes: { isEmpty: true } },
+                { targetArchetypes: { has: player.archetype as any } },
+              ],
+            },
+            // If targetDemeanor is set, must match player's demeanor
+            {
+              OR: [
+                { targetDemeanor: null },
+                { targetDemeanor: player.demeanor as any },
+              ],
+            },
           ],
         },
       ],

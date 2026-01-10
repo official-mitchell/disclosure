@@ -33,7 +33,7 @@ async function main() {
       select: {
         title: true,
         targetCountry: true,
-        targetArchetype: true,
+        targetArchetypes: true,
         targetDemeanor: true,
         targetPlayer: true,
       }
@@ -43,7 +43,7 @@ async function main() {
     sampleClues.forEach(c => {
       const targets = [
         c.targetCountry,
-        c.targetArchetype,
+        c.targetArchetypes.length > 0 ? c.targetArchetypes.join(', ') : null,
         c.targetDemeanor,
         c.targetPlayer
       ].filter(Boolean);

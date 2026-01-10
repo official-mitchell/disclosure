@@ -119,7 +119,7 @@ async function migrateData() {
           source: clue.source,
           takeaways: clue.takeaways,
           targetCountry: clue.targetCountry,
-          targetArchetype: clue.targetArchetype,
+          targetArchetypes: clue.targetArchetypes,
           targetDemeanor: clue.targetDemeanor,
           targetPlayer: clue.targetPlayer,
           createdAt: clue.createdAt,

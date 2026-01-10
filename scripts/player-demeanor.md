@@ -27,4 +27,4 @@ Jack (Kadyrov) 🇷🇺 Russia Agnostic Intel / Oligarch
 Harrison (Petrov) 🇷🇺 Russia Agnostic Journalist / Media
 Eliza (Karimov) 🇷🇺 Russia Agnostic High Ranking Politician
 Dr. Oscar (Morozov) 🇷🇺 Russia Agnostic High Ranking Scientist
-Dr. Kristen (Sharapova) 🇷🇺 Russia Pro-Disclosure High Ranking Scientist
+Dr. Chris (Smirnov) 🇷🇺 Russia Pro-Disclosure High Ranking Scientist

@@ -26,7 +26,7 @@ Total Characters: 30
 | Admiral Kannon Zhou | Kannon | `9442` |
 | Kassidy Neville | Kassidy | `8392` |
 | General Kevin (Zhang) | Kevin | `8256` |
-| Dr. Kristen Sharapova | Kristen | `3025` |
+| Dr. Chris Smirnov | Chris | `3025` |
 | Maddie Volkov | Maddie | `5873` |
 | Maggie Maple | Maggie | `7360` |
 | Representative Maria St. Germain | Maria | `7098` |
