@@ -14,9 +14,9 @@ interface CharacterImport {
   restrictions: string[];
   backstory: string;
   motivations: { label: string; description: string }[];
-  formalAuthority: string;
-  informalFears: string;
-  safelyIgnore: string;
+  formalAuthority: string[];
+  informalFears: string[];
+  safelyIgnore: string[];
   exposureConsequences: string;
   privateWant: string;
   disclosureBelief: string;
