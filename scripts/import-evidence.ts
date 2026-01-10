@@ -1,6 +1,7 @@
 // import-evidence.ts
 // Changes:
 // - Updated: Modified parser to preserve empty lines in supporting intel section to maintain paragraph breaks in markdown rendering
+// - Updated: Added filter to exclude files with "unprocessed" in the filename to prevent accidental import of unprocessed evidence files
 import fs from "fs";
 import path from "path";
 import { prisma } from "../lib/db";
@@ -269,6 +270,19 @@ function parseRecipients(recipients: string): RecipientFilters {
   return filters;
 }
 
+function extractPhaseFromFilename(filename: string): number {
+  // Extract phase from filename pattern: 1-p1-XXX.md, 2-p2-XXX.md, 3-p3-XXX.md
+  const match = filename.match(/^(\d+)-/);
+  if (match) {
+    const phase = parseInt(match[1], 10);
+    if (phase >= 1 && phase <= 3) {
+      return phase;
+    }
+  }
+  // Default to phase 1 if no pattern matches
+  return 1;
+}
+
 async function main() {
   if (!fs.existsSync(EVIDENCE_DIR)) {
     console.error(`Directory not found: ${EVIDENCE_DIR}`);
@@ -279,7 +293,8 @@ async function main() {
   const files = fs
     .readdirSync(EVIDENCE_DIR)
     .filter((f) => f.endsWith(".md") || f.endsWith(".markdown"))
-    .filter((f) => !f.includes("EVIDENCE_FORMAT")); // Skip documentation
+    .filter((f) => !f.includes("EVIDENCE_FORMAT")) // Skip documentation
+    .filter((f) => !f.toLowerCase().includes("unprocessed")); // Skip unprocessed evidence files
 
   if (files.length === 0) {
     console.log("No markdown files found in /evidence");
@@ -313,6 +328,9 @@ async function main() {
       const isWelcome = filename.toLowerCase().includes("welcome");
       const autoRelease = isWelcome || recipientFilters.isEveryone;
 
+      // Extract phase from filename
+      const phase = extractPhaseFromFilename(filename);
+
       // Check if clue already exists to determine created vs updated
       const existingClue = await prisma.clue.findUnique({
         where: { id: clueId },
@@ -325,15 +343,16 @@ async function main() {
           eventDate: evidence.date,
           backstory: evidence.summary,
           confidenceLevel: mapConfidenceLevel(evidence.confidence),
-          supportingIntel: evidence.supportingIntel,
-          source: evidence.source,
+          supportingIntel: evidence.supportingIntel || "",
+          source: evidence.source || "",
           takeaways: evidence.takeaways,
+          phase: phase, // Update phase from filename
           // Don't update targeting/metadata fields on update to preserve GM settings
         },
         create: {
           id: clueId,
           title: evidence.title,
-          phase: 1, // Default to phase 1
+          phase: phase, // Extract phase from filename
           targetCountry: recipientFilters.targetCountry,
           targetArchetypes: recipientFilters.targetArchetypes,
           targetDemeanor: recipientFilters.targetDemeanor,
@@ -344,8 +363,8 @@ async function main() {
           eventDate: evidence.date,
           backstory: evidence.summary,
           confidenceLevel: mapConfidenceLevel(evidence.confidence),
-          supportingIntel: evidence.supportingIntel,
-          source: evidence.source,
+          supportingIntel: evidence.supportingIntel || "",
+          source: evidence.source || "",
           takeaways: evidence.takeaways,
           released: autoRelease,
           releasedAt: autoRelease ? new Date() : null,

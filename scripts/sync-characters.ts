@@ -29,7 +29,12 @@ async function main() {
     failed = 0;
 
   for (const file of files) {
-    const playerName = path.basename(file, ".html");
+    let playerName = path.basename(file, ".html");
+    // Strip common prefixes from Notion exports
+    playerName = playerName
+      .replace(/^Catastrophic Disclosure Character Sheet — /, "")
+      .replace(/^Character Sheet — /, "")
+      .trim();
     process.stdout.write(`[${file}] `);
 
     try {

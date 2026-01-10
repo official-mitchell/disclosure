@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const CHARACTERS_DIR = path.join(__dirname, '..', 'characters');
-const MERGED_DIR = path.join(__dirname, '..', 'Merged');
+const MERGED_DIR = path.join(__dirname, '..', 'characters', 'Merged');
 const OUTPUT_FILE = path.join(MERGED_DIR, 'merged-character-sheets-01.html');
 
 // Create Merged directory if it doesn't exist

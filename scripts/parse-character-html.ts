@@ -346,18 +346,56 @@ export function parseCharacterHtml(filePath: string): CharacterData {
 
   let canDiscuss: string[] = [];
   let mustConceal: string[] = [];
-  let foundConceal = false;
+  let currentBoundaryCategory = "";
+  let ulCount = 0;
 
-  $boundaries.children().each((_, el) => {
-    const text = $(el).text().toLowerCase();
-    if (text.includes("conceal")) foundConceal = true;
+  // Handle details/summary structure similar to Section 4
+  let $boundaryElements = $boundaries;
+  if ($boundaries.length === 1 && $boundaries.first().hasClass("indented")) {
+    $boundaryElements = $boundaries.children();
+  }
 
-    if ($(el).is("ul")) {
-      const bullets = getBullets($(el));
-      if (foundConceal) {
-        mustConceal.push(...bullets);
+  $boundaryElements.each((_, el) => {
+    const $el = $(el);
+    const text = htmlToText($el.html() || "").toLowerCase();
+
+    // Check for explicit headers: "SPEAK OPENLY:" or "KEEP SECRETIVE:"
+    // Also check for strong tags that might contain these headers
+    const strongText = $el.find("strong").first().text().toLowerCase();
+    if (text.includes("speak openly") || text.includes("openly:") || strongText.includes("speak openly")) {
+      currentBoundaryCategory = "discuss";
+    } else if (text.includes("keep secretive") || text.includes("secretive:") ||
+               text.includes("conceal") || strongText.includes("keep secretive") ||
+               strongText.includes("secretive")) {
+      currentBoundaryCategory = "conceal";
+    }
+
+    // Extract bullets from ul elements
+    if ($el.is("ul") || $el.find("ul").length > 0) {
+      ulCount++;
+      const bullets = getBullets($el.is("ul") ? $el : $el.find("ul").first());
+
+      // Process bullets - check if any contain "KEEP SECRETIVE:" as a label
+      const processedBullets = bullets.map(bullet => {
+        const bulletLower = bullet.toLowerCase();
+        // If bullet starts with "KEEP SECRETIVE:" or "keep secretive:", extract content after colon
+        if (bulletLower.startsWith("keep secretive:")) {
+          return bullet.split(":").slice(1).join(":").trim();
+        }
+        return bullet;
+      }).filter(b => b.length > 0);
+
+      if (currentBoundaryCategory === "conceal") {
+        mustConceal.push(...processedBullets);
+      } else if (currentBoundaryCategory === "discuss") {
+        canDiscuss.push(...processedBullets);
       } else {
-        canDiscuss.push(...bullets);
+        // Fallback: second ul is typically "KEEP SECRETIVE:" section
+        if (ulCount === 2) {
+          mustConceal.push(...processedBullets);
+        } else {
+          canDiscuss.push(...processedBullets);
+        }
       }
     }
   });

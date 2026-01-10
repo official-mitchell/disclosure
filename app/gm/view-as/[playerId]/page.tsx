@@ -2,14 +2,21 @@ import { redirect } from 'next/navigation';
 import { getGMSession } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import { COUNTRY_NAMES, ARCHETYPE_NAMES } from '@/lib/constants';
-import ClueCard from '@/components/ClueCard';
+import DossierPage from '@/components/dossier/DossierPage';
+import PlayerCluesDisplay from '@/components/PlayerCluesDisplay';
 
-export default async function ViewAsPlayerPage({ params }: { params: Promise<{ playerId: string }> }) {
+export default async function ViewAsPlayerPage({ 
+  params,
+  searchParams 
+}: { 
+  params: Promise<{ playerId: string }>;
+  searchParams: Promise<{ tab?: string }>;
+}) {
   const session = await getGMSession();
   if (!session) redirect('/gm/login');
 
   const { playerId } = await params;
+  const { tab = 'dossier' } = await searchParams;
   const player = await prisma.player.findUnique({
     where: { id: playerId },
   });
@@ -18,125 +25,96 @@ export default async function ViewAsPlayerPage({ params }: { params: Promise<{ p
     return <div>Player not found</div>;
   }
 
-  // Fetch visible clues for this player (same logic as player API)
-  const clues = await prisma.clue.findMany({
-    where: {
-      released: true,
-      retracted: false,
-      OR: [
-        // Target all (all target fields are null/empty)
-        {
-          targetCountry: null,
-          targetArchetypes: { isEmpty: true },
-          targetDemeanor: null,
-          targetPlayer: null,
-        },
-        // Target specific player OR assigned to player
-        {
-          OR: [
-            { targetPlayer: player.id },
-            {
-              clueAssignments: {
-                some: {
-                  playerId: player.id,
-                },
-              },
-            },
-          ],
-        },
-        // Target with country and/or archetype filters
-        // This requires ALL specified filters to match (AND logic)
-        {
-          AND: [
-            // If targetCountry is set, must match player's country
-            {
-              OR: [
-                { targetCountry: null },
-                { targetCountry: player.country as any },
-              ],
-            },
-            // If targetArchetypes is set, must include player's archetype
-            {
-              OR: [
-                { targetArchetypes: { isEmpty: true } },
-                { targetArchetypes: { has: player.archetype as any } },
-              ],
-            },
-            // If targetDemeanor is set, must match player's demeanor
-            {
-              OR: [
-                { targetDemeanor: null },
-                { targetDemeanor: player.demeanor as any },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    orderBy: { releasedAt: 'desc' },
-  });
-
-  const countryName = COUNTRY_NAMES[player.country as keyof typeof COUNTRY_NAMES];
-  const archetypeName = ARCHETYPE_NAMES[player.archetype as keyof typeof ARCHETYPE_NAMES];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
-      <nav className="bg-gray-900 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/gm/dashboard" className="text-gray-400 hover:text-white transition">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
+      {/* Logo and Title Section - Centered */}
+      <div className="bg-black border-b border-gray-800">
+        <div className="max-w-7xl mx-auto dynamic-padding-sm">
+          <div className="flex flex-col items-center" style={{ paddingTop: 'clamp(0.85rem, 2.55vw, 1.275rem)', paddingBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+            <div className="flex justify-center mb-2">
+              <img
+                src="/Catastrophic Disclosure icon.png"
+                alt="Icon"
+                className="flex-shrink-0"
+                style={{ 
+                  width: 'clamp(4.8rem, 14vw, 7.2rem)', 
+                  height: 'clamp(4.8rem, 14vw, 7.2rem)',
+                  minWidth: '76px',
+                  maxWidth: '115px'
+                }}
+              />
+            </div>
+            <h1 className="dynamic-text-xl font-bold text-center" style={{ color: 'white' }}>
+              Catastrophic Disclosure
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Links Row with GM Indicator */}
+      <nav className="bg-black border-b border-gray-800">
+        <div className="max-w-7xl mx-auto dynamic-padding-sm">
+          <div className="flex justify-between items-center" style={{ paddingTop: 'clamp(0.75rem, 2vw, 1rem)', paddingBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+            <div className="flex items-center" style={{ gap: 'clamp(1rem, 3vw, 2rem)' }}>
+              <Link
+                href="/gm/dashboard"
+                className="dynamic-text-base transition hover:text-white"
+                style={{ color: 'rgba(255, 255, 255, 0.7)' }}
+              >
                 ← Back to GM
               </Link>
               <div className="bg-yellow-900 text-yellow-300 px-3 py-1 rounded text-xs font-medium">
-                VIEWING AS PLAYER
+                GM VIEW
               </div>
-              <h1 className="text-xl font-bold text-white">
-                {player.name}
-              </h1>
+              <Link
+                href={`/gm/view-as/${playerId}?tab=intelligence`}
+                className={`dynamic-text-base transition pb-1 ${
+                  tab === 'intelligence' 
+                    ? 'font-semibold text-white border-b-2' 
+                    : 'hover:text-white'
+                }`}
+                style={{ 
+                  color: tab === 'intelligence' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+                  borderBottom: tab === 'intelligence' ? '2px solid #3b82f6' : 'none'
+                }}
+              >
+                Intelligence
+              </Link>
+              <Link
+                href={`/gm/view-as/${playerId}?tab=dossier`}
+                className={`dynamic-text-base transition pb-1 ${
+                  tab === 'dossier' 
+                    ? 'font-semibold text-white border-b-2' 
+                    : 'hover:text-white'
+                }`}
+                style={{ 
+                  color: tab === 'dossier' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+                  borderBottom: tab === 'dossier' ? '2px solid #3b82f6' : 'none'
+                }}
+              >
+                Dossier
+              </Link>
+            </div>
+            <div className="flex items-center" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
+              <span className="dynamic-text-base font-semibold" style={{ color: 'white' }}>
+                Viewing as: {player.name}
+              </span>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-yellow-900/30 border border-yellow-700 rounded-lg p-6 mb-8">
-          <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0">
-              <svg className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-yellow-100">
-                GM View
-              </h2>
-              <p className="text-yellow-200 mt-1">
-                Viewing as: <span className="font-bold">{player.name}</span>,{' '}
-                <span className="font-bold">{archetypeName}</span>,{' '}
-                <span className="font-bold">{countryName}</span>
-              </p>
+      <main className="w-full" style={{ paddingTop: 0, paddingBottom: 0 }}>
+        {tab === 'intelligence' ? (
+          <div className="max-w-7xl mx-auto dynamic-padding" style={{ paddingTop: 'clamp(1.5rem, 4vw, 2rem)', paddingBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
+            <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
+              <h2 className="dynamic-text-2xl font-bold mb-6 text-center" style={{ color: 'white' }}>Intelligence Visible to {player.name}</h2>
+              <PlayerCluesDisplay playerId={playerId} />
             </div>
           </div>
-        </div>
-
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            Intelligence Visible to {player.name} ({clues.length})
-          </h2>
-          {clues.length === 0 ? (
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-12 text-center">
-              <p className="text-gray-400">No clues visible to this player yet</p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {clues.map((clue) => (
-                <ClueCard key={clue.id} clue={clue} />
-              ))}
-            </div>
-          )}
-        </div>
+        ) : (
+          <DossierPage playerId={playerId} />
+        )}
       </main>
     </div>
   );
