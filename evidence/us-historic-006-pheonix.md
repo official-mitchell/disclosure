@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 The Phoenix Lights — When Thousands Saw The Same Thing

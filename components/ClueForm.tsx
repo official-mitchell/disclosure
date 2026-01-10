@@ -19,8 +19,8 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
   const getTargetTypeAndValue = () => {
     if (clue?.targetCountry) {
       return { targetType: 'country', targetValue: clue.targetCountry };
-    } else if (clue?.targetArchetype) {
-      return { targetType: 'archetype', targetValue: clue.targetArchetype };
+    } else if (clue?.targetArchetypes && clue.targetArchetypes.length > 0) {
+      return { targetType: 'archetype', targetValue: clue.targetArchetypes[0] };
     } else if (clue?.targetDemeanor) {
       return { targetType: 'demeanor', targetValue: clue.targetDemeanor };
     } else if (clue?.targetPlayer) {

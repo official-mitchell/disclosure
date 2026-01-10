@@ -31,20 +31,20 @@ export async function PUT(
 
     // Convert targetType/targetValue to new schema fields
     let targetCountry = null;
-    let targetArchetype = null;
+    let targetArchetypes: any[] = [];
     let targetDemeanor = null;
     let targetPlayer = null;
 
     if (targetType === 'country' && targetValue) {
       targetCountry = targetValue as any;
     } else if (targetType === 'archetype' && targetValue) {
-      targetArchetype = targetValue as any;
+      targetArchetypes = [targetValue as any];
     } else if (targetType === 'demeanor' && targetValue) {
       targetDemeanor = targetValue as any;
     } else if (targetType === 'player' && targetValue) {
       targetPlayer = targetValue;
     }
-    // If targetType is 'all' or not set, all fields remain null
+    // If targetType is 'all' or not set, all fields remain null/empty
 
     const clue = await prisma.clue.update({
       where: { id },
@@ -52,7 +52,7 @@ export async function PUT(
         title,
         phase: parseInt(phase),
         targetCountry,
-        targetArchetype,
+        targetArchetypes,
         targetDemeanor,
         targetPlayer,
         legitimacy,

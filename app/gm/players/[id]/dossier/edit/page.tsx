@@ -5,16 +5,18 @@ import CharacterForm from '@/components/CharacterForm';
 import Link from 'next/link';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function GMDossierEdit({ params }: PageProps) {
   await requireGMAuth();
 
+  const { id } = await params;
+
   const player = await prisma.player.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!player) {
@@ -22,7 +24,7 @@ export default async function GMDossierEdit({ params }: PageProps) {
   }
 
   const character = await prisma.character.findUnique({
-    where: { playerId: params.id },
+    where: { playerId: id },
   });
 
   return (
@@ -35,7 +37,7 @@ export default async function GMDossierEdit({ params }: PageProps) {
                 GM: {character ? 'Edit' : 'Create'} Character
               </h1>
               <Link
-                href={`/gm/players/${params.id}/dossier`}
+                href={`/gm/players/${id}/dossier`}
                 className="text-gray-300 hover:text-white transition text-sm"
               >
                 ← Cancel
@@ -52,7 +54,7 @@ export default async function GMDossierEdit({ params }: PageProps) {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <CharacterForm
-          playerId={params.id}
+          playerId={id}
           playerName={player.name}
           initialData={character ? {
             displayName: character.displayName,

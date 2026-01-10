@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 The Voronezh Landing — When Aliens Walked Out in Front of Soviet Kids

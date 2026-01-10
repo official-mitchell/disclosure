@@ -144,7 +144,7 @@ function mapConfidenceLevel(confidence: string): ConfidenceLevel {
 
 interface RecipientFilters {
   targetCountry: Country | null;
-  targetArchetype: Archetype | null;
+  targetArchetypes: Archetype[];
   targetDemeanor: Demeanor | null;
   targetPlayer: string | null;
   isEveryone: boolean;
@@ -153,7 +153,7 @@ interface RecipientFilters {
 function parseRecipients(recipients: string): RecipientFilters {
   const filters: RecipientFilters = {
     targetCountry: null,
-    targetArchetype: null,
+    targetArchetypes: [],
     targetDemeanor: null,
     targetPlayer: null,
     isEveryone: false,
@@ -200,7 +200,7 @@ function parseRecipients(recipients: string): RecipientFilters {
       upperPart === "MILITARY / DEFENSE CONTRACTOR" ||
       upperPart === "MILITARY/DEFENSE CONTRACTOR"
     ) {
-      filters.targetArchetype = Archetype.MILITARY_DEFENSE_CONTRACTOR;
+      filters.targetArchetypes.push(Archetype.MILITARY_DEFENSE_CONTRACTOR);
       continue;
     }
     if (
@@ -208,7 +208,7 @@ function parseRecipients(recipients: string): RecipientFilters {
       upperPart === "HIGH RANKING POLITICIAN" ||
       upperPart === "HIGH-RANKING POLITICIAN"
     ) {
-      filters.targetArchetype = Archetype.HIGH_RANKING_POLITICIAN;
+      filters.targetArchetypes.push(Archetype.HIGH_RANKING_POLITICIAN);
       continue;
     }
     if (
@@ -217,7 +217,7 @@ function parseRecipients(recipients: string): RecipientFilters {
       upperPart === "INTEL / OLIGARCH" ||
       upperPart === "INTEL/OLIGARCH"
     ) {
-      filters.targetArchetype = Archetype.INTEL_OLIGARCH;
+      filters.targetArchetypes.push(Archetype.INTEL_OLIGARCH);
       continue;
     }
     if (
@@ -226,7 +226,7 @@ function parseRecipients(recipients: string): RecipientFilters {
       upperPart === "JOURNALIST / MEDIA" ||
       upperPart === "JOURNALIST/MEDIA"
     ) {
-      filters.targetArchetype = Archetype.JOURNALIST_MEDIA;
+      filters.targetArchetypes.push(Archetype.JOURNALIST_MEDIA);
       continue;
     }
     if (
@@ -234,7 +234,7 @@ function parseRecipients(recipients: string): RecipientFilters {
       upperPart === "HIGH RANKING SCIENTIST" ||
       upperPart === "HIGH-RANKING SCIENTIST"
     ) {
-      filters.targetArchetype = Archetype.HIGH_RANKING_SCIENTIST;
+      filters.targetArchetypes.push(Archetype.HIGH_RANKING_SCIENTIST);
       continue;
     }
 
@@ -335,7 +335,7 @@ async function main() {
           title: evidence.title,
           phase: 1, // Default to phase 1
           targetCountry: recipientFilters.targetCountry,
-          targetArchetype: recipientFilters.targetArchetype,
+          targetArchetypes: recipientFilters.targetArchetypes,
           targetDemeanor: recipientFilters.targetDemeanor,
           targetPlayer: recipientFilters.targetPlayer,
           legitimacy: Legitimacy.verified,
@@ -360,7 +360,9 @@ async function main() {
           ? "Everyone"
           : [
               recipientFilters.targetCountry,
-              recipientFilters.targetArchetype,
+              recipientFilters.targetArchetypes.length > 0
+                ? `[${recipientFilters.targetArchetypes.join(", ")}]`
+                : null,
               recipientFilters.targetDemeanor,
               recipientFilters.targetPlayer,
             ]

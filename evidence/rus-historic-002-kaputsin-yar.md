@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Kapustin Yar — Russia's Area 51 (They Have One Too)

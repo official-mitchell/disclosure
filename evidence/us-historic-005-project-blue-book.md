@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Project Blue Book — How the Air Force Made UFOs Embarrassing

@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Yemen Orb Incident — A Metallic Sphere Films a U.S. Airstrike (And Doesn't Flinch)

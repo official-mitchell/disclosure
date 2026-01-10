@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Thread Three (Нить-3) — The Soviet Reverse-Engineering Program

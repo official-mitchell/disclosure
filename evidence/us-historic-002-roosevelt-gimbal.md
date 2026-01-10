@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 USS Theodore Roosevelt "Gimbal" & "GoFast" — When Navy Pilots Stopped Laughing

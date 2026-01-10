@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 USS Nimitz "Tic Tac" Encounter — The Video That Changed Everything

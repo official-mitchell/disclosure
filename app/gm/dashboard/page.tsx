@@ -1,6 +1,7 @@
 // GM Dashboard Page
 // Changes:
 // - 2024-12-XX: Improved mobile responsiveness - reduced icon sizes on mobile, improved navigation bar layout for small screens, adjusted card layouts and spacing for better mobile experience
+// - 2024-12-XX: Replaced white borders with card-container-thick class for consistent gray borders, updated player and clue management buttons to use global button-component button-edit style
 import { redirect } from 'next/navigation';
 import { getGMSession } from '@/lib/auth';
 import { prisma } from '@/lib/db';
@@ -62,15 +63,15 @@ export default async function GMDashboard() {
       <main className="max-w-7xl mx-auto dynamic-padding" style={{ paddingTop: 'clamp(1.5rem, 4vw, 2rem)', paddingBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
         {/* Quick Stats */}
         <div className="flex flex-wrap justify-start items-stretch" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)', marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
-          <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ flex: '1 1 auto', minWidth: 'clamp(150px, 25vw, 200px)', maxWidth: 'clamp(200px, 30vw, 250px)', border: '2px solid white' }}>
+          <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container-thick" style={{ flex: '1 1 auto', minWidth: 'clamp(150px, 25vw, 200px)', maxWidth: 'clamp(200px, 30vw, 250px)' }}>
             <div className="mb-2" style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)', color: 'white' }}>Total Players</div>
             <div className="dynamic-text-xl font-bold" style={{ color: 'white' }}>{players.length}</div>
           </div>
-          <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ flex: '1 1 auto', minWidth: 'clamp(150px, 25vw, 200px)', maxWidth: 'clamp(200px, 30vw, 250px)', border: '2px solid white' }}>
+          <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container-thick" style={{ flex: '1 1 auto', minWidth: 'clamp(150px, 25vw, 200px)', maxWidth: 'clamp(200px, 30vw, 250px)' }}>
             <div className="mb-2" style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)', color: 'white' }}>Total Clues</div>
             <div className="dynamic-text-xl font-bold" style={{ color: 'white' }}>{cluesCount}</div>
           </div>
-          <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ flex: '1 1 auto', minWidth: 'clamp(150px, 25vw, 200px)', maxWidth: 'clamp(200px, 30vw, 250px)', border: '2px solid white' }}>
+          <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container-thick" style={{ flex: '1 1 auto', minWidth: 'clamp(150px, 25vw, 200px)', maxWidth: 'clamp(200px, 30vw, 250px)' }}>
             <div className="mb-2" style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)', color: 'white' }}>Released Clues</div>
             <div className="dynamic-text-xl font-bold" style={{ color: 'white' }}>{releasedCount}</div>
           </div>
@@ -78,7 +79,7 @@ export default async function GMDashboard() {
 
         {/* Navigation Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 dynamic-gap-sm" style={{ marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
-          <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ border: '2px solid white' }}>
+          <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container-thick">
             <div className="flex items-start sm:items-center justify-between mb-4" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)' }}>
               <div className="flex-1 min-w-0">
                 <h3 className="dynamic-text-lg font-bold" style={{ color: 'white', marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}>
@@ -104,13 +105,13 @@ export default async function GMDashboard() {
               </svg>
             </div>
             <Link href="/gm/players" className="block">
-              <button type="button" className="nav-button">
+              <button type="button" className="button-component button-edit" style={{ width: '100%' }}>
                 Go to Player Management
               </button>
             </Link>
           </div>
 
-          <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ border: '2px solid white' }}>
+          <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container-thick">
             <div className="flex items-start sm:items-center justify-between mb-4" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)' }}>
               <div className="flex-1 min-w-0">
                 <h3 className="dynamic-text-lg font-bold" style={{ color: 'white', marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}>
@@ -136,7 +137,7 @@ export default async function GMDashboard() {
               </svg>
             </div>
             <Link href="/gm/clues" className="block">
-              <button type="button" className="nav-button">
+              <button type="button" className="button-component button-edit" style={{ width: '100%' }}>
                 Go to Clue Management
               </button>
             </Link>

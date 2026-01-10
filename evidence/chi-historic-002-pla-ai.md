@@ -1,5 +1,5 @@
 Recipients:
-China
+China + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 The PLA's AI UFO Program — China Is Using Artificial Intelligence to Track Them

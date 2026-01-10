@@ -16,7 +16,7 @@ interface Clue {
   id: string;
   title: string;
   targetCountry?: string | null;
-  targetArchetype?: string | null;
+  targetArchetypes?: string[] | null;
   targetDemeanor?: string | null;
   targetPlayer?: string | null;
   originCountry: string;
@@ -43,8 +43,8 @@ export default function CollapsibleClueCard({
   const getTargetDisplay = () => {
     if (clue.targetCountry) {
       return { type: "Country", value: clue.targetCountry };
-    } else if (clue.targetArchetype) {
-      return { type: "Archetype", value: clue.targetArchetype };
+    } else if (clue.targetArchetypes && clue.targetArchetypes.length > 0) {
+      return { type: "Archetype", value: clue.targetArchetypes.join(", ") };
     } else if (clue.targetDemeanor) {
       return { type: "Demeanor", value: clue.targetDemeanor };
     } else if (clue.targetPlayer) {

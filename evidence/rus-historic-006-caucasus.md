@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 1985 Caucasus Crash — The Soviet Recovery Operation Nobody Was Supposed to Know About

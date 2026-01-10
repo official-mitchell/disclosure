@@ -484,3 +484,83 @@ Documentation correctly shows combination targeting:
 - Auto-release for "Everyone" only
 - All other evidence requires manual GM release
 - Upsert behavior preserves GM settings on re-import
+
+---
+
+CHANGES MADE
+
+1. Database Schema (prisma/schema.prisma:43)
+
+- Changed targetArchetype from single Archetype? to targetArchetypes array Archetype[]
+- This allows clues to target multiple archetypes
+
+2. Filtering Logic (app/api/clues/visible/route.ts:9-74)
+
+- Implemented AND logic: players must match ALL specified filters
+- If both targetCountry and targetArchetypes are set, player must match both
+- Uses { has: session.archetype } to check if player's archetype is in the array
+
+3. Import Script (scripts/import-evidence.ts)
+
+- Updated to parse multiple archetypes from Recipients field
+- Changed targetArchetype to targetArchetypes array throughout
+- Supports syntax like "US + Intel/Oligarch + Military/Defense Contractor"
+
+4. Evidence Files
+
+- US historic (12 files): All updated to US + Intel/Oligarch + Military/Defense Contractor
+- Chinese historic (8 files): All updated to China + Intel/Oligarch + Military/Defense Contractor
+- Russian historic (8 files): All updated to Russia + Intel/Oligarch + Military/Defense Contractor
+- Global evidence (8 files): Remain as "Everyone" - visible to all players
+
+5. UI Components
+
+- Updated ClueForm.tsx:22 to handle targetArchetypes array
+- Updated CollapsibleClueCard.tsx:19,46 to display multiple archetypes
+- Updated API routes for creating/editing clues
+
+6. Migration Script
+
+Created MIGRATION-targetArchetypes.sql with the database migration
+
+Migration Summary
+
+✅ Database Changes
+
+- Migrated targetArchetype (single value) → targetArchetypes (array)
+- Schema verified: Column now stores multiple archetypes as "Archetype"[]
+- Zero errors during migration
+
+✅ Evidence Import Results
+
+- Created: 35 new evidence files
+- Updated: 1 existing file (welcome message)
+- Failed: 0
+
+✅ Verification
+
+Sample of targeting rules now in production:
+┌───────────────────────────────────┬─────────┬────────────────────────────────────┐
+│ Evidence │ Country │ Archetypes Required │
+├───────────────────────────────────┼─────────┼────────────────────────────────────┤
+│ USS Nimitz (US historic) │ US │ Intel/Oligarch OR Military/Defense │
+├───────────────────────────────────┼─────────┼────────────────────────────────────┤
+│ Hangzhou Airport (China historic) │ CHINA │ Intel/Oligarch OR Military/Defense │
+├───────────────────────────────────┼─────────┼────────────────────────────────────┤
+│ Dalnegorsk (Russia historic) │ RUSSIA │ Intel/Oligarch OR Military/Defense │
+├───────────────────────────────────┼─────────┼────────────────────────────────────┤
+│ Metallic Orbs (Global) │ None │ None (visible to everyone) │
+└───────────────────────────────────┴─────────┴────────────────────────────────────┘
+🎯 Access Logic Now Active
+
+Historic evidence requires BOTH:
+
+1. Country match: Player's country must match (US, China, or Russia)
+2. Archetype match: Player must be Intel/Oligarch OR Military/Defense Contractor
+
+Example scenarios:
+
+- ✅ US Intel/Oligarch → sees US historic evidence
+- ✅ US Military/Defense Contractor → sees US historic evidence
+- ❌ US Journalist → does NOT see US historic evidence
+- ❌ China Intel/Oligarch → does NOT see US historic evidence (wrong country)

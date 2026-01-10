@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Roselectronics "Plasma Stealth" — Russia's Impossible Breakthrough (or Did They Have Help?)

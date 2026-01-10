@@ -1,5 +1,5 @@
 Recipients:
-China
+China + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 China's Hypersonic Surprise — A Decade Ahead of Schedule (How?)

@@ -41,7 +41,12 @@ interface Character {
   mustConceal: string[];
 }
 
-export default function DossierPage() {
+interface DossierPageProps {
+  playerId?: string;
+}
+
+export default function DossierPage(props: DossierPageProps = {}) {
+  const { playerId } = props;
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +54,11 @@ export default function DossierPage() {
   useEffect(() => {
     async function fetchCharacter() {
       try {
-        const response = await fetch('/api/player/dossier');
+        const apiUrl = playerId 
+          ? `/api/gm/players/${playerId}/dossier`
+          : '/api/player/dossier';
+        
+        const response = await fetch(apiUrl);
         const data = await response.json();
 
         if (!response.ok) {
@@ -65,7 +74,7 @@ export default function DossierPage() {
     }
 
     fetchCharacter();
-  }, []);
+  }, [playerId]);
 
   if (loading) {
     return (

@@ -24,14 +24,14 @@ export async function POST(
 
     if (clue.targetCountry) {
       players = players.filter(p => p.country === clue.targetCountry);
-    } else if (clue.targetArchetype) {
-      players = players.filter(p => p.archetype === clue.targetArchetype);
+    } else if (clue.targetArchetypes && clue.targetArchetypes.length > 0) {
+      players = players.filter(p => clue.targetArchetypes.includes(p.archetype));
     } else if (clue.targetDemeanor) {
       players = players.filter(p => p.demeanor === clue.targetDemeanor);
     } else if (clue.targetPlayer) {
       players = players.filter(p => p.id === clue.targetPlayer);
     }
-    // If all target fields are null, all players are eligible
+    // If all target fields are null/empty, all players are eligible
 
     // Randomize selection
     const shuffled = players.sort(() => 0.5 - Math.random());

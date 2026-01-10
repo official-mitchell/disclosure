@@ -1,5 +1,5 @@
 Recipients:
-China
+China + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 China's 2025 UFO Wave — Something Is Happening in Chinese Skies

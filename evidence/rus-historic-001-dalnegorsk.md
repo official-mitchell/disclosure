@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Dalnegorsk "Height 611" — Russia's Roswell in the Far East

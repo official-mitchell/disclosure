@@ -1,5 +1,5 @@
 Recipients:
-Russia
+Russia + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Energia — Russia's Secret Space Corporation and the Technology That Doesn't Make Sense

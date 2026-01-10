@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Aguadilla, Puerto Rico — The Object That Split In Two and Dove Into the Ocean

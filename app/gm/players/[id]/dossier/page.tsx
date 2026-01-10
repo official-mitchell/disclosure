@@ -5,16 +5,18 @@ import DossierPage from '@/components/dossier/DossierPage';
 import Link from 'next/link';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function GMDossierView({ params }: PageProps) {
   await requireGMAuth();
 
+  const { id } = await params;
+
   const player = await prisma.player.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!player) {
@@ -22,40 +24,43 @@ export default async function GMDossierView({ params }: PageProps) {
   }
 
   const character = await prisma.character.findUnique({
-    where: { playerId: params.id },
+    where: { playerId: id },
   });
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom, #3d2820 0%, #1a1410 100%)' }}>
       <nav className="bg-gray-900 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-bold text-white">
-                GM: Character Dossier
-              </h1>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <div className="flex justify-between items-center" style={{ gap: 'clamp(1rem, 3vw, 2rem)' }}>
+            <div className="flex items-center" style={{ gap: 'clamp(1rem, 3vw, 2rem)' }}>
               <Link
                 href="/gm/players"
-                className="text-gray-300 hover:text-white transition text-sm"
+                className="nav-button"
+                style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
               >
                 ← Back to Players
               </Link>
+              <h1 className="text-xl font-bold" style={{ color: 'white', fontSize: 'clamp(1.125rem, 3vw, 1.5rem)' }}>
+                GM: Character Dossier
+              </h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-300 text-sm">
+            <div className="flex items-center" style={{ gap: 'clamp(1rem, 3vw, 2rem)' }}>
+              <span className="text-sm" style={{ color: 'white', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}>
                 Viewing: {player.name}
               </span>
               {character ? (
                 <Link
-                  href={`/gm/players/${params.id}/dossier/edit`}
-                  className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded text-sm"
+                  href={`/gm/players/${id}/dossier/edit`}
+                  className="button-component button-edit"
+                  style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
                 >
                   Edit Character
                 </Link>
               ) : (
                 <Link
-                  href={`/gm/players/${params.id}/dossier/edit`}
-                  className="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded text-sm"
+                  href={`/gm/players/${id}/dossier/edit`}
+                  className="button-component button-add"
+                  style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
                 >
                   Create Character
                 </Link>
@@ -76,7 +81,7 @@ export default async function GMDossierView({ params }: PageProps) {
               Character" to add one.
             </p>
             <Link
-              href={`/gm/players/${params.id}/dossier/edit`}
+              href={`/gm/players/${id}/dossier/edit`}
               className="inline-block px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded"
             >
               Create Character
@@ -84,7 +89,7 @@ export default async function GMDossierView({ params }: PageProps) {
           </div>
         ) : (
           <div className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(244, 232, 208, 0.05)' }}>
-            <DossierPage />
+            <DossierPage playerId={id} />
           </div>
         )}
       </main>

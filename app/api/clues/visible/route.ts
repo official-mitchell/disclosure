@@ -12,20 +12,12 @@ export async function GET() {
         released: true,
         retracted: false,
         OR: [
-          // Target all (all target fields are null)
+          // Target all (all target fields are null/empty)
           {
             targetCountry: null,
-            targetArchetype: null,
+            targetArchetypes: { isEmpty: true },
             targetDemeanor: null,
             targetPlayer: null,
-          },
-          // Target player's country
-          {
-            targetCountry: session.country as any,
-          },
-          // Target player's archetype
-          {
-            targetArchetype: session.archetype as any,
           },
           // Target specific player OR assigned to player
           {
@@ -37,6 +29,33 @@ export async function GET() {
                     playerId: session.playerId,
                   },
                 },
+              },
+            ],
+          },
+          // Target with country and/or archetype filters
+          // This requires ALL specified filters to match (AND logic)
+          {
+            AND: [
+              // If targetCountry is set, must match player's country
+              {
+                OR: [
+                  { targetCountry: null },
+                  { targetCountry: session.country as any },
+                ],
+              },
+              // If targetArchetypes is set, must include player's archetype
+              {
+                OR: [
+                  { targetArchetypes: { isEmpty: true } },
+                  { targetArchetypes: { has: session.archetype as any } },
+                ],
+              },
+              // If targetDemeanor is set, must match player's demeanor
+              {
+                OR: [
+                  { targetDemeanor: null },
+                  { targetDemeanor: session.demeanor as any },
+                ],
               },
             ],
           },

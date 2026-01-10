@@ -107,7 +107,7 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
 
       {/* Add/Edit Form */}
       {(showAddForm || editingId) && (
-        <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ border: '2px solid white' }}>
+        <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container-thick">
           <h3 className="dynamic-text-lg font-bold mb-4" style={{ color: 'white' }}>
             {editingId ? 'Edit Player' : 'Add New Player'}
           </h3>
@@ -191,21 +191,21 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
       )}
 
       {/* Player List */}
-      <div className="bg-gray-800 rounded-lg overflow-hidden" style={{ border: '2px solid white' }}>
-        <div className="bg-gray-900 border-b" style={{ borderColor: 'white', padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
+      <div className="bg-gray-800 rounded-lg overflow-hidden card-container-thick">
+        <div className="bg-gray-900 border-b card-separator" style={{ padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
           <h2 className="dynamic-text-lg font-bold" style={{ color: 'white' }}>
             Players ({initialPlayers.length})
           </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-900 border-b" style={{ borderColor: 'white' }}>
+            <thead className="bg-gray-900 border-b card-separator">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(34, 197, 94, 0.2)' }}>PIN</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(168, 85, 247, 0.2)' }}>Country</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(251, 146, 60, 0.2)' }}>Archetype</th>
-                <th className="px-6 py-3 text-right text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(239, 68, 68, 0.2)' }}>Actions</th>
+                <th className="text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(59, 130, 246, 0.2)', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', minWidth: 'clamp(100px, 20vw, 150px)' }}>Name</th>
+                <th className="text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(34, 197, 94, 0.2)', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', minWidth: 'clamp(80px, 15vw, 120px)' }}>PIN</th>
+                <th className="text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(168, 85, 247, 0.2)', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', minWidth: 'clamp(100px, 18vw, 140px)' }}>Country</th>
+                <th className="text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(251, 146, 60, 0.2)', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', minWidth: 'clamp(100px, 18vw, 140px)' }}>Archetype</th>
+                <th className="text-right text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(239, 68, 68, 0.2)', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', minWidth: 'clamp(140px, 25vw, 200px)' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -214,75 +214,92 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
                   key={player.id} 
                   className="hover:bg-gray-750"
                   style={{ 
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
-                    marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)'
+                    borderBottom: '1px solid rgba(156, 163, 175, 0.3)'
                   }}
                 >
                   <td 
-                    className="px-6 py-4 text-sm" 
+                    className="text-sm" 
                     style={{ 
                       color: 'white', 
                       fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                       backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                      padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+                      minWidth: 'clamp(100px, 20vw, 150px)'
                     }}
                   >
-                    {player.name}
+                    <Link
+                      href={`/gm/players/${player.id}/dossier`}
+                      className="button-component button-edit"
+                      style={{
+                        display: 'inline-block',
+                        width: 'auto',
+                        padding: 'clamp(0.375rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem)',
+                        fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+                        textDecoration: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {player.name}
+                    </Link>
                   </td>
                   <td 
-                    className="px-6 py-4 text-sm" 
+                    className="text-sm" 
                     style={{ 
                       color: 'white', 
                       fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                       backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                      padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+                      minWidth: 'clamp(80px, 15vw, 120px)'
                     }}
                   >
                     {player.pin}
                   </td>
                   <td 
-                    className="px-6 py-4 text-sm" 
+                    className="text-sm" 
                     style={{ 
                       color: 'white', 
                       fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                       backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                      padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+                      minWidth: 'clamp(100px, 18vw, 140px)'
                     }}
                   >
                     {COUNTRY_NAMES[player.country as keyof typeof COUNTRY_NAMES]}
                   </td>
                   <td 
-                    className="px-6 py-4 text-sm" 
+                    className="text-sm" 
                     style={{ 
                       color: 'white', 
                       fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                       backgroundColor: 'rgba(251, 146, 60, 0.1)',
-                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                      padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+                      minWidth: 'clamp(100px, 18vw, 140px)'
                     }}
                   >
                     {ARCHETYPE_NAMES[player.archetype as keyof typeof ARCHETYPE_NAMES]}
                   </td>
                   <td 
-                    className="px-6 py-4 text-sm text-right" 
+                    className="text-sm text-right" 
                     style={{ 
                       gap: 'clamp(0.5rem, 1.5vw, 0.75rem)', 
                       display: 'flex', 
                       justifyContent: 'flex-end',
                       backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                      padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+                      minWidth: 'clamp(140px, 25vw, 200px)'
                     }}
                   >
                     <button
                       onClick={() => handleEdit(player)}
                       className="button-component button-edit"
-                      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
+                      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(player.id, player.name)}
                       className="button-component button-delete"
-                      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
+                      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
                     >
                       Delete
                     </button>

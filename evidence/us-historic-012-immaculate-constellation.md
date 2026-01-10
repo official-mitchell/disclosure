@@ -1,5 +1,5 @@
 Recipients:
-US
+US + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 IMMACULATE CONSTELLATION — The Secret UAP Program Hidden Inside the Pentagon

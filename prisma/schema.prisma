@@ -21,29 +21,29 @@ model Player {
 }
 
 model Clue {
-  id              String           @id @default(uuid())
-  title           String
-  phase           Int
-  released        Boolean          @default(false)
-  releasedAt      DateTime?
-  retracted       Boolean          @default(false)
-  legitimacy      Legitimacy
-  confidentiality Confidentiality
-  originCountry   String
-  eventDate       String
-  backstory       String
-  imageUrl        String?
-  confidenceLevel ConfidenceLevel
-  supportingIntel String
-  source          String
-  takeaways       String[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  targetCountry   Country?
-  targetArchetype Archetype?
-  targetDemeanor  Demeanor?
-  targetPlayer    String?
-  clueAssignments ClueAssignment[]
+  id               String           @id @default(uuid())
+  title            String
+  phase            Int
+  released         Boolean          @default(false)
+  releasedAt       DateTime?
+  retracted        Boolean          @default(false)
+  legitimacy       Legitimacy
+  confidentiality  Confidentiality
+  originCountry    String
+  eventDate        String
+  backstory        String
+  imageUrl         String?
+  confidenceLevel  ConfidenceLevel
+  supportingIntel  String
+  source           String
+  takeaways        String[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  targetCountry    Country?
+  targetArchetypes Archetype[]
+  targetDemeanor   Demeanor?
+  targetPlayer     String?
+  clueAssignments  ClueAssignment[]
 }
 
 model ClueAssignment {

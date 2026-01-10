@@ -1,5 +1,5 @@
 Recipients:
-China
+China + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Hangzhou Airport Closure — When China Shut Down for a UFO

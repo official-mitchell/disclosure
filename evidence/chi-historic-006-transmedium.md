@@ -1,5 +1,5 @@
 Recipients:
-China
+China + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 China's Trans-Medium Patent — They Put "UFO Technology" in a Government Filing

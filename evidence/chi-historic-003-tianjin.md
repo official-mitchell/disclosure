@@ -1,5 +1,5 @@
 Recipients:
-China
+China + Intel/Oligarch + Military/Defense Contractor
 
 Title:
 Tianjin Airport 2024 — Two Nights, Two Shutdowns, Zero Explanations
