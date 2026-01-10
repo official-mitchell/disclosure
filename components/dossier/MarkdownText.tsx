@@ -1,5 +1,9 @@
+// MarkdownText Component
+// Changes:
+// - Updated: Added remark-breaks plugin to preserve single line breaks as <br> tags for better paragraph formatting
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import remarkBreaks from 'remark-breaks';
 
 interface MarkdownTextProps {
   content: string;
@@ -8,6 +12,7 @@ interface MarkdownTextProps {
 export default function MarkdownText({ content }: MarkdownTextProps) {
   return (
     <ReactMarkdown
+      remarkPlugins={[remarkBreaks]}
       rehypePlugins={[rehypeRaw]}
       components={{
         // Render paragraphs with spacing

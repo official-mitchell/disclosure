@@ -1,8 +1,13 @@
+// ClueCard Component
+// Changes:
+// - Updated: Added markdown rendering support for supporting intel section to allow line breaks and text formatting
+// - Updated: Footer badges (Legitimacy and Confidentiality) now use green background with white text and font size increased by 20%
 'use client';
 
 import { useState } from 'react';
 import { Clue } from '@prisma/client';
 import { LEGITIMACY_DISPLAY, CONFIDENTIALITY_DISPLAY, CONFIDENCE_DISPLAY } from '@/lib/constants';
+import MarkdownText from './dossier/MarkdownText';
 
 interface ClueCardProps {
   clue: Clue;
@@ -127,9 +132,9 @@ export default function ClueCard({ clue }: ClueCardProps) {
             <h4 className="dynamic-text-base font-semibold mb-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               SUPPORTING INTEL:
             </h4>
-            <p className="dynamic-text-base leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              {clue.supportingIntel}
-            </p>
+            <div className="dynamic-text-base leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <MarkdownText content={clue.supportingIntel} />
+            </div>
           </div>
         )}
 
@@ -155,12 +160,14 @@ export default function ClueCard({ clue }: ClueCardProps) {
       {/* Footer */}
       <div className="border-t card-separator dynamic-card-padding flex" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
         <span
-          className={`px-3 py-1 rounded text-xs font-semibold ${getLegitimacyColor(clue.legitimacy)}`}
+          className="px-3 py-1 rounded font-semibold bg-green-900 text-white"
+          style={{ fontSize: 'clamp(0.9rem, 2.4vw, 1.2rem)' }}
         >
           {LEGITIMACY_DISPLAY[clue.legitimacy as keyof typeof LEGITIMACY_DISPLAY]}
         </span>
         <span
-          className={`px-3 py-1 rounded text-xs font-semibold ${getConfidentialityColor(clue.confidentiality)}`}
+          className="px-3 py-1 rounded font-semibold bg-green-900 text-white"
+          style={{ fontSize: 'clamp(0.9rem, 2.4vw, 1.2rem)' }}
         >
           {CONFIDENTIALITY_DISPLAY[clue.confidentiality as keyof typeof CONFIDENTIALITY_DISPLAY]}
         </span>

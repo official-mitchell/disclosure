@@ -1,6 +1,10 @@
+// Player Dashboard Page
+// Changes:
+// - Updated: Replaced archetype display with occupation (covertOccupation if available, otherwise occupation)
 import { redirect } from 'next/navigation';
 import { getPlayerSession } from '@/lib/auth';
-import { COUNTRY_NAMES, ARCHETYPE_NAMES } from '@/lib/constants';
+import { COUNTRY_NAMES } from '@/lib/constants';
+import { prisma } from '@/lib/db';
 import CluesDisplay from '@/components/CluesDisplay';
 import Link from 'next/link';
 
@@ -11,8 +15,20 @@ export default async function PlayerDashboard() {
     redirect('/login');
   }
 
-  const countryName = COUNTRY_NAMES[session.country as keyof typeof COUNTRY_NAMES];
-  const archetypeName = ARCHETYPE_NAMES[session.archetype as keyof typeof ARCHETYPE_NAMES];
+  // Fetch character to get occupation
+  const character = await prisma.character.findUnique({
+    where: {
+      playerId: session.playerId,
+    },
+    select: {
+      occupation: true,
+      covertOccupation: true,
+    },
+  });
+
+  const countryName = COUNTRY_NAMES[session.country as keyof typeof COUNTRY_NAMES] || session.country;
+  // Use covertOccupation if available, otherwise use occupation
+  const occupationDisplay = character?.covertOccupation || character?.occupation || 'Unknown';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
@@ -106,7 +122,7 @@ export default async function PlayerDashboard() {
                 </h2>
                 <p className="dynamic-text-base mt-1" style={{ color: '#a7f3d0' }}>
                   You are <span className="font-bold">{session.name}</span>,{' '}
-                  <span className="font-bold">{archetypeName}</span>,{' '}
+                  <span className="font-bold">{occupationDisplay}</span>,{' '}
                   <span className="font-bold">{countryName}</span>
                 </p>
               </div>

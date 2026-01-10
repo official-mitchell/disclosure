@@ -3,11 +3,13 @@
 // - Created: Collapsible clue card component for displaying clue details with expand/collapse functionality
 // - Updated: Restructured layout - buttons above title, Origin moved to details section, improved spacing, left-aligned list
 // - Updated: Replaced text caret (▼/▶) with SVG chevron caret matching ClueCard component, with rotation animation
+// - Updated: Added markdown rendering support for supporting intel section to allow line breaks and text formatting
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import ReleaseControls from './ReleaseControls';
+import MarkdownText from './dossier/MarkdownText';
 
 interface Clue {
   id: string;
@@ -154,7 +156,9 @@ export default function CollapsibleClueCard({ clue }: CollapsibleClueCardProps) 
           {clue.supportingIntel && (
             <div style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
               <span className="dynamic-text-base font-semibold mb-2 block" style={{ color: 'white' }}>Supporting Intel:</span>
-              <p className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{clue.supportingIntel}</p>
+              <div className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                <MarkdownText content={clue.supportingIntel} />
+              </div>
             </div>
           )}
 

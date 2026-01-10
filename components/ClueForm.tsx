@@ -283,6 +283,7 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
             required
             className="form-input form-input-dark"
             style={{ minHeight: 'clamp(5rem, 12vw, 8rem)' }}
+            placeholder="Supports markdown formatting: **bold**, *italic*, line breaks"
           />
         </div>
 

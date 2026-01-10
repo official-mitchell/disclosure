@@ -58,6 +58,11 @@ export const ARCHETYPE_NAMES = {
   EXECUTIVE: 'Executive',
   JOURNALIST: 'Journalist',
   OPERATIVE: 'Operative',
+  MILITARY_DEFENSE_CONTRACTOR: 'Military / Defense Contractor',
+  HIGH_RANKING_POLITICIAN: 'High Ranking Politician',
+  INTEL_OLIGARCH: 'Intel / Oligarch',
+  JOURNALIST_MEDIA: 'Journalist / Media',
+  HIGH_RANKING_SCIENTIST: 'High Ranking Scientist',
 };
 
 export const LEGITIMACY_DISPLAY = {

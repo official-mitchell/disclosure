@@ -1,3 +1,6 @@
+// import-evidence.ts
+// Changes:
+// - Updated: Modified parser to preserve empty lines in supporting intel section to maintain paragraph breaks in markdown rendering
 import fs from "fs";
 import path from "path";
 import { prisma } from "../lib/db";
@@ -37,7 +40,8 @@ function parseEvidenceFile(filePath: string): EvidenceData {
   let sectionContent: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const originalLine = lines[i];
+    const line = originalLine.trim();
 
     // Detect section headers
     if (line === "Recipients:") {
@@ -92,20 +96,27 @@ function parseEvidenceFile(filePath: string): EvidenceData {
       sectionContent = [];
     } else if (line === "TAKEAWAYS") {
       if (currentSection === "supportingIntel") {
+        // For supporting intel, preserve empty lines to maintain paragraph breaks
         data.supportingIntel = sectionContent.join("\n").trim();
       }
       currentSection = "takeaways";
       collectingSection = true;
       sectionContent = [];
-    } else if (collectingSection && line !== "") {
+    } else if (collectingSection) {
       // Collect content for current section
       if (currentSection === "takeaways") {
-        // Parse numbered takeaways
-        const match = line.match(/^\d+\.\s*(.+)$/);
-        if (match) {
-          data.takeaways!.push(match[1]);
+        // Parse numbered takeaways (skip empty lines)
+        if (line !== "") {
+          const match = line.match(/^\d+\.\s*(.+)$/);
+          if (match) {
+            data.takeaways!.push(match[1]);
+          }
         }
-      } else {
+      } else if (currentSection === "supportingIntel") {
+        // For supporting intel, preserve original line including empty lines for paragraph breaks
+        sectionContent.push(originalLine);
+      } else if (line !== "") {
+        // For other sections, only collect non-empty lines
         sectionContent.push(line);
       }
     }
@@ -115,6 +126,7 @@ function parseEvidenceFile(filePath: string): EvidenceData {
   if (currentSection === "takeaways" && sectionContent.length > 0) {
     // Already handled in the loop
   } else if (currentSection === "supportingIntel") {
+    // Preserve empty lines for paragraph breaks, but trim leading/trailing whitespace
     data.supportingIntel = sectionContent.join("\n").trim();
   }
 
