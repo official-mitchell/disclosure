@@ -147,11 +147,11 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 After running `npm run db:seed`:
 
 **Players:**
-- Alice Johnson (US, Scientist) - PIN: 1234
-- Boris Petrov (Russia, Spy) - PIN: 5678
-- Chen Wei (China, Diplomat) - PIN: 9012
+- Test players will be created with the `[EXAMPLE]` prefix
+- Use the migration scripts to populate with actual game players
+- Remove example players before production deployment: `npx tsx scripts/remove-example-players.ts`
 
-**GM:** Password: admin123
+**GM:** Password set via `GM_PASSWORD` environment variable
 
 ## Deployment
 
@@ -211,6 +211,53 @@ If schema changes are made, sync the database:
 DATABASE_URL=$(grep POSTGRES_URL .env.production | cut -d '=' -f2- | tr -d '"') npx prisma db push
 ```
 
+## Database Migrations and Maintenance
+
+### Naming Conventions
+
+**Player Names**:
+- Production player names should NEVER have an `[EXAMPLE]` prefix
+- Example players are for testing only and should be removed before deployment
+- Player names must match exactly (case-sensitive) across all imports and scripts
+
+**Database Enums**:
+- **Country**: `US`, `RUSSIA`, `CHINA`
+- **Demeanor**: `ANTI_DISCLOSURE`, `AGNOSTIC`, `PRO_DISCLOSURE`
+- **Archetype**: `MILITARY_DEFENSE_CONTRACTOR`, `HIGH_RANKING_POLITICIAN`, `INTEL_OLIGARCH`, `JOURNALIST_MEDIA`, `HIGH_RANKING_SCIENTIST`
+
+### Migration Scripts
+
+Located in `/scripts/`:
+
+```bash
+# Migrate player attributes (country, demeanor, archetype)
+npx tsx scripts/migrate-players.ts
+
+# Migrate clue targeting system
+npx tsx scripts/migrate-clues.ts
+
+# Remove example/test players
+npx tsx scripts/remove-example-players.ts
+
+# Check migration status
+npx tsx scripts/check-db-status.ts
+npx tsx scripts/check-unmigrated.ts
+```
+
+### Evidence Import
+
+Import evidence files from markdown format:
+
+```bash
+# Import evidence from /evidence directory
+npx tsx scripts/import-evidence.ts
+```
+
+**Evidence File Naming Convention**:
+- Files should be in markdown format (`.md`)
+- Place in `/evidence/` directory
+- See `/evidence/EVIDENCE_FORMAT.md` for structure requirements
+
 ## Character Sheet Import
 
 Import character sheets from Notion HTML exports into the database.
@@ -220,8 +267,8 @@ Import character sheets from Notion HTML exports into the database.
 **CRITICAL**: HTML files must be named **exactly** as the player's login name.
 
 Examples:
-- If the player login name is `[EXAMPLE] Alice Johnson`, the file must be `[EXAMPLE] Alice Johnson.html`
-- If the player login name is `[EXAMPLE] Boris Petrov`, the file must be `[EXAMPLE] Boris Petrov.html`
+- If the player login name is `Kassidy Neville`, the file must be `Kassidy Neville.html`
+- If the player login name is `Sarah Fierce`, the file must be `Sarah Fierce.html`
 
 The filename (without `.html`) must match the `name` field in the Player table exactly (case-sensitive, including spaces and special characters).
 
@@ -277,12 +324,25 @@ The filename (without `.html`) must match the `name` field in the Player table e
 ## Useful Commands
 
 ```bash
-npm run dev              # Start dev server
-npm run build           # Build for production
-npx prisma studio       # Open database GUI
-npx prisma db push      # Push schema to database
-npm run db:seed         # Seed test data
-npm run sync:characters # Import character sheets from HTML
+# Development
+npm run dev                              # Start dev server
+npm run build                            # Build for production
+
+# Database
+npx prisma studio                        # Open database GUI
+npx prisma db push                       # Push schema to database
+npx prisma generate                      # Regenerate Prisma client
+npm run db:seed                          # Seed test data
+
+# Imports
+npm run sync:characters                  # Import character sheets from HTML
+npx tsx scripts/import-evidence.ts       # Import evidence from markdown
+
+# Migrations
+npx tsx scripts/migrate-players.ts       # Migrate player attributes
+npx tsx scripts/migrate-clues.ts         # Migrate clue targeting
+npx tsx scripts/remove-example-players.ts # Remove example players
+npx tsx scripts/check-db-status.ts       # Check migration status
 ```
 
 ## Routes

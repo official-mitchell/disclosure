@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,56 +8,51 @@ datasource db {
 }
 
 model Player {
-  id            String           @id @default(uuid())
-  name          String           @unique
-  pin           String
-  country       Country
-  archetype     Archetype
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-
-  clueAssignments ClueAssignment[]
+  id              String           @id @default(uuid())
+  name            String           @unique
+  pin             String
+  country         Country
+  archetype       Archetype
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  demeanor        Demeanor?        @default(AGNOSTIC)
   character       Character?
+  clueAssignments ClueAssignment[]
 }
 
 model Clue {
-  id               String         @id @default(uuid())
-  title            String
-  phase            Int
-  targetType       TargetType
-  targetValue      String?
-  released         Boolean        @default(false)
-  releasedAt       DateTime?
-  retracted        Boolean        @default(false)
-
-  // Metadata
-  legitimacy       Legitimacy
-  confidentiality  Confidentiality
-  originCountry    String
-
-  // Content
-  eventDate        String
-  backstory        String         @db.Text
-  imageUrl         String?
-  confidenceLevel  ConfidenceLevel
-  supportingIntel  String         @db.Text
-  source           String
-  takeaways        String[]
-
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-
-  clueAssignments  ClueAssignment[]
+  id              String           @id @default(uuid())
+  title           String
+  phase           Int
+  released        Boolean          @default(false)
+  releasedAt      DateTime?
+  retracted       Boolean          @default(false)
+  legitimacy      Legitimacy
+  confidentiality Confidentiality
+  originCountry   String
+  eventDate       String
+  backstory       String
+  imageUrl        String?
+  confidenceLevel ConfidenceLevel
+  supportingIntel String
+  source          String
+  takeaways       String[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  targetCountry   Country?
+  targetArchetype Archetype?
+  targetDemeanor  Demeanor?
+  targetPlayer    String?
+  clueAssignments ClueAssignment[]
 }
 
 model ClueAssignment {
-  id          String    @id @default(uuid())
-  clueId      String
-  playerId    String
-  assignedAt  DateTime  @default(now())
-
-  clue        Clue      @relation(fields: [clueId], references: [id], onDelete: Cascade)
-  player      Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  clueId     String
+  playerId   String
+  assignedAt DateTime @default(now())
+  clue       Clue     @relation(fields: [clueId], references: [id], onDelete: Cascade)
+  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
   @@unique([clueId, playerId])
   @@index([playerId])
@@ -68,49 +60,30 @@ model ClueAssignment {
 }
 
 model Character {
-  id                    String   @id @default(uuid())
-  playerId              String   @unique
-  player                Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
-
-  // Header
-  displayName           String
-  nationalityBloc       String
-  occupation            String
-  covertOccupation      String?
-  publicReputation      String   @db.Text
-  portraitUrl           String?
-
-  // Section 1: Roles
-  archetypeTitle        String
-  permissions           String[]
-  restrictions          String[]
-
-  // Section 2: Backstory
-  backstory             String   @db.Text
-
-  // Section 3: Motivations (stored as JSON)
-  motivations           Json     // [{label, description}]
-
-  // Section 4: Authority
-  formalAuthority       String[]
-  informalFears         String[]
-  safelyIgnore          String[]
-
-  // Section 5: Exposure
-  exposureConsequences  String   @db.Text
-
-  // Section 6: Private Want
-  privateWant           String   @db.Text
-
-  // Section 7: Disclosure
-  disclosureBelief      String   @db.Text
-
-  // Section 8: Boundaries
-  canDiscuss            String[]
-  mustConceal           String[]
-
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                   String   @id @default(uuid())
+  playerId             String   @unique
+  displayName          String
+  nationalityBloc      String
+  occupation           String
+  publicReputation     String
+  portraitUrl          String?
+  archetypeTitle       String
+  permissions          String[]
+  restrictions         String[]
+  backstory            String
+  motivations          Json
+  exposureConsequences String
+  privateWant          String
+  disclosureBelief     String
+  canDiscuss           String[]
+  mustConceal          String[]
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  covertOccupation     String?
+  formalAuthority      String[]
+  informalFears        String[]
+  safelyIgnore         String[]
+  player               Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
 }
 
 enum Country {
@@ -127,13 +100,17 @@ enum Archetype {
   EXECUTIVE
   JOURNALIST
   OPERATIVE
+  MILITARY_DEFENSE_CONTRACTOR
+  HIGH_RANKING_POLITICIAN
+  INTEL_OLIGARCH
+  JOURNALIST_MEDIA
+  HIGH_RANKING_SCIENTIST
 }
 
-enum TargetType {
-  all
-  country
-  archetype
-  player
+enum Demeanor {
+  ANTI_DISCLOSURE
+  AGNOSTIC
+  PRO_DISCLOSURE
 }
 
 enum Legitimacy {
@@ -156,4 +133,11 @@ enum ConfidenceLevel {
   medium
   low
   unverified
+}
+
+enum TargetType {
+  all
+  country
+  archetype
+  player
 }

@@ -2,7 +2,9 @@ import fs from "fs";
 import path from "path";
 import { prisma } from "../lib/db";
 import {
-  TargetType,
+  Country,
+  Archetype,
+  Demeanor,
   Legitimacy,
   Confidentiality,
   ConfidenceLevel,
@@ -128,38 +130,131 @@ function mapConfidenceLevel(confidence: string): ConfidenceLevel {
   return ConfidenceLevel.unverified;
 }
 
-interface RecipientTarget {
-  targetType: TargetType;
-  targetValue: string | null;
+interface RecipientFilters {
+  targetCountry: Country | null;
+  targetArchetype: Archetype | null;
+  targetDemeanor: Demeanor | null;
+  targetPlayer: string | null;
+  isEveryone: boolean;
 }
 
-function parseRecipients(recipients: string): RecipientTarget {
-  const normalized = recipients.trim().toUpperCase();
+function parseRecipients(recipients: string): RecipientFilters {
+  const filters: RecipientFilters = {
+    targetCountry: null,
+    targetArchetype: null,
+    targetDemeanor: null,
+    targetPlayer: null,
+    isEveryone: false,
+  };
 
   // Check for "Everyone" or "All"
+  const normalized = recipients.trim().toUpperCase();
   if (normalized === "EVERYONE" || normalized === "ALL") {
-    return { targetType: TargetType.all, targetValue: null };
+    filters.isEveryone = true;
+    return filters;
   }
 
-  // Check for country
-  if (normalized === "US" || normalized === "USA" || normalized === "UNITED STATES") {
-    return { targetType: TargetType.country, targetValue: "US" };
-  }
-  if (normalized === "RUSSIA" || normalized === "RUSSIAN") {
-    return { targetType: TargetType.country, targetValue: "RUSSIA" };
-  }
-  if (normalized === "CHINA" || normalized === "CHINESE") {
-    return { targetType: TargetType.country, targetValue: "CHINA" };
+  // Split by + or comma to handle combinations like "US + Pro-Disclosure"
+  const parts = recipients
+    .split(/[+,]/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+
+  for (const part of parts) {
+    const upperPart = part.toUpperCase();
+
+    // Check for country
+    if (
+      upperPart === "US" ||
+      upperPart === "USA" ||
+      upperPart === "UNITED STATES"
+    ) {
+      filters.targetCountry = Country.US;
+      continue;
+    }
+    if (upperPart === "RUSSIA" || upperPart === "RUSSIAN") {
+      filters.targetCountry = Country.RUSSIA;
+      continue;
+    }
+    if (upperPart === "CHINA" || upperPart === "CHINESE") {
+      filters.targetCountry = Country.CHINA;
+      continue;
+    }
+
+    // Check for archetype
+    if (
+      upperPart === "MILITARY" ||
+      upperPart === "DEFENSE CONTRACTOR" ||
+      upperPart === "MILITARY / DEFENSE CONTRACTOR" ||
+      upperPart === "MILITARY/DEFENSE CONTRACTOR"
+    ) {
+      filters.targetArchetype = Archetype.MILITARY_DEFENSE_CONTRACTOR;
+      continue;
+    }
+    if (
+      upperPart === "POLITICIAN" ||
+      upperPart === "HIGH RANKING POLITICIAN" ||
+      upperPart === "HIGH-RANKING POLITICIAN"
+    ) {
+      filters.targetArchetype = Archetype.HIGH_RANKING_POLITICIAN;
+      continue;
+    }
+    if (
+      upperPart === "INTEL" ||
+      upperPart === "OLIGARCH" ||
+      upperPart === "INTEL / OLIGARCH" ||
+      upperPart === "INTEL/OLIGARCH"
+    ) {
+      filters.targetArchetype = Archetype.INTEL_OLIGARCH;
+      continue;
+    }
+    if (
+      upperPart === "JOURNALIST" ||
+      upperPart === "MEDIA" ||
+      upperPart === "JOURNALIST / MEDIA" ||
+      upperPart === "JOURNALIST/MEDIA"
+    ) {
+      filters.targetArchetype = Archetype.JOURNALIST_MEDIA;
+      continue;
+    }
+    if (
+      upperPart === "SCIENTIST" ||
+      upperPart === "HIGH RANKING SCIENTIST" ||
+      upperPart === "HIGH-RANKING SCIENTIST"
+    ) {
+      filters.targetArchetype = Archetype.HIGH_RANKING_SCIENTIST;
+      continue;
+    }
+
+    // Check for demeanor
+    if (
+      upperPart === "ANTI-DISCLOSURE" ||
+      upperPart === "ANTI DISCLOSURE" ||
+      upperPart === "ANTIDISCLOSURE"
+    ) {
+      filters.targetDemeanor = Demeanor.ANTI_DISCLOSURE;
+      continue;
+    }
+    if (upperPart === "AGNOSTIC") {
+      filters.targetDemeanor = Demeanor.AGNOSTIC;
+      continue;
+    }
+    if (
+      upperPart === "PRO-DISCLOSURE" ||
+      upperPart === "PRO DISCLOSURE" ||
+      upperPart === "PRODISCLOSURE"
+    ) {
+      filters.targetDemeanor = Demeanor.PRO_DISCLOSURE;
+      continue;
+    }
+
+    // If nothing matched, assume it's a specific player name
+    if (filters.targetPlayer === null) {
+      filters.targetPlayer = part.trim();
+    }
   }
 
-  // Check for archetype
-  const archetypes = ["SCIENTIST", "SPY", "DIPLOMAT", "GENERAL", "EXECUTIVE", "JOURNALIST", "OPERATIVE"];
-  if (archetypes.includes(normalized)) {
-    return { targetType: TargetType.archetype, targetValue: normalized };
-  }
-
-  // Otherwise assume it's a player name
-  return { targetType: TargetType.player, targetValue: recipients.trim() };
+  return filters;
 }
 
 async function main() {
@@ -171,7 +266,8 @@ async function main() {
 
   const files = fs
     .readdirSync(EVIDENCE_DIR)
-    .filter((f) => f.endsWith(".md") || f.endsWith(".markdown"));
+    .filter((f) => f.endsWith(".md") || f.endsWith(".markdown"))
+    .filter((f) => !f.includes("EVIDENCE_FORMAT")); // Skip documentation
 
   if (files.length === 0) {
     console.log("No markdown files found in /evidence");
@@ -196,12 +292,19 @@ async function main() {
       // Use filename as unique identifier for upsert
       const clueId = `evidence-${filename.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
-      // Parse recipients to determine target
-      const recipientTarget = parseRecipients(evidence.recipients || "Everyone");
+      // Parse recipients to determine filters
+      const recipientFilters = parseRecipients(
+        evidence.recipients || "Everyone"
+      );
 
-      // Determine if this should be auto-released
+      // Determine if this should be auto-released (everyone with no filters)
       const isWelcome = filename.toLowerCase().includes("welcome");
-      const autoRelease = isWelcome || recipientTarget.targetType === TargetType.all;
+      const autoRelease = isWelcome || recipientFilters.isEveryone;
+
+      // Check if clue already exists to determine created vs updated
+      const existingClue = await prisma.clue.findUnique({
+        where: { id: clueId },
+      });
 
       const clue = await prisma.clue.upsert({
         where: { id: clueId },
@@ -213,14 +316,16 @@ async function main() {
           supportingIntel: evidence.supportingIntel,
           source: evidence.source,
           takeaways: evidence.takeaways,
-          // Don't update metadata fields on update to preserve GM settings
+          // Don't update targeting/metadata fields on update to preserve GM settings
         },
         create: {
           id: clueId,
           title: evidence.title,
           phase: 1, // Default to phase 1
-          targetType: recipientTarget.targetType,
-          targetValue: recipientTarget.targetValue,
+          targetCountry: recipientFilters.targetCountry,
+          targetArchetype: recipientFilters.targetArchetype,
+          targetDemeanor: recipientFilters.targetDemeanor,
+          targetPlayer: recipientFilters.targetPlayer,
           legitimacy: Legitimacy.verified,
           confidentiality: Confidentiality.public,
           originCountry: evidence.origin || "Unknown",
@@ -235,16 +340,21 @@ async function main() {
         },
       });
 
-      const existed = await prisma.clue.findUnique({
-        where: { id: clueId },
-        select: { createdAt: true, updatedAt: true },
-      });
-
-      if (existed && existed.createdAt.getTime() !== existed.updatedAt.getTime()) {
+      if (existingClue) {
         console.log(`✓ Updated "${evidence.title}"`);
         updated++;
       } else {
-        console.log(`✓ Created "${evidence.title}" (ID: ${clueId})`);
+        const targetDesc = recipientFilters.isEveryone
+          ? "Everyone"
+          : [
+              recipientFilters.targetCountry,
+              recipientFilters.targetArchetype,
+              recipientFilters.targetDemeanor,
+              recipientFilters.targetPlayer,
+            ]
+              .filter(Boolean)
+              .join(" + ");
+        console.log(`✓ Created "${evidence.title}" (Target: ${targetDesc})`);
         created++;
       }
     } catch (error) {
