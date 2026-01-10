@@ -170,40 +170,146 @@ export function parseCharacterHtml(filePath: string): CharacterData {
   // Look for paragraphs with strong tags (questions) and collect following ul elements
   let currentCategory = "";
 
-  $authority.each((_, el) => {
+  // For <details><summary> structure, getSection returns the .indented div
+  // We need to iterate over its children instead
+  let $elementsToProcess = $authority;
+  if ($authority.length === 1 && $authority.first().hasClass("indented")) {
+    $elementsToProcess = $authority.children();
+  }
+
+  $elementsToProcess.each((_, el) => {
     const $el = $(el);
 
-    // Each element is a div that might contain a <p> or <ul>
-    // Check for paragraph with strong tag (question header)
-    const $p = $el.find("p");
-    if ($p.length > 0) {
-      const strongText = $p.find("strong").text().toLowerCase();
+    // Check if this div has a direct ul > li structure
+    const $directUl = $el.find("> ul");
+    let isBreaStyle = false;
+    let isOscarStyle = false;
 
-      // Check "informal" before "formal" since "informally" contains "formal"
-      if (strongText.includes("informal") || strongText.includes("fear") || strongText.includes("rely")) {
-        currentCategory = "informal";
-      } else if (strongText.includes("formal")) {
-        currentCategory = "formal";
-      } else if (strongText.includes("ignore")) {
-        currentCategory = "ignore";
+    if ($directUl.length > 0) {
+      const firstLi = $directUl.children("li").first();
+
+      // Check for Brea-style: li has direct strong child with category header
+      const strongInLi = firstLi.children("strong").first();
+      if (strongInLi.length > 0) {
+        const strongText = strongInLi.text().toLowerCase();
+        // It's a Brea-style header if it ends with ":" or contains category keywords
+        if (strongText.endsWith(":") ||
+            (strongText.includes("formal") || strongText.includes("informal") ||
+             strongText.includes("influence") || strongText.includes("ignore"))) {
+          isBreaStyle = true;
+        }
+      }
+
+      // Check for Oscar-style: li contains plain text question followed by nested ul
+      if (!isBreaStyle) {
+        // Get the direct text of the li (not including nested elements)
+        const liText = firstLi.clone().children().remove().end().text().toLowerCase().trim();
+        // Oscar-style if the text looks like a question
+        if (liText.includes("formal") || liText.includes("informal") ||
+            liText.includes("fear") || liText.includes("ignore") || liText.includes("who")) {
+          isOscarStyle = true;
+        }
       }
     }
 
-    // Check for bulleted list
-    const $ul = $el.find("ul");
-    if ($ul.length > 0 && currentCategory) {
-      const bullets = $ul.find("li")
-        .map((_, li) => htmlToText($(li).html() || ""))
-        .get()
-        .filter(text => text.length > 0);
+    if (isOscarStyle) {
+      // STRUCTURE 3: Oscar-style (div > ul > li with plain text question + nested ul)
+      $directUl.children("li").each((_, li) => {
+        const $li = $(li);
+        // Get the question text (direct text of the li, excluding nested elements)
+        const questionText = $li.clone().children().remove().end().text().toLowerCase().trim();
 
-      // Add to appropriate category
-      if (currentCategory === "formal") {
-        formalAuthority.push(...bullets);
-      } else if (currentCategory === "informal") {
-        informalFears.push(...bullets);
-      } else if (currentCategory === "ignore") {
-        safelyIgnore.push(...bullets);
+        // Determine category from the question text
+        let category = "";
+        // Check "informal" before "formal" since "informally" contains "formal"
+        if (questionText.includes("informal") || questionText.includes("fear") || questionText.includes("rely")) {
+          category = "informal";
+        } else if (questionText.includes("formal")) {
+          category = "formal";
+        } else if (questionText.includes("ignore")) {
+          category = "ignore";
+        }
+
+        // Extract nested bullets (in nested div > ul > li structure)
+        if (category) {
+          const nestedBullets = $li.find("> div > ul > li, > ul > li")
+            .map((_, nestedLi) => htmlToText($(nestedLi).html() || ""))
+            .get()
+            .filter(text => text.length > 0);
+
+          if (category === "formal") {
+            formalAuthority.push(...nestedBullets);
+          } else if (category === "informal") {
+            informalFears.push(...nestedBullets);
+          } else if (category === "ignore") {
+            safelyIgnore.push(...nestedBullets);
+          }
+        }
+      });
+    } else if (isBreaStyle) {
+      // STRUCTURE 2: Brea-style (div > ul > li > strong + nested ul with bullets)
+      $directUl.children("li").each((_, li) => {
+        const $li = $(li);
+        const strongText = $li.children("strong").first().text().toLowerCase();
+
+        // Determine category from the strong text
+        let category = "";
+        if (strongText.includes("informal") || strongText.includes("influence") || strongText.includes("pressure") || strongText.includes("fear") || strongText.includes("rely")) {
+          category = "informal";
+        } else if (strongText.includes("formal")) {
+          category = "formal";
+        } else if (strongText.includes("ignore")) {
+          category = "ignore";
+        }
+
+        // Extract nested bullets
+        if (category) {
+          const nestedBullets = $li.find("> div > ul > li, > ul > li")
+            .map((_, nestedLi) => htmlToText($(nestedLi).html() || ""))
+            .get()
+            .filter(text => text.length > 0);
+
+          if (category === "formal") {
+            formalAuthority.push(...nestedBullets);
+          } else if (category === "informal") {
+            informalFears.push(...nestedBullets);
+          } else if (category === "ignore") {
+            safelyIgnore.push(...nestedBullets);
+          }
+        }
+      });
+    } else {
+      // STRUCTURE 1: Bernardo-style (div > p with question OR div > ul with bullets)
+      // Check for paragraph with strong tag (question header)
+      const $p = $el.find("p");
+      if ($p.length > 0) {
+        const strongText = $p.find("strong").text().toLowerCase();
+
+        // Check "informal" before "formal" since "informally" contains "formal"
+        if (strongText.includes("informal") || strongText.includes("fear") || strongText.includes("rely")) {
+          currentCategory = "informal";
+        } else if (strongText.includes("formal")) {
+          currentCategory = "formal";
+        } else if (strongText.includes("ignore")) {
+          currentCategory = "ignore";
+        }
+      }
+
+      // Handle bulleted lists following category headers
+      if ($el.find("ul").length > 0 && currentCategory) {
+        const bullets = $el.find("ul > li")
+          .map((_, li) => htmlToText($(li).html() || ""))
+          .get()
+          .filter(text => text.length > 0);
+
+        // Add to appropriate category
+        if (currentCategory === "formal") {
+          formalAuthority.push(...bullets);
+        } else if (currentCategory === "informal") {
+          informalFears.push(...bullets);
+        } else if (currentCategory === "ignore") {
+          safelyIgnore.push(...bullets);
+        }
       }
     }
   });

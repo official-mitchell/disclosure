@@ -208,3 +208,169 @@ npx prisma migrate reset
 - Tailwind v4 with @tailwindcss/postcss
 - Next.js 16.1.1 (middleware uses deprecated convention)
 - 5 test players seeded (3 countries, 5 archetypes)
+
+---
+
+## Character HTML Parsing: Section 4 Challenges
+
+### Overview
+
+Section 4 ("Who do you answer to?") proved to be the most complex section to parse due to **three different Notion export structures** being used across the 30 character sheets. The parser needed to handle all three formats without breaking any existing characters.
+
+### The Three Structures
+
+#### Structure 1: Bernardo-style (Separate P and UL)
+**Format:** Separate `<div>` elements for questions and answers
+- Questions: `<div><p><strong>Question?</strong></p></div>`
+- Answers: `<div><ul><li>Answer text</li></ul></div>`
+
+**Example:**
+```html
+<div><p><strong>Who has formal authority over you?</strong></p></div>
+<div><ul><li>Senate leadership...</li></ul></div>
+<div><p><strong>Who you informally fear or rely on?</strong></p></div>
+<div><ul><li>Rep. Maria St. Germain...</li></ul></div>
+<div><ul><li>Amanda O'Brien...</li></ul></div>
+```
+
+**Parsing Strategy:**
+- Iterate through divs sequentially
+- When we find a `<p>` with `<strong>`, extract the question text and set current category
+- When we find a `<ul>`, extract bullets and add to current category
+- Track state with `currentCategory` variable
+
+**Key Challenge:** "informally" contains "formal" substring
+- **Solution:** Check for "informal" **before** checking for "formal" in keyword matching
+
+---
+
+#### Structure 2: Brea-style (Nested Strong Headers)
+**Format:** Nested structure with strong tags as headers
+- `<ul><li><strong>Question:</strong><ul><li>Answer</li></ul></li></ul>`
+
+**Example:**
+```html
+<div>
+  <ul>
+    <li>
+      <strong>Formal authority:</strong>
+      <div><ul><li>DIA handling officers</li></ul></div>
+      <div><ul><li>Think-tank leadership</li></ul></div>
+    </li>
+  </ul>
+</div>
+```
+
+**Parsing Strategy:**
+- Detect by checking if first `<li>` has direct `<strong>` child
+- Verify strong text ends with ":" or contains category keywords
+- Extract nested bullets from `> div > ul > li` or `> ul > li`
+
+**Detection Logic:**
+```typescript
+const strongInLi = firstLi.children("strong").first();
+if (strongInLi.length > 0) {
+  const strongText = strongInLi.text().toLowerCase();
+  if (strongText.endsWith(":") ||
+      strongText.includes("formal") ||
+      strongText.includes("informal")) {
+    isBreaStyle = true;
+  }
+}
+```
+
+---
+
+#### Structure 3: Oscar-style (Details/Summary with Plain Text)
+**Format:** Uses `<details><summary>` with plain text questions in `<li>`
+- `<ul><li>Question text?<div><ul><li>Answer</li></ul></div></li></ul>`
+
+**Example:**
+```html
+<details><summary>4. Who do you answer to?</summary>
+  <div class="indented">
+    <div><ul>
+      <li>Who has formal authority over you?
+        <div><ul><li>The Ministry of Defense...</li></ul></div>
+      </li>
+    </ul></div>
+    <div><ul>
+      <li>Who you informally fear or rely on?
+        <div><ul><li>CIA/GRU concerns...</li></ul></div>
+        <div><ul><li>Maddie Volkov...</li></ul></div>
+      </li>
+    </ul></div>
+  </div>
+</details>
+```
+
+**Parsing Strategy:**
+- `getSection()` returns the `.indented` div for details/summary structure
+- Detect when result is a single `.indented` element
+- Process its **children** instead of the element itself
+- Detect Oscar-style when `<li>` contains plain text (not `<strong>`) with question keywords
+- Extract question from `li.clone().children().remove().end().text()` to get only direct text
+
+**Special Handling:**
+```typescript
+let $elementsToProcess = $authority;
+if ($authority.length === 1 && $authority.first().hasClass("indented")) {
+  $elementsToProcess = $authority.children();
+}
+```
+
+---
+
+### Category Detection Keywords
+
+**Formal Authority:**
+- "formal"
+- But NOT "informal" (checked first)
+
+**Informal Fears/Pressures:**
+- "informal"
+- "fear"
+- "rely"
+- "influence"
+- "pressure"
+
+**Safely Ignore:**
+- "ignore"
+
+### Key Parsing Challenges Solved
+
+1. **Substring Matching Bug:** "informally" contains "formal"
+   - Fixed by checking "informal" before "formal" in all conditionals
+
+2. **Bold Text vs. Headers:** In Bernardo-style, `<strong>` tags appear both as question headers AND within answer content
+   - Fixed by checking if `<strong>` ends with ":" or contains category keywords
+   - Only treat as header if it matches category patterns
+
+3. **Details/Summary Structure:** Oscar's `getSection()` returns different element type
+   - Fixed by detecting `.indented` class and processing children instead
+
+4. **Three Different Detection Methods:**
+   - Brea-style: Check for `<strong>` as direct child of `<li>`
+   - Oscar-style: Check for plain text in `<li>` (no direct `<strong>` child)
+   - Bernardo-style: Fallback when neither of above match
+
+### Files Modified
+
+- `scripts/parse-character-html.ts` - Section 4 parsing logic (lines 162-310)
+- `scripts/import-characters-with-codes.ts` - Character import script
+- `components/dossier/AuthoritySection.tsx` - Display component
+
+### Related Components
+
+- `components/dossier/MarkdownText.tsx` - Added `rehype-raw` plugin for HTML parsing
+  - Allows `<i>`, `<b>`, `<em>`, `<strong>` tags in content
+  - Converts to React components for proper rendering
+
+### Testing
+
+All three structures verified working:
+- **Bernardo**: 1 formal, 3 informal, 1 ignore
+- **Brea**: 2 formal, 3 informal, 1 ignore
+- **Oscar**: 1 formal, 5 informal, 1 ignore
+
+30 characters successfully imported with all section 4 data preserved.

@@ -1,6 +1,6 @@
 # Character Access Codes
 
-Generated: 1/10/2026, 2:22:15 AM
+Generated: 1/10/2026, 10:47:34 AM
 
 Total Characters: 30
 
@@ -8,36 +8,36 @@ Total Characters: 30
 
 | Character Name | Short Name | PIN |
 |----------------|------------|-----|
-| Amanda O’Brien | Amanda | `2865` |
-| Senator Bernardo Reis | Bernardo | `2308` |
-| Brea Balloon | Brea | `4796` |
-| Candace Bradley | Candace | `4627` |
-| Dr. Cara (Huang) | Cara | `8992` |
-| Lt. Carson Conklin | Carson | `5441` |
-| Deniz Sipahi, Ph.D. | Deniz | `6001` |
-| Admiral Diego (Kuznetsov) | Diego | `8000` |
-| Eliza Karimov | Eliza | `2472` |
-| Hannah Huang | Hannah | `9174` |
-| Harrison Petrov | Harrison | `9192` |
-| Jack (Kadyrov) | Jack | `2770` |
-| Jake Liu | Jake | `9914` |
-| Julia Ren | Julia | `5067` |
-| Dr. Juliette Wang | Juliette | `7167` |
-| Admiral Kannon Zhou | Kannon | `9105` |
-| Kassidy Neville | Kassidy | `7770` |
-| General Kevin (Zhang) | Kevin | `3244` |
-| Dr. Kristen Sharapova | Kristen | `1032` |
-| Maddie Volkov | Maddie | `1115` |
-| Maggie Maple | Maggie | `2204` |
-| Representative Maria St. Germain | Maria | `5081` |
-| Dr. Maya Badman | Maya | `3700` |
-| Mitchell Xu | Mitchell | `7685` |
-| Morty (Qiao) | Morty | `8207` |
-| Dr. Oscar (Morozov) | Oscar | `3701` |
-| Captain Perry Sun | Perry | `7836` |
-| Cmdr. Roberto De La Torres | Roberto | `1886` |
-| Rep. Sarah Fierce | Sarah | `2871` |
-| Sofia Chen | Sofia | `4113` |
+| Amanda O’Brien | Amanda | `5098` |
+| Senator Bernardo Reis | Bernardo | `4199` |
+| Brea Balloon | Brea | `3103` |
+| Candace Bradley | Candace | `9878` |
+| Dr. Cara (Huang) | Cara | `1753` |
+| Lt. Carson Conklin | Carson | `2552` |
+| Deniz Sipahi, Ph.D. | Deniz | `4273` |
+| Admiral Diego (Kuznetsov) | Diego | `9167` |
+| Eliza Karimov | Eliza | `4998` |
+| Hannah Huang | Hannah | `2735` |
+| Harrison Petrov | Harrison | `6729` |
+| Jack (Kadyrov) | Jack | `3272` |
+| Jake Liu | Jake | `4259` |
+| Julia Ren | Julia | `9511` |
+| Dr. Juliette Wang | Juliette | `9183` |
+| Admiral Kannon Zhou | Kannon | `9442` |
+| Kassidy Neville | Kassidy | `8392` |
+| General Kevin (Zhang) | Kevin | `8256` |
+| Dr. Kristen Sharapova | Kristen | `3025` |
+| Maddie Volkov | Maddie | `5873` |
+| Maggie Maple | Maggie | `7360` |
+| Representative Maria St. Germain | Maria | `7098` |
+| Dr. Maya Badman | Maya | `6486` |
+| Mitchell Xu | Mitchell | `1741` |
+| Morty (Qiao) | Morty | `4083` |
+| Dr. Oscar (Morozov) | Oscar | `5045` |
+| Captain Perry Sun | Perry | `5993` |
+| Cmdr. Roberto De La Torres | Roberto | `8200` |
+| Rep. Sarah Fierce | Sarah | `1972` |
+| Sofia Chen | Sofia | `8337` |
 
 ## Usage
 
