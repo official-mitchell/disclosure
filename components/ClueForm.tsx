@@ -15,11 +15,27 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Convert new schema fields to targetType/targetValue for form
+  const getTargetTypeAndValue = () => {
+    if (clue?.targetCountry) {
+      return { targetType: 'country', targetValue: clue.targetCountry };
+    } else if (clue?.targetArchetype) {
+      return { targetType: 'archetype', targetValue: clue.targetArchetype };
+    } else if (clue?.targetDemeanor) {
+      return { targetType: 'demeanor', targetValue: clue.targetDemeanor };
+    } else if (clue?.targetPlayer) {
+      return { targetType: 'player', targetValue: clue.targetPlayer };
+    }
+    return { targetType: 'all', targetValue: '' };
+  };
+
+  const { targetType, targetValue } = getTargetTypeAndValue();
+
   const [formData, setFormData] = useState({
     title: clue?.title || '',
     phase: clue?.phase || 1,
-    targetType: clue?.targetType || 'all',
-    targetValue: clue?.targetValue || '',
+    targetType,
+    targetValue,
     legitimacy: clue?.legitimacy || 'unknown',
     confidentiality: clue?.confidentiality || 'confidential',
     originCountry: clue?.originCountry || 'US',
@@ -103,6 +119,7 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
             <option value="all">All Players</option>
             <option value="country">Country</option>
             <option value="archetype">Archetype</option>
+            <option value="demeanor">Demeanor</option>
             <option value="player">Specific Player</option>
           </select>
         </div>
@@ -135,6 +152,22 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
               {Object.keys(ARCHETYPES).map((a) => (
                 <option key={a} value={a}>{a}</option>
               ))}
+            </select>
+          </div>
+        )}
+
+        {formData.targetType === 'demeanor' && (
+          <div className="col-span-2 form-spacing">
+            <label className="form-label" style={{ color: 'white' }}>Target Demeanor</label>
+            <select
+              value={formData.targetValue}
+              onChange={(e) => setFormData({ ...formData, targetValue: e.target.value })}
+              className="form-input form-input-dark"
+            >
+              <option value="">Select...</option>
+              <option value="ANTI_DISCLOSURE">Anti-Disclosure</option>
+              <option value="AGNOSTIC">Agnostic</option>
+              <option value="PRO_DISCLOSURE">Pro-Disclosure</option>
             </select>
           </div>
         )}

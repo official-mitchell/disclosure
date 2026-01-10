@@ -12,23 +12,25 @@ export async function GET() {
         released: true,
         retracted: false,
         OR: [
-          // Target all
-          { targetType: 'all' },
+          // Target all (all target fields are null)
+          {
+            targetCountry: null,
+            targetArchetype: null,
+            targetDemeanor: null,
+            targetPlayer: null,
+          },
           // Target player's country
           {
-            targetType: 'country',
-            targetValue: session.country,
+            targetCountry: session.country as any,
           },
           // Target player's archetype
           {
-            targetType: 'archetype',
-            targetValue: session.archetype,
+            targetArchetype: session.archetype as any,
           },
           // Target specific player OR assigned to player
           {
-            targetType: 'player',
             OR: [
-              { targetValue: session.playerId },
+              { targetPlayer: session.playerId },
               {
                 clueAssignments: {
                   some: {

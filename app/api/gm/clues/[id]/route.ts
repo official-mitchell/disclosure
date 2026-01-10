@@ -29,13 +29,32 @@ export async function PUT(
       takeaways,
     } = body;
 
+    // Convert targetType/targetValue to new schema fields
+    let targetCountry = null;
+    let targetArchetype = null;
+    let targetDemeanor = null;
+    let targetPlayer = null;
+
+    if (targetType === 'country' && targetValue) {
+      targetCountry = targetValue as any;
+    } else if (targetType === 'archetype' && targetValue) {
+      targetArchetype = targetValue as any;
+    } else if (targetType === 'demeanor' && targetValue) {
+      targetDemeanor = targetValue as any;
+    } else if (targetType === 'player' && targetValue) {
+      targetPlayer = targetValue;
+    }
+    // If targetType is 'all' or not set, all fields remain null
+
     const clue = await prisma.clue.update({
       where: { id },
       data: {
         title,
         phase: parseInt(phase),
-        targetType,
-        targetValue: targetValue || null,
+        targetCountry,
+        targetArchetype,
+        targetDemeanor,
+        targetPlayer,
         legitimacy,
         confidentiality,
         originCountry,

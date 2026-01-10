@@ -24,13 +24,25 @@ export default async function ViewAsPlayerPage({ params }: { params: Promise<{ p
       released: true,
       retracted: false,
       OR: [
-        { targetType: 'all' },
-        { targetType: 'country', targetValue: player.country },
-        { targetType: 'archetype', targetValue: player.archetype },
+        // Target all (all target fields are null)
         {
-          targetType: 'player',
+          targetCountry: null,
+          targetArchetype: null,
+          targetDemeanor: null,
+          targetPlayer: null,
+        },
+        // Target player's country
+        {
+          targetCountry: player.country,
+        },
+        // Target player's archetype
+        {
+          targetArchetype: player.archetype,
+        },
+        // Target specific player OR assigned to player
+        {
           OR: [
-            { targetValue: player.id },
+            { targetPlayer: player.id },
             { clueAssignments: { some: { playerId: player.id } } },
           ],
         },
