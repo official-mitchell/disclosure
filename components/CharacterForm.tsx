@@ -20,9 +20,9 @@ interface CharacterFormData {
   restrictions: string[];
   backstory: string;
   motivations: Motivation[];
-  formalAuthority: string;
-  informalFears: string;
-  safelyIgnore: string;
+  formalAuthority: string[];
+  informalFears: string[];
+  safelyIgnore: string[];
   exposureConsequences: string;
   privateWant: string;
   disclosureBelief: string;
@@ -57,9 +57,9 @@ export default function CharacterForm({
     restrictions: initialData?.restrictions || [''],
     backstory: initialData?.backstory || '',
     motivations: initialData?.motivations || [{ label: '', description: '' }],
-    formalAuthority: initialData?.formalAuthority || '',
-    informalFears: initialData?.informalFears || '',
-    safelyIgnore: initialData?.safelyIgnore || '',
+    formalAuthority: Array.isArray(initialData?.formalAuthority) ? initialData.formalAuthority : (initialData?.formalAuthority ? [initialData.formalAuthority] : ['']),
+    informalFears: Array.isArray(initialData?.informalFears) ? initialData.informalFears : (initialData?.informalFears ? [initialData.informalFears] : ['']),
+    safelyIgnore: Array.isArray(initialData?.safelyIgnore) ? initialData.safelyIgnore : (initialData?.safelyIgnore ? [initialData.safelyIgnore] : ['']),
     exposureConsequences: initialData?.exposureConsequences || '',
     privateWant: initialData?.privateWant || '',
     disclosureBelief: initialData?.disclosureBelief || '',
@@ -123,6 +123,9 @@ export default function CharacterForm({
         ...formData,
         permissions: formData.permissions.filter((p) => p.trim()),
         restrictions: formData.restrictions.filter((r) => r.trim()),
+        formalAuthority: formData.formalAuthority.filter((f) => f.trim()),
+        informalFears: formData.informalFears.filter((f) => f.trim()),
+        safelyIgnore: formData.safelyIgnore.filter((s) => s.trim()),
         canDiscuss: formData.canDiscuss.filter((c) => c.trim()),
         mustConceal: formData.mustConceal.filter((m) => m.trim()),
         motivations: formData.motivations.filter(
@@ -421,45 +424,108 @@ export default function CharacterForm({
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Formal Authority
             </label>
-            <input
-              type="text"
-              value={formData.formalAuthority}
-              onChange={(e) =>
-                setFormData({ ...formData, formalAuthority: e.target.value })
-              }
-              className="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
-              required
-            />
+            {formData.formalAuthority.map((item, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) =>
+                    handleArrayChange('formalAuthority', index, e.target.value)
+                  }
+                  className="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const array = [...formData.formalAuthority];
+                    array.splice(index, 1);
+                    setFormData({ ...formData, formalAuthority: array });
+                  }}
+                  className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addArrayItem('formalAuthority')}
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Add Formal Authority
+            </button>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Informal Fears
             </label>
-            <input
-              type="text"
-              value={formData.informalFears}
-              onChange={(e) =>
-                setFormData({ ...formData, informalFears: e.target.value })
-              }
-              className="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
-              required
-            />
+            {formData.informalFears.map((item, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) =>
+                    handleArrayChange('informalFears', index, e.target.value)
+                  }
+                  className="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const array = [...formData.informalFears];
+                    array.splice(index, 1);
+                    setFormData({ ...formData, informalFears: array });
+                  }}
+                  className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addArrayItem('informalFears')}
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Add Informal Fear
+            </button>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Safely Ignore
             </label>
-            <input
-              type="text"
-              value={formData.safelyIgnore}
-              onChange={(e) =>
-                setFormData({ ...formData, safelyIgnore: e.target.value })
-              }
-              className="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
-              required
-            />
+            {formData.safelyIgnore.map((item, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) =>
+                    handleArrayChange('safelyIgnore', index, e.target.value)
+                  }
+                  className="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const array = [...formData.safelyIgnore];
+                    array.splice(index, 1);
+                    setFormData({ ...formData, safelyIgnore: array });
+                  }}
+                  className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addArrayItem('safelyIgnore')}
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Add Safely Ignore
+            </button>
           </div>
         </div>
       </div>

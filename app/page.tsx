@@ -16,7 +16,7 @@ export default function Home() {
             <p className="font-medium" style={{ color: 'white', fontSize: 'clamp(1.25rem, 4vw, 2rem)' }}>
               Mystery Game - GM Clue Release System
             </p>
-            <div className="flex flex-row justify-center items-center" style={{ gap: 'clamp(1.5rem, 4vw, 2.5rem)', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+            <div className="flex flex-row justify-center items-center" style={{ gap: 'clamp(1.3rem, 3.9vw, 3.25rem)', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
               <a
                 href="/login"
                 className="relative inline-block rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 text-center overflow-hidden"
@@ -24,12 +24,12 @@ export default function Home() {
                   background: 'linear-gradient(to bottom right, #1e3a8a, #1e40af, #1e3a8a)', 
                   borderColor: '#60a5fa',
                   color: 'white',
-                  borderWidth: '4px',
+                  borderWidth: 'clamp(2px, 1vw, 4px)',
                   borderStyle: 'solid',
-                  padding: 'clamp(1rem, 3vw, 1.5rem) clamp(2rem, 6vw, 3rem)',
-                  fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-                  minWidth: 'clamp(200px, 35vw, 280px)',
-                  width: 'clamp(200px, 35vw, 280px)'
+                  padding: 'clamp(0.975rem, 3.25vw, 1.95rem) clamp(1.625rem, 5.2vw, 3.9rem)',
+                  fontSize: 'clamp(1.1375rem, 3.25vw, 1.95rem)',
+                  minWidth: 'clamp(182px, 36.4vw, 364px)',
+                  width: 'clamp(182px, 36.4vw, 364px)'
                 }}
               >
                 <span className="relative z-10">Player Login</span>
@@ -42,12 +42,12 @@ export default function Home() {
                   background: 'linear-gradient(to bottom right, #7f1d1d, #991b1b, #7f1d1d)', 
                   borderColor: '#dc2626', 
                   color: 'white',
-                  borderWidth: '4px',
+                  borderWidth: 'clamp(2px, 1vw, 4px)',
                   borderStyle: 'solid',
-                  padding: 'clamp(1rem, 3vw, 1.5rem) clamp(2rem, 6vw, 3rem)',
-                  fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-                  minWidth: 'clamp(200px, 35vw, 280px)',
-                  width: 'clamp(200px, 35vw, 280px)'
+                  padding: 'clamp(0.975rem, 3.25vw, 1.95rem) clamp(1.625rem, 5.2vw, 3.9rem)',
+                  fontSize: 'clamp(1.1375rem, 3.25vw, 1.95rem)',
+                  minWidth: 'clamp(182px, 36.4vw, 364px)',
+                  width: 'clamp(182px, 36.4vw, 364px)'
                 }}
               >
                 <span className="relative z-10">GM Login</span>
