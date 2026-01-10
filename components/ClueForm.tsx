@@ -61,31 +61,31 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} style={{ gap: 'clamp(1.5rem, 4vw, 2rem)', display: 'flex', flexDirection: 'column' }}>
       {error && (
         <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded">
           {error}
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)' }}>
+        <div className="col-span-2 form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Title</label>
           <input
             type="text"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             required
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded focus:ring-2 focus:ring-blue-500"
+            className="form-input form-input-dark"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Phase</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Phase</label>
           <select
             value={formData.phase}
             onChange={(e) => setFormData({ ...formData, phase: parseInt(e.target.value) })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           >
             {[1, 2, 3, 4, 5].map((p) => (
               <option key={p} value={p}>Phase {p}</option>
@@ -93,12 +93,12 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Target Type</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Target Type</label>
           <select
             value={formData.targetType}
             onChange={(e) => setFormData({ ...formData, targetType: e.target.value as any })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           >
             <option value="all">All Players</option>
             <option value="country">Country</option>
@@ -108,12 +108,12 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
         </div>
 
         {formData.targetType === 'country' && (
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Target Country</label>
+          <div className="col-span-2 form-spacing">
+            <label className="form-label" style={{ color: 'white' }}>Target Country</label>
             <select
               value={formData.targetValue}
               onChange={(e) => setFormData({ ...formData, targetValue: e.target.value })}
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+              className="form-input form-input-dark"
             >
               <option value="">Select...</option>
               {Object.keys(COUNTRIES).map((c) => (
@@ -124,12 +124,12 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
         )}
 
         {formData.targetType === 'archetype' && (
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Target Archetype</label>
+          <div className="col-span-2 form-spacing">
+            <label className="form-label" style={{ color: 'white' }}>Target Archetype</label>
             <select
               value={formData.targetValue}
               onChange={(e) => setFormData({ ...formData, targetValue: e.target.value })}
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+              className="form-input form-input-dark"
             >
               <option value="">Select...</option>
               {Object.keys(ARCHETYPES).map((a) => (
@@ -139,12 +139,12 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
           </div>
         )}
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Legitimacy</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Legitimacy</label>
           <select
             value={formData.legitimacy}
             onChange={(e) => setFormData({ ...formData, legitimacy: e.target.value as any })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           >
             <option value="verified">Verified</option>
             <option value="suspected">Suspected</option>
@@ -153,12 +153,12 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Confidentiality</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Confidentiality</label>
           <select
             value={formData.confidentiality}
             onChange={(e) => setFormData({ ...formData, confidentiality: e.target.value as any })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           >
             <option value="top_secret">Top Secret</option>
             <option value="confidential">Confidential</option>
@@ -167,12 +167,12 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Origin Country</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Origin Country</label>
           <select
             value={formData.originCountry}
             onChange={(e) => setFormData({ ...formData, originCountry: e.target.value as any })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           >
             {ORIGIN_COUNTRIES.map((c) => (
               <option key={c} value={c}>{c}</option>
@@ -180,45 +180,46 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Event Date</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Event Date</label>
           <input
             type="text"
             value={formData.eventDate}
             onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
             placeholder="e.g., March 14, 1962"
             required
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           />
         </div>
 
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-2">Backstory</label>
+        <div className="col-span-2 form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Backstory</label>
           <textarea
             value={formData.backstory}
             onChange={(e) => setFormData({ ...formData, backstory: e.target.value })}
             rows={4}
             required
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
+            style={{ minHeight: 'clamp(6rem, 15vw, 10rem)' }}
           />
         </div>
 
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-2">Image URL (optional)</label>
+        <div className="col-span-2 form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Image URL (optional)</label>
           <input
             type="url"
             value={formData.imageUrl}
             onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Confidence Level</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Confidence Level</label>
           <select
             value={formData.confidenceLevel}
             onChange={(e) => setFormData({ ...formData, confidenceLevel: e.target.value as any })}
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           >
             <option value="confirmed">Confirmed</option>
             <option value="high">High</option>
@@ -228,54 +229,58 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Source</label>
+        <div className="form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Source</label>
           <input
             type="text"
             value={formData.source}
             onChange={(e) => setFormData({ ...formData, source: e.target.value })}
             placeholder="e.g., CIA Station Chief - Berlin"
             required
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
           />
         </div>
 
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-2">Supporting Intel</label>
+        <div className="col-span-2 form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Supporting Intel</label>
           <textarea
             value={formData.supportingIntel}
             onChange={(e) => setFormData({ ...formData, supportingIntel: e.target.value })}
             rows={3}
             required
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
+            style={{ minHeight: 'clamp(5rem, 12vw, 8rem)' }}
           />
         </div>
 
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-2">Takeaways (one per line)</label>
+        <div className="col-span-2 form-spacing">
+          <label className="form-label" style={{ color: 'white' }}>Takeaways (one per line)</label>
           <textarea
             value={formData.takeaways}
             onChange={(e) => setFormData({ ...formData, takeaways: e.target.value })}
             rows={4}
             placeholder="Enter each takeaway on a new line"
             required
-            className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+            className="form-input form-input-dark"
+            style={{ minHeight: 'clamp(6rem, 15vw, 10rem)' }}
           />
         </div>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)', marginTop: 'clamp(1rem, 3vw, 1.5rem)' }}>
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          className="form-button form-button-secondary"
+          style={{ width: 'auto', flex: '1' }}
         >
           {loading ? 'Saving...' : mode === 'create' ? 'Create Clue' : 'Save Changes'}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
+          className="nav-button"
+          style={{ width: 'auto', flex: '1' }}
         >
           Cancel
         </button>

@@ -4,6 +4,8 @@ import { prisma } from '@/lib/db';
 import Link from 'next/link';
 import ReleaseControls from '@/components/ReleaseControls';
 import PhaseReleaseButton from '@/components/PhaseReleaseButton';
+import CollapsiblePhase from '@/components/CollapsiblePhase';
+import CollapsibleClueCard from '@/components/CollapsibleClueCard';
 
 export default async function GMCluesPage() {
   const session = await getGMSession();
@@ -23,52 +25,62 @@ export default async function GMCluesPage() {
   }, {} as Record<number, typeof clues>);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-      <nav className="bg-black border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/gm/dashboard" className="text-gray-400 hover:text-white transition">
-                ← Back
-              </Link>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
+      <nav className="bg-black border-b border-gray-800 relative">
+        <div className="max-w-7xl mx-auto dynamic-padding-sm">
+          {/* Back button - top left */}
+          <div className="absolute top-0 left-0" style={{ padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
+            <Link href="/gm/dashboard" className="logout-button" style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}>
+              ← Back
+            </Link>
+          </div>
+          
+          {/* Centered content */}
+          <div className="flex flex-col items-center justify-center" style={{ paddingTop: 'clamp(1rem, 3vw, 1.5rem)', paddingBottom: 'clamp(1rem, 3vw, 1.5rem)', minHeight: 'clamp(5rem, 15vw, 8rem)' }}>
+            <div className="flex justify-center mb-2">
               <img
                 src="/Catastrophic Disclosure icon.png"
                 alt="Icon"
-                className="w-8 h-8"
+                className="flex-shrink-0"
+                style={{ 
+                  width: 'clamp(5rem, 15vw, 8rem)', 
+                  height: 'clamp(5rem, 15vw, 8rem)',
+                  minWidth: '80px',
+                  maxWidth: '128px'
+                }}
               />
-              <div className="bg-amber-700 text-amber-200 px-3 py-1 rounded text-xs font-medium">
-                GM
-              </div>
-              <h1 className="text-xl font-bold text-white">Clue Management</h1>
             </div>
-            <Link
-              href="/gm/clues/new"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              + New Clue
-            </Link>
+            <h1 className="dynamic-text-base font-bold" style={{ color: 'white', textAlign: 'center' }}>Clue Management</h1>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto dynamic-padding" style={{ paddingTop: 'clamp(1.5rem, 4vw, 2rem)', paddingBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
+        {/* New Clue button - above content */}
+        <div className="mb-6" style={{ marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
+          <Link href="/gm/clues/new" className="button-component button-add" style={{ width: 'auto', minWidth: 'clamp(120px, 20vw, 160px)', display: 'inline-block' }}>
+            + New Clue
+          </Link>
+        </div>
+
         {clues.length === 0 ? (
-          <div className="bg-gray-800 border border-gray-700 rounded-lg p-12 text-center">
-            <h2 className="text-xl font-semibold text-gray-300 mb-4">
+          <div className="bg-gray-800 rounded-lg dynamic-card-padding text-center card-container-thick">
+            <h2 className="dynamic-text-lg font-semibold mb-4" style={{ color: 'white' }}>
               No Clues Yet
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="dynamic-text-base mb-6" style={{ color: 'white' }}>
               Create your first clue to get started
             </p>
             <Link
               href="/gm/clues/new"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+              className="button-component button-add"
+              style={{ width: 'auto', minWidth: 'clamp(150px, 25vw, 200px)', display: 'inline-block' }}
             >
               Create First Clue
             </Link>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div>
             {[1, 2, 3, 4, 5].map((phase) => {
               const phaseClues = cluesByPhase[phase] || [];
               if (phaseClues.length === 0) return null;
@@ -76,59 +88,16 @@ export default async function GMCluesPage() {
               const unreleasedCount = phaseClues.filter(c => !c.released).length;
 
               return (
-                <div key={phase} className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-                  <div className="bg-gray-900 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
-                    <h2 className="text-lg font-bold text-white">
-                      Phase {phase} ({phaseClues.length} {phaseClues.length === 1 ? 'clue' : 'clues'})
-                    </h2>
-                    <PhaseReleaseButton phase={phase} unreleasedCount={unreleasedCount} />
-                  </div>
-                  <div className="divide-y divide-gray-700">
-                    {phaseClues.map((clue) => (
-                      <div key={clue.id} className="p-6 hover:bg-gray-750 transition">
-                        <div className="flex justify-between items-start gap-4">
-                          <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-white mb-2">
-                              {clue.title}
-                            </h3>
-                            <div className="flex flex-wrap gap-3 text-sm">
-                              <span className="text-gray-400">
-                                Target: <span className="text-gray-300">{clue.targetType}</span>
-                                {clue.targetValue && ` (${clue.targetValue})`}
-                              </span>
-                              <span className="text-gray-400">
-                                Origin: <span className="text-gray-300">{clue.originCountry}</span>
-                              </span>
-                              {clue.released && (
-                                <span className="bg-green-900/50 text-green-300 px-2 py-1 rounded">
-                                  Released
-                                </span>
-                              )}
-                              {clue.retracted && (
-                                <span className="bg-red-900/50 text-red-300 px-2 py-1 rounded">
-                                  Retracted
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex gap-2">
-                            <ReleaseControls
-                              clueId={clue.id}
-                              released={clue.released}
-                              retracted={clue.retracted}
-                            />
-                            <Link
-                              href={`/gm/clues/${clue.id}/edit`}
-                              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition text-sm"
-                            >
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <CollapsiblePhase
+                  key={phase}
+                  phase={phase}
+                  clueCount={phaseClues.length}
+                  headerActions={<PhaseReleaseButton phase={phase} unreleasedCount={unreleasedCount} />}
+                >
+                  {phaseClues.map((clue) => (
+                    <CollapsibleClueCard key={clue.id} clue={clue} />
+                  ))}
+                </CollapsiblePhase>
               );
             })}
           </div>

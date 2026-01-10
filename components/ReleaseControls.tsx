@@ -40,7 +40,8 @@ export default function ReleaseControls({ clueId, released, retracted }: Release
       <button
         onClick={handleRelease}
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm disabled:opacity-50"
+        className="button-component button-edit"
+        style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
       >
         {loading ? 'Re-releasing...' : 'Re-release'}
       </button>
@@ -52,7 +53,8 @@ export default function ReleaseControls({ clueId, released, retracted }: Release
       <button
         onClick={handleRetract}
         disabled={loading}
-        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition text-sm disabled:opacity-50"
+        className="button-component button-delete"
+        style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
       >
         {loading ? 'Retracting...' : 'Retract'}
       </button>
@@ -63,7 +65,8 @@ export default function ReleaseControls({ clueId, released, retracted }: Release
     <button
       onClick={handleRelease}
       disabled={loading}
-      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm disabled:opacity-50"
+      className="button-component button-add"
+      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
     >
       {loading ? 'Releasing...' : 'Release'}
     </button>

@@ -41,83 +41,88 @@ export default function PlayerLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
-          <img
-            src="/Catastrophic Disclosure icon.png"
-            alt="Catastrophic Disclosure Icon"
-            className="mx-auto mb-4 w-24 h-24"
-          />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Player Login
-          </h1>
-          <p className="text-gray-600">
-            Enter your name and PIN to access the game
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900"
-              placeholder="Your name"
-              disabled={loading}
+    <div className="dynamic-page-wrapper bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="dynamic-container">
+        <div className="bg-white rounded-2xl shadow-2xl dynamic-card-full dynamic-padding">
+          <div className="text-center form-spacing-lg">
+            <img
+              src="/Catastrophic Disclosure icon.png"
+              alt="Catastrophic Disclosure Icon"
+              className="mx-auto mb-6 dynamic-image-sm"
             />
+            <h1 className="dynamic-text-xl font-bold text-gray-900 mb-3">
+              Player Login
+            </h1>
+            <p className="dynamic-text-base text-gray-600">
+              Enter your name and PIN to access the game
+            </p>
           </div>
 
-          <div>
-            <label
-              htmlFor="pin"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              PIN
-            </label>
-            <input
-              id="pin"
-              type="password"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900"
-              placeholder="4-6 digit PIN"
-              disabled={loading}
-            />
-          </div>
-
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
+          <form onSubmit={handleSubmit} className="space-y-6" style={{ marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+            <div className="form-spacing">
+              <label
+                htmlFor="name"
+                className="form-label text-gray-700"
+              >
+                Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="form-input form-input-light"
+                placeholder="Your name"
+                disabled={loading}
+              />
             </div>
-          )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
+            <div className="form-spacing">
+              <label
+                htmlFor="pin"
+                className="form-label text-gray-700"
+              >
+                PIN
+              </label>
+              <input
+                id="pin"
+                type="password"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                required
+                className="form-input form-input-light"
+                placeholder="4-6 digit PIN"
+                disabled={loading}
+              />
+            </div>
 
-        <div className="mt-6 text-center">
-          <a
-            href="/"
-            className="text-sm text-gray-600 hover:text-gray-900 transition"
-          >
-            ← Back to home
-          </a>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="form-spacing" style={{ marginTop: 'clamp(1rem, 3vw, 1.5rem)' }}>
+              <button
+                type="submit"
+                disabled={loading}
+                className="form-button form-button-secondary"
+                style={{ minWidth: 'auto' }}
+              >
+                {loading ? 'Logging in...' : 'Login'}
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-8 text-center">
+            <a
+              href="/"
+              className="text-sm text-gray-600 hover:text-gray-900 transition"
+            >
+              ← Back to home
+            </a>
+          </div>
         </div>
       </div>
     </div>

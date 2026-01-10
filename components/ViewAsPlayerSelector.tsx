@@ -1,3 +1,6 @@
+// ViewAsPlayerSelector Component
+// Changes:
+// - 2024-12-XX: Improved mobile responsiveness - adjusted padding and text size for smaller screens
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -20,7 +23,13 @@ export default function ViewAsPlayerSelector({ players }: ViewAsPlayerSelectorPr
     <select
       onChange={handleSelect}
       defaultValue=""
-      className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded"
+      className="form-input form-input-dark"
+      style={{ 
+        padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+        fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+        width: 'auto',
+        minWidth: 'clamp(150px, 25vw, 200px)'
+      }}
     >
       <option value="">View As Player...</option>
       {players.map((player) => (

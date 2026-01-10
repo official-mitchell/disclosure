@@ -91,70 +91,62 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ gap: 'clamp(1.5rem, 4vw, 2rem)', display: 'flex', flexDirection: 'column' }}>
       {/* Add Player Button */}
       {!showAddForm && !editingId && (
-        <div className="flex gap-4">
+        <div>
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            className="button-component button-add"
+            style={{ width: 'auto', minWidth: 'clamp(150px, 25vw, 200px)' }}
           >
             + Add Player
           </button>
-          <Link
-            href="/gm/import/characters"
-            className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
-            Bulk Import Characters
-          </Link>
         </div>
       )}
 
       {/* Add/Edit Form */}
       {(showAddForm || editingId) && (
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-          <h3 className="text-xl font-bold text-white mb-4">
+        <div className="bg-gray-800 rounded-lg dynamic-card-padding" style={{ border: '2px solid white' }}>
+          <h3 className="dynamic-text-lg font-bold mb-4" style={{ color: 'white' }}>
             {editingId ? 'Edit Player' : 'Add New Player'}
           </h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} style={{ gap: 'clamp(1rem, 3vw, 1.5rem)', display: 'flex', flexDirection: 'column' }}>
             {error && (
               <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded">
                 {error}
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+            <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)' }}>
+              <div className="form-spacing">
+                <label className="form-label" style={{ color: 'white' }}>Name</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+                  className="form-input form-input-dark"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">PIN</label>
+              <div className="form-spacing">
+                <label className="form-label" style={{ color: 'white' }}>PIN</label>
                 <input
                   type="text"
                   value={formData.pin}
                   onChange={(e) => setFormData({ ...formData, pin: e.target.value })}
                   required
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+                  className="form-input form-input-dark"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Country</label>
+              <div className="form-spacing">
+                <label className="form-label" style={{ color: 'white' }}>Country</label>
                 <select
                   value={formData.country}
                   onChange={(e) => setFormData({ ...formData, country: e.target.value as any })}
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+                  className="form-input form-input-dark"
                 >
                   {Object.keys(COUNTRIES).map((c) => (
                     <option key={c} value={c}>{COUNTRY_NAMES[c as keyof typeof COUNTRY_NAMES]}</option>
@@ -162,12 +154,12 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Archetype</label>
+              <div className="form-spacing">
+                <label className="form-label" style={{ color: 'white' }}>Archetype</label>
                 <select
                   value={formData.archetype}
                   onChange={(e) => setFormData({ ...formData, archetype: e.target.value as any })}
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+                  className="form-input form-input-dark"
                 >
                   {Object.keys(ARCHETYPES).map((a) => (
                     <option key={a} value={a}>{ARCHETYPE_NAMES[a as keyof typeof ARCHETYPE_NAMES]}</option>
@@ -176,18 +168,20 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
+                className="form-button form-button-secondary"
+                style={{ width: 'auto', flex: '1' }}
               >
                 {loading ? 'Saving...' : editingId ? 'Save Changes' : 'Add Player'}
               </button>
               <button
                 type="button"
                 onClick={resetForm}
-                className="bg-gray-700 text-white px-6 py-2 rounded hover:bg-gray-600 transition"
+                className="nav-button"
+                style={{ width: 'auto', flex: '1' }}
               >
                 Cancel
               </button>
@@ -197,65 +191,98 @@ export default function PlayerManagement({ initialPlayers }: PlayerManagementPro
       )}
 
       {/* Player List */}
-      <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-        <div className="bg-gray-900 border-b border-gray-700 px-6 py-4">
-          <h2 className="text-lg font-bold text-white">
+      <div className="bg-gray-800 rounded-lg overflow-hidden" style={{ border: '2px solid white' }}>
+        <div className="bg-gray-900 border-b" style={{ borderColor: 'white', padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <h2 className="dynamic-text-lg font-bold" style={{ color: 'white' }}>
             Players ({initialPlayers.length})
           </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-900 border-b border-gray-700">
+            <thead className="bg-gray-900 border-b" style={{ borderColor: 'white' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">PIN</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Country</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Archetype</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Character</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(34, 197, 94, 0.2)' }}>PIN</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(168, 85, 247, 0.2)' }}>Country</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(251, 146, 60, 0.2)' }}>Archetype</th>
+                <th className="px-6 py-3 text-right text-xs font-medium uppercase" style={{ color: 'white', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', backgroundColor: 'rgba(239, 68, 68, 0.2)' }}>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700">
+            <tbody>
               {initialPlayers.map((player) => (
-                <tr key={player.id} className="hover:bg-gray-750">
-                  <td className="px-6 py-4 text-sm text-white">{player.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-400">{player.pin}</td>
-                  <td className="px-6 py-4 text-sm text-gray-300">
+                <tr 
+                  key={player.id} 
+                  className="hover:bg-gray-750"
+                  style={{ 
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+                    marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)'
+                  }}
+                >
+                  <td 
+                    className="px-6 py-4 text-sm" 
+                    style={{ 
+                      color: 'white', 
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                    }}
+                  >
+                    {player.name}
+                  </td>
+                  <td 
+                    className="px-6 py-4 text-sm" 
+                    style={{ 
+                      color: 'white', 
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+                      backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                    }}
+                  >
+                    {player.pin}
+                  </td>
+                  <td 
+                    className="px-6 py-4 text-sm" 
+                    style={{ 
+                      color: 'white', 
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+                      backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                    }}
+                  >
                     {COUNTRY_NAMES[player.country as keyof typeof COUNTRY_NAMES]}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-300">
+                  <td 
+                    className="px-6 py-4 text-sm" 
+                    style={{ 
+                      color: 'white', 
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+                      backgroundColor: 'rgba(251, 146, 60, 0.1)',
+                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                    }}
+                  >
                     {ARCHETYPE_NAMES[player.archetype as keyof typeof ARCHETYPE_NAMES]}
                   </td>
-                  <td className="px-6 py-4 text-sm">
-                    {player.character ? (
-                      <Link
-                        href={`/gm/players/${player.id}/dossier`}
-                        className="text-green-400 hover:text-green-300 flex items-center gap-1"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        {player.character.displayName}
-                      </Link>
-                    ) : (
-                      <Link
-                        href={`/gm/players/${player.id}/dossier/edit`}
-                        className="text-yellow-400 hover:text-yellow-300 text-xs"
-                      >
-                        + Create
-                      </Link>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-right space-x-2">
+                  <td 
+                    className="px-6 py-4 text-sm text-right" 
+                    style={{ 
+                      gap: 'clamp(0.5rem, 1.5vw, 0.75rem)', 
+                      display: 'flex', 
+                      justifyContent: 'flex-end',
+                      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                      padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)'
+                    }}
+                  >
                     <button
                       onClick={() => handleEdit(player)}
-                      className="text-blue-400 hover:text-blue-300"
+                      className="button-component button-edit"
+                      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(player.id, player.name)}
-                      className="text-red-400 hover:text-red-300"
+                      className="button-component button-delete"
+                      style={{ width: 'auto', padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)', fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}
                     >
                       Delete
                     </button>

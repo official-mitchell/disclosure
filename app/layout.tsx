@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
+import { Special_Elite, Crimson_Text } from "next/font/google";
 import "./globals.css";
+
+const specialElite = Special_Elite({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-special-elite",
+});
+
+const crimsonText = Crimson_Text({
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-crimson-text",
+});
 
 export const metadata: Metadata = {
   title: "Catastrophic Disclosure",
@@ -17,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${specialElite.variable} ${crimsonText.variable}`}>{children}</body>
     </html>
   );
 }

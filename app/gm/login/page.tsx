@@ -40,67 +40,80 @@ export default function GMLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
-          <img
-            src="/Catastrophic Disclosure icon.png"
-            alt="Catastrophic Disclosure Icon"
-            className="mx-auto mb-4 w-24 h-24"
-          />
-          <div className="inline-block bg-amber-700 text-amber-200 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            GAME MASTER ACCESS
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            GM Login
-          </h1>
-          <p className="text-gray-400">
-            Enter the Game Master password
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-300 mb-2"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none transition"
-              placeholder="Enter GM password"
-              disabled={loading}
-            />
-          </div>
-
-          {error && (
-            <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg">
-              {error}
+    <div className="dynamic-page-wrapper bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
+      <div className="dynamic-container">
+        <div className="bg-slate-800 border border-slate-600 rounded-2xl shadow-2xl dynamic-card-full dynamic-padding" style={{ backgroundColor: '#1e293b', borderColor: '#475569' }}>
+          <div className="text-center form-spacing-lg">
+            <div className="flex justify-center" style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+              <img
+                src="/Catastrophic Disclosure icon.png"
+                alt="Catastrophic Disclosure Icon"
+                className="dynamic-image-sm"
+              />
             </div>
-          )}
+            <div className="flex justify-center" style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+              <div className="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style={{ color: 'white' }}>
+                GAME MASTER ACCESS
+              </div>
+            </div>
+            <h1 className="dynamic-text-xl font-bold" style={{ color: 'white', marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+              GM Login
+            </h1>
+            <p className="dynamic-text-base" style={{ color: 'white' }}>
+              Enter the Game Master password
+            </p>
+          </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-amber-600 text-white py-3 rounded-lg font-medium hover:bg-amber-700 transition disabled:bg-gray-800 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Authenticating...' : 'Access GM Dashboard'}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-6" style={{ marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+            <div className="form-spacing">
+              <label
+                htmlFor="password"
+                className="form-label"
+                style={{ color: 'white' }}
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="form-input form-input-blue"
+                placeholder="Enter GM password"
+                disabled={loading}
+                style={{ color: 'white' }}
+              />
+            </div>
 
-        <div className="mt-6 text-center">
-          <a
-            href="/"
-            className="text-sm text-gray-400 hover:text-gray-200 transition"
-          >
-            ← Back to home
-          </a>
+            {error && (
+              <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="form-spacing" style={{ marginTop: 'clamp(1rem, 3vw, 1.5rem)' }}>
+              <button
+                type="submit"
+                disabled={loading}
+                className="form-button form-button-primary"
+              >
+                {loading ? 'Authenticating...' : 'Access GM Dashboard'}
+              </button>
+            </div>
+          </form>
+
+          <div className="text-center" style={{ marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+            <a
+              href="/"
+              className="text-sm transition"
+              style={{ color: 'rgba(255, 255, 255, 0.6)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}
+            >
+              ← Back to home
+            </a>
+          </div>
         </div>
       </div>
     </div>
