@@ -13,19 +13,13 @@ March 13, 1997
 Summary:
 **THIS ACTUALLY HAPPENED.** Thousands of witnesses. Multiple cities. The Governor of Arizona. All saw the same thing.
 
-On the night of March 13, 1997, a **massive V-shaped craft** — witnesses estimated it at **over a mile wide** — silently glided over the state of Arizona. It passed over Phoenix, one of America's largest cities, in full view of thousands of people.
+On March 13, 1997, a **massive V-shaped craft** — witnesses estimated **over a mile wide** — silently glided over Arizona. It passed over Phoenix in full view of thousands.
 
-This wasn't some blurry dot in the sky. Witnesses described a **solid, structured object** blocking out the stars as it passed overhead. Silent. Slow. Absolutely massive.
+Witnesses described a **solid, structured object** blocking out the stars. Silent. Slow. Absolutely massive.
 
-**Governor Fife Symington** initially mocked the sightings at a press conference (he brought out a staffer in an alien costume — real classy). Years later, he admitted he'd **seen it himself** and called it "otherworldly."
+**Governor Fife Symington** initially mocked the sightings (brought out a staffer in an alien costume). Years later, he admitted he'd **seen it himself** and called it "otherworldly": "I'm a pilot and I know just about every machine that flies. It was bigger than anything I've ever seen."
 
-His exact quote: "I'm a pilot and I know just about every machine that flies. It was bigger than anything that I've ever seen. It remains a great mystery."
-
-**Simple analogy**: Imagine a flying football stadium cruising over your city at rooftop height, making zero noise, and the government telling you it was "flares." That's Phoenix Lights.
-
-The Air Force later claimed the lights were **flares dropped from military aircraft**. Cool story — except witnesses reported two separate events that night, and the massive craft was seen **before** any flares were allegedly dropped.
-
-Also, flares don't fly in formation. Or block out stars. Or stay perfectly still in a V-shape for extended periods.
+The Air Force claimed the lights were **flares dropped from military aircraft**. But witnesses reported two separate events that night, and the massive craft was seen **before** any flares were allegedly dropped. Flares don't fly in formation, block out stars, or stay perfectly still in a V-shape.
 
 Confidence: CONFIRMED
 
@@ -47,9 +41,9 @@ The Air Force explanation only covers the 10 PM lights. The earlier, more signif
 - Air traffic controllers
 - Police officers
 - A sitting state Governor
-- Thousands of ordinary citizens who all described the same thing
+- Thousands of ordinary citizens
 
-**Physical description (consistent across witnesses):**
+**Physical description (consistent):**
 
 - V-shaped or boomerang structure
 - Estimated 1-2 miles in width
@@ -58,11 +52,10 @@ The Air Force explanation only covers the 10 PM lights. The earlier, more signif
 - Moved slowly, deliberately
 - Blocked starlight as it passed (indicating solid structure)
 
-**The cover-up behavior:**
-When Governor Symington tried to get answers from federal agencies, he was stonewalled. "We just couldn't get any information," he later said. "The feds wouldn't talk about it."
+**Cover-up behavior**: When Governor Symington tried to get answers from federal agencies, he was stonewalled: "We just couldn't get any information. The feds wouldn't talk about it."
 
 TAKEAWAYS
 
-1. Thousands of people in a major American city witnessed an object that defies any known aircraft — and the government's "flares" explanation doesn't hold up to basic timeline scrutiny
+1. Thousands of people in a major American city witnessed an object that defies any known aircraft — the government's "flares" explanation doesn't hold up to timeline scrutiny
 2. Even a sitting Governor who initially mocked the sightings later admitted he saw something "otherworldly" and couldn't get answers from federal authorities
 3. When this many credible witnesses see the same impossible thing, either mass hallucination is real or something was in our skies that shouldn't exist

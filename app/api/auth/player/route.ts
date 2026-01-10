@@ -1,6 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
-import { setSessionCookie } from '@/lib/auth';
+// Player Authentication Route Handler
+// Changes:
+// - 2024-12-XX: Fixed server-side error by using setSessionCookieOnResponse instead of setSessionCookie (cookies() doesn't work in Route Handlers)
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
+import { setSessionCookieOnResponse } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,7 +13,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     if (!name || !pin) {
       return NextResponse.json(
-        { error: 'Name and PIN are required' },
+        { error: "Name and PIN are required" },
         { status: 400 }
       );
     }
@@ -21,7 +24,7 @@ export async function POST(request: NextRequest) {
       where: {
         name: {
           contains: name,
-          mode: 'insensitive',
+          mode: "insensitive",
         },
       },
     });
@@ -31,11 +34,10 @@ export async function POST(request: NextRequest) {
 
     for (const p of players) {
       // Extract first name from full name (handles formats like "[EXAMPLE] Alice Johnson")
-      const nameParts = p.name.split(' ');
-      const firstName = nameParts.find(part =>
-        !part.startsWith('[') &&
-        !part.endsWith(']') &&
-        part.length > 0
+      const nameParts = p.name.split(" ");
+      const firstName = nameParts.find(
+        (part) =>
+          !part.startsWith("[") && !part.endsWith("]") && part.length > 0
       );
 
       // Check if first name matches (case-insensitive) and PIN is correct
@@ -47,22 +49,13 @@ export async function POST(request: NextRequest) {
 
     if (!matchedPlayer) {
       return NextResponse.json(
-        { error: 'Invalid name or PIN' },
+        { error: "Invalid name or PIN" },
         { status: 401 }
       );
     }
 
-    // Create session
-    await setSessionCookie({
-      type: 'player',
-      playerId: matchedPlayer.id,
-      name: matchedPlayer.name,
-      country: matchedPlayer.country,
-      archetype: matchedPlayer.archetype,
-    });
-
-    // Return success with player info
-    return NextResponse.json({
+    // Create session and set cookie on response
+    const response = NextResponse.json({
       success: true,
       player: {
         id: matchedPlayer.id,
@@ -71,10 +64,26 @@ export async function POST(request: NextRequest) {
         archetype: matchedPlayer.archetype,
       },
     });
+
+    return await setSessionCookieOnResponse(
+      {
+        type: "player",
+        playerId: matchedPlayer.id,
+        name: matchedPlayer.name,
+        country: matchedPlayer.country,
+        archetype: matchedPlayer.archetype,
+      },
+      response
+    );
   } catch (error) {
-    console.error('Player auth error:', error);
+    console.error("Player auth error:", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
+    });
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

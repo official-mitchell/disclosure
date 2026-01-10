@@ -194,6 +194,7 @@ export function parseCharacterHtml(filePath: string): CharacterData {
 
   let permissions: string[] = [];
   let restrictions: string[] = [];
+  1;
 
   if (howeverIdx > -1) {
     let passedHowever = false;

@@ -1,7 +1,7 @@
 Kassidy Neville 🇺🇸 American Anti-Disclosure Military / Defense Contractor
 Rep. Sarah Fierce 🇺🇸 American Anti-Disclosure High Ranking Politician
 Deniz Sipahi, Ph.D. 🇺🇸 American Anti-Disclosure Intel / Oligarch
-Lt. Carson Conklin 🇺🇸 American Agnostic Military / Defense Contractor
+Lt. Chris Ries 🇺🇸 American Agnostic Military / Defense Contractor
 Candace Bradley 🇺🇸 American Agnostic Journalist / Media
 Amanda O’Brien 🇺🇸 American Agnostic Journalist / Media
 Rep. Maria St. Germain 🇺🇸 American Agnostic High Ranking Politician
