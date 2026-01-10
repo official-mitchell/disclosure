@@ -18,18 +18,18 @@ export default function CluesDisplay() {
 
   if (error) {
     return (
-      <div className="bg-red-900/50 border border-red-700 rounded-lg p-6 text-center">
-        <p className="text-red-200">Failed to load intelligence. Please try again.</p>
+      <div className="bg-red-900/50 border border-red-700 rounded-lg dynamic-card-padding card-container text-center">
+        <p className="dynamic-text-base" style={{ color: '#ef4444' }}>Failed to load intelligence. Please try again.</p>
       </div>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-12 text-center">
+      <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container text-center">
         <div className="animate-pulse">
-          <div className="h-12 w-12 bg-gray-700 rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading intelligence...</p>
+          <div className="bg-gray-700 rounded-full mx-auto mb-4" style={{ width: 'clamp(3rem, 8vw, 4rem)', height: 'clamp(3rem, 8vw, 4rem)' }}></div>
+          <p className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Loading intelligence...</p>
         </div>
       </div>
     );
@@ -37,9 +37,10 @@ export default function CluesDisplay() {
 
   if (!data?.clues || data.clues.length === 0) {
     return (
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-12 text-center">
+      <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container text-center">
         <svg
-          className="mx-auto h-12 w-12 text-gray-600 mb-4"
+          className="mx-auto mb-4"
+          style={{ width: 'clamp(3rem, 8vw, 4rem)', height: 'clamp(3rem, 8vw, 4rem)', color: 'rgba(255, 255, 255, 0.4)' }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -51,10 +52,10 @@ export default function CluesDisplay() {
             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        <h3 className="text-lg font-medium text-gray-300 mb-2">
+        <h3 className="dynamic-text-lg font-medium mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
           No Intelligence Available
         </h3>
-        <p className="text-gray-500">
+        <p className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
           Wait for the Game Master to release clues. This page will automatically update.
         </p>
       </div>
@@ -62,14 +63,15 @@ export default function CluesDisplay() {
   }
 
   return (
-    <div className="space-y-6">
+    <div style={{ gap: 'clamp(1.5rem, 4vw, 2rem)', display: 'flex', flexDirection: 'column' }}>
       <div className="flex justify-between items-center">
-        <p className="text-sm text-gray-400">
+        <p className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
           {data.clues.length} {data.clues.length === 1 ? 'report' : 'reports'} available
         </p>
         <button
           onClick={() => mutate()}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
+          className="form-button form-button-secondary"
+          style={{ width: 'auto', minWidth: 'clamp(100px, 18vw, 140px)' }}
         >
           Refresh Now
         </button>

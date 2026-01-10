@@ -87,7 +87,7 @@ export default function GMLogin() {
             </div>
 
             {error && (
-              <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-900/50 border border-red-700 px-4 py-3 rounded-lg text-sm" style={{ color: '#ef4444' }}>
                 {error}
               </div>
             )}

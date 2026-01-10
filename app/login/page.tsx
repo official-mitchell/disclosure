@@ -41,20 +41,22 @@ export default function PlayerLogin() {
   };
 
   return (
-    <div className="dynamic-page-wrapper bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="dynamic-page-wrapper bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
       <div className="dynamic-container">
-        <div className="bg-white rounded-2xl shadow-2xl dynamic-card-full dynamic-padding">
+        <div className="bg-slate-800 rounded-2xl dynamic-card-full dynamic-padding card-container-thick" style={{ backgroundColor: '#1e293b' }}>
           <div className="text-center form-spacing-lg">
-            <img
-              src="/Catastrophic Disclosure icon.png"
-              alt="Catastrophic Disclosure Icon"
-              className="mx-auto mb-6 dynamic-image-sm"
-            />
-            <h1 className="dynamic-text-xl font-bold text-gray-900 mb-3">
+            <div className="flex justify-center" style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+              <img
+                src="/Catastrophic Disclosure icon.png"
+                alt="Catastrophic Disclosure Icon"
+                className="dynamic-image-sm"
+              />
+            </div>
+            <h1 className="dynamic-text-xl font-bold mb-3" style={{ color: 'white' }}>
               Player Login
             </h1>
-            <p className="dynamic-text-base text-gray-600">
-              Enter your name and PIN to access the game
+            <p className="dynamic-text-base" style={{ color: 'white' }}>
+              Enter your first name and PIN to access the game
             </p>
           </div>
 
@@ -62,9 +64,10 @@ export default function PlayerLogin() {
             <div className="form-spacing">
               <label
                 htmlFor="name"
-                className="form-label text-gray-700"
+                className="form-label"
+                style={{ color: 'white' }}
               >
-                Name
+                First Name
               </label>
               <input
                 id="name"
@@ -72,8 +75,8 @@ export default function PlayerLogin() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="form-input form-input-light"
-                placeholder="Your name"
+                className="form-input form-input-dark"
+                placeholder="Your first name"
                 disabled={loading}
               />
             </div>
@@ -81,7 +84,8 @@ export default function PlayerLogin() {
             <div className="form-spacing">
               <label
                 htmlFor="pin"
-                className="form-label text-gray-700"
+                className="form-label"
+                style={{ color: 'white' }}
               >
                 PIN
               </label>
@@ -91,14 +95,14 @@ export default function PlayerLogin() {
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
                 required
-                className="form-input form-input-light"
+                className="form-input form-input-dark"
                 placeholder="4-6 digit PIN"
                 disabled={loading}
               />
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-900/50 border border-red-700 px-4 py-3 rounded-lg text-sm" style={{ color: '#ef4444' }}>
                 {error}
               </div>
             )}
@@ -115,10 +119,13 @@ export default function PlayerLogin() {
             </div>
           </form>
 
-          <div className="mt-8 text-center">
+          <div className="text-center" style={{ marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
             <a
               href="/"
-              className="text-sm text-gray-600 hover:text-gray-900 transition"
+              className="text-sm transition"
+              style={{ color: 'rgba(255, 255, 255, 0.6)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}
             >
               ← Back to home
             </a>

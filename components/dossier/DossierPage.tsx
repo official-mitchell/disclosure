@@ -11,7 +11,6 @@ import ExposureSection from './ExposureSection';
 import PrivateWantSection from './PrivateWantSection';
 import DisclosureSection from './DisclosureSection';
 import BoundariesSection from './BoundariesSection';
-import CountryWatermark from './CountryWatermark';
 import ClassifiedStamp from './ClassifiedStamp';
 
 interface Motivation {
@@ -95,13 +94,10 @@ export default function DossierPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto relative">
-      {/* Country Watermark */}
-      <CountryWatermark country={character.nationalityBloc} />
-
+    <div className="w-full min-h-screen relative aged-paper">
       {/* Folder Tab Header */}
-      <div className="mb-4 sm:mb-6 relative">
-        <div className="folder-tab inline-block px-4 sm:px-8 py-2 sm:py-3 rounded-t-lg">
+      <div className="mb-6 sm:mb-8 relative" style={{ padding: 'clamp(1rem, 3vw, 2rem)', paddingBottom: 'clamp(0.5rem, 1.5vw, 1rem)' }}>
+        <div className="folder-tab inline-block px-4 sm:px-8 py-2 sm:py-3 rounded-t-lg" style={{ padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)' }}>
           <h1 className="text-lg sm:text-2xl font-bold typewriter-font stamp-effect" style={{ color: '#2d1810' }}>
             CLASSIFIED PERSONNEL DOSSIER
           </h1>
@@ -110,6 +106,8 @@ export default function DossierPage() {
           <ClassifiedStamp type="top_secret" position="top-right" />
         </div>
       </div>
+
+      <div className="aged-paper" style={{ padding: '0 clamp(1rem, 3vw, 2rem)', paddingBottom: 'clamp(1rem, 3vw, 2rem)', backgroundColor: '#f4e8d0' }}>
 
       <DossierHeader
         displayName={character.displayName}
@@ -206,6 +204,7 @@ export default function DossierPage() {
           mustConceal={character.mustConceal}
         />
       </DossierSection>
+      </div>
     </div>
   );
 }

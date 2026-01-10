@@ -38,14 +38,15 @@ export default function DossierSection({
   };
 
   return (
-    <div className="aged-paper border-4 border-amber-900 rounded-lg p-4 sm:p-6 mb-6 shadow-lg relative overflow-hidden">
+    <div className="shadow-lg relative overflow-visible w-full" style={{ borderRadius: 0, backgroundColor: '#f4e8d0', marginBottom: 0, border: '4px solid rgba(180, 83, 9, 0.3)' }}>
       <div className="relative z-10">
-        {/* Clickable Header */}
+        {/* Clickable Header - No padding, flush with borders */}
         <button
           onClick={toggleExpanded}
-          className="w-full text-left flex items-center justify-between group mb-4 hover:opacity-80 transition-opacity"
+          className="w-full text-left flex items-center justify-between group hover:opacity-80 transition-opacity"
+          style={{ padding: 'clamp(0.75rem, 2vw, 1rem)', borderBottom: '2px solid #92400e' }}
         >
-          <h2 className="text-xl sm:text-2xl font-bold typewriter-font stamp-effect border-b-2 border-amber-900 pb-2 flex-1" style={{ color: '#2d1810' }}>
+          <h2 className="text-xl sm:text-2xl font-bold typewriter-font stamp-effect flex-1" style={{ color: '#2d1810' }}>
             <span className="inline-block transition-transform duration-200" style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
               ▶
             </span>
@@ -54,7 +55,7 @@ export default function DossierSection({
           </h2>
         </button>
 
-        {/* Collapsible Content */}
+        {/* Collapsible Content - Padding only on content */}
         <div
           className="transition-all duration-300 ease-in-out overflow-hidden"
           style={{
@@ -62,7 +63,9 @@ export default function DossierSection({
             opacity: isExpanded ? 1 : 0,
           }}
         >
-          {children}
+          <div style={{ padding: 'clamp(1rem, 3vw, 2rem)' }}>
+            {children}
+          </div>
         </div>
       </div>
     </div>

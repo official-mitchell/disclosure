@@ -15,42 +15,59 @@ export default async function PlayerDashboard() {
   const archetypeName = ARCHETYPE_NAMES[session.archetype as keyof typeof ARCHETYPE_NAMES];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
-      <nav className="bg-gray-900 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-3">
-                <img
-                  src="/Catastrophic Disclosure icon.png"
-                  alt="Icon"
-                  className="w-10 h-10"
-                />
-                <h1 className="text-xl font-bold text-white">
-                  Catastrophic Disclosure
-                </h1>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
+      {/* Logo and Title Section - Centered */}
+      <div className="bg-black border-b border-gray-800">
+        <div className="max-w-7xl mx-auto dynamic-padding-sm">
+          <div className="flex flex-col items-center" style={{ paddingTop: 'clamp(0.85rem, 2.55vw, 1.275rem)', paddingBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+            <div className="flex justify-center mb-2">
+              <img
+                src="/Catastrophic Disclosure icon.png"
+                alt="Icon"
+                className="flex-shrink-0"
+                style={{ 
+                  width: 'clamp(4.8rem, 14vw, 7.2rem)', 
+                  height: 'clamp(4.8rem, 14vw, 7.2rem)',
+                  minWidth: '76px',
+                  maxWidth: '115px'
+                }}
+              />
+            </div>
+            <h1 className="dynamic-text-xl font-bold text-center" style={{ color: 'white' }}>
+              Catastrophic Disclosure
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Links Row */}
+      <nav className="bg-black border-b border-gray-800">
+        <div className="max-w-7xl mx-auto dynamic-padding-sm">
+          <div className="flex justify-between items-center" style={{ paddingTop: 'clamp(0.75rem, 2vw, 1rem)', paddingBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+            <div className="flex items-center" style={{ gap: 'clamp(1rem, 3vw, 2rem)' }}>
               <Link
                 href="/dashboard"
-                className="text-white border-b-2 border-blue-500 text-sm font-semibold pb-1"
+                className="dynamic-text-base font-semibold pb-1"
+                style={{ color: 'white', borderBottom: '2px solid #3b82f6' }}
               >
                 Intelligence
               </Link>
               <Link
                 href="/dashboard/dossier"
-                className="text-gray-300 hover:text-white transition text-sm"
+                className="dynamic-text-base transition hover:text-white"
+                style={{ color: 'rgba(255, 255, 255, 0.7)' }}
               >
                 Dossier
               </Link>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-300 text-sm">
+            <div className="flex items-center" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
+              <span className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                 {session.name}
               </span>
               <form action="/api/auth/logout" method="POST">
                 <button
                   type="submit"
-                  className="text-gray-400 hover:text-white text-sm transition"
+                  className="logout-button dynamic-text-base"
                 >
                   Logout
                 </button>
@@ -60,14 +77,17 @@ export default async function PlayerDashboard() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content Area */}
+      <main>
+        <div className="max-w-7xl mx-auto dynamic-padding" style={{ paddingTop: 'clamp(1.5rem, 4vw, 2rem)', paddingBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
         {/* Connection Confirmed Banner */}
-        <div className="bg-green-900/50 border border-green-700 rounded-lg p-6 mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+        <div className="bg-green-900/50 border border-green-700 rounded-lg dynamic-card-padding card-container" style={{ marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
+          <div className="flex items-center justify-between" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)' }}>
+            <div className="flex items-center" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
               <div className="flex-shrink-0">
                 <svg
-                  className="h-6 w-6 text-green-400"
+                  className="text-green-400"
+                  style={{ width: 'clamp(1.5rem, 4vw, 2rem)', height: 'clamp(1.5rem, 4vw, 2rem)' }}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -81,10 +101,10 @@ export default async function PlayerDashboard() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-green-100">
+                <h2 className="dynamic-text-lg font-semibold" style={{ color: '#d1fae5' }}>
                   Connection Confirmed!
                 </h2>
-                <p className="text-green-200 mt-1">
+                <p className="dynamic-text-base mt-1" style={{ color: '#a7f3d0' }}>
                   You are <span className="font-bold">{session.name}</span>,{' '}
                   <span className="font-bold">{archetypeName}</span>,{' '}
                   <span className="font-bold">{countryName}</span>
@@ -93,7 +113,8 @@ export default async function PlayerDashboard() {
             </div>
             <Link
               href="/dashboard/dossier"
-              className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded text-sm font-semibold transition"
+              className="form-button form-button-secondary"
+              style={{ width: 'auto', minWidth: 'clamp(120px, 20vw, 160px)' }}
             >
               View Dossier
             </Link>
@@ -101,16 +122,17 @@ export default async function PlayerDashboard() {
         </div>
 
         {/* Clues Section */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Your Intelligence</h2>
+        <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
+          <h2 className="dynamic-text-2xl font-bold mb-6 text-center" style={{ color: 'white' }}>Your Intelligence</h2>
           <CluesDisplay />
         </div>
 
         {/* Info Footer */}
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-          <p className="text-sm text-gray-400 text-center">
+        <div className="bg-gray-800 rounded-lg dynamic-card-padding card-container">
+          <p className="dynamic-text-base text-center" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
             This dashboard auto-refreshes every 15 seconds. New intelligence will appear automatically.
           </p>
+        </div>
         </div>
       </main>
     </div>

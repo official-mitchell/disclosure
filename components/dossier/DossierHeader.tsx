@@ -14,12 +14,12 @@ export default function DossierHeader({
   portraitUrl,
 }: DossierHeaderProps) {
   return (
-    <div className="aged-paper border-4 border-amber-900 rounded-lg p-4 sm:p-6 mb-6 shadow-lg relative overflow-hidden">
+    <div className="shadow-lg relative overflow-hidden w-full" style={{ borderRadius: 0, backgroundColor: '#f4e8d0', marginBottom: 0, border: '4px solid rgba(180, 83, 9, 0.3)' }}>
       {/* Coffee stains - hidden on mobile */}
       <div className="coffee-stain hidden sm:block" style={{ width: '100px', height: '100px', top: '10px', right: '50px' }} />
       <div className="coffee-stain hidden sm:block" style={{ width: '60px', height: '60px', bottom: '20px', left: '100px' }} />
 
-      <div className="relative z-10">
+      <div className="relative z-10" style={{ padding: 'clamp(1rem, 3vw, 2rem)' }}>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           {portraitUrl && (
             <div className="flex-shrink-0 mx-auto sm:mx-0">
@@ -32,11 +32,11 @@ export default function DossierHeader({
             </div>
           )}
           <div className="flex-1">
-            <h1 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 typewriter-font text-center sm:text-left" style={{ color: '#2d1810' }}>
+            <h1 className="text-2xl sm:text-4xl font-bold typewriter-font text-center sm:text-left" style={{ color: '#2d1810', marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
               {displayName}
             </h1>
-            <div className="space-y-2 document-font text-base sm:text-lg" style={{ color: '#3d2820' }}>
-              <p className="border-b border-amber-800 pb-2">
+            <div className="document-font text-base sm:text-lg" style={{ color: '#3d2820', gap: 'clamp(0.75rem, 2vw, 1rem)', display: 'flex', flexDirection: 'column' }}>
+              <p className="border-b border-amber-800" style={{ paddingBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
                 <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm">Nationality:</span>{' '}
                 <span className="font-normal">{nationalityBloc}</span>
               </p>
@@ -48,8 +48,8 @@ export default function DossierHeader({
           </div>
         </div>
 
-        <div className="mt-4 sm:mt-6 p-3 sm:p-4 border-2 border-amber-800 bg-amber-50/50 rounded">
-          <p className="text-xs font-bold tracking-widest mb-2 typewriter-font" style={{ color: '#2d1810' }}>
+        <div className="border-2 border-amber-800 bg-amber-50/50 rounded" style={{ marginTop: 'clamp(1.5rem, 4vw, 2.5rem)', padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <p className="text-xs font-bold tracking-widest typewriter-font" style={{ color: '#2d1810', marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
             PUBLIC PROFILE:
           </p>
           <p className="document-font text-sm sm:text-base leading-relaxed" style={{ color: '#3d2820' }}>

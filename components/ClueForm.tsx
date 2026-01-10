@@ -63,7 +63,7 @@ export default function ClueForm({ clue, mode }: ClueFormProps) {
   return (
     <form onSubmit={handleSubmit} style={{ gap: 'clamp(1.5rem, 4vw, 2rem)', display: 'flex', flexDirection: 'column' }}>
       {error && (
-        <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded">
+        <div className="bg-red-900/50 border border-red-700 px-4 py-3 rounded" style={{ color: '#ef4444' }}>
           {error}
         </div>
       )}

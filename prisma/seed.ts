@@ -94,6 +94,86 @@ async function main() {
 
   console.log(`✓ Created ${players.length} EXAMPLE test players`);
 
+  // Create EXAMPLE test characters
+  const alicePlayer = await prisma.player.findUnique({
+    where: { name: '[EXAMPLE] Alice Johnson' },
+  });
+
+  if (alicePlayer) {
+    await prisma.character.upsert({
+      where: { playerId: alicePlayer.id },
+      update: {},
+      create: {
+        playerId: alicePlayer.id,
+        displayName: 'Dr. Alice Johnson',
+        nationalityBloc: 'United States',
+        occupation: 'Senior Astrophysicist, DARPA Advanced Research Division',
+        publicReputation: 'Dr. Johnson is known in academic circles for her groundbreaking work in radio astronomy and her controversial theories about technosignatures. She has published extensively on the detection of non-natural electromagnetic signals and has served as a consultant to several government agencies.',
+        portraitUrl: null,
+        archetypeTitle: 'The Scientist: Seeker of Truth',
+        permissions: [
+          'Access to classified astronomical data and SETI intercepts',
+          'Authority to request additional telescope time for priority targets',
+          'Clearance to review technical specifications of recovered materials',
+          'Permission to consult with international scientific collaborators',
+        ],
+        restrictions: [
+          'However, you cannot share raw data with civilian researchers without approval',
+          'However, you must not publish findings without security review',
+          'However, your analysis must support the official narrative when requested',
+        ],
+        backstory: `Alice Johnson grew up in rural Montana, spending countless nights stargazing from her family's ranch. Her fascination with the cosmos led her to MIT, where she completed her doctorate in astrophysics at age 26. Her dissertation on anomalous radio signals caught the attention of DARPA recruiters.
+
+For the past decade, she has worked in a classified facility analyzing data that officially doesn't exist. The 2019 Navy UAP videos were just the tip of the iceberg—Alice has spent years studying flight characteristics, propulsion signatures, and communication attempts that defy conventional physics.
+
+She joined this project believing she would help humanity prepare for contact. Instead, she's found herself increasingly complicit in a coverup that spans decades. The weight of what she knows—and cannot say—grows heavier each day.`,
+        motivations: [
+          {
+            label: 'Scientific Truth',
+            description: 'You became a scientist to discover truth, not to hide it. Every day you spend concealing evidence feels like a betrayal of everything you once believed in.',
+          },
+          {
+            label: 'Humanity\'s Right to Know',
+            description: 'You believe people deserve to know they\'re not alone in the universe. The psychological and philosophical implications should be decided democratically, not by a shadow committee.',
+          },
+          {
+            label: 'Fear of Consequences',
+            description: 'You\'ve seen what happens to whistleblowers. Your career, your freedom, perhaps your life—all could vanish if you speak out. Sometimes courage feels like a luxury you can\'t afford.',
+          },
+        ],
+        formalAuthority: 'Director of Special Programs at DARPA. He can end your career with a phone call and has made it clear that operational security is paramount.',
+        informalFears: 'Your mentor, Dr. Sarah Chen (EXECUTIVE), who brought you into the program. Disappointing her feels worse than any official reprimand.',
+        safelyIgnore: 'Military brass who don\'t understand the science. They need your analysis and can\'t replace you easily.',
+        exposureConsequences: `If your involvement becomes public, you face immediate termination and potential prosecution under the Espionage Act. Your security clearance will be revoked, ending your scientific career permanently.
+
+More personally, your family doesn't know what you really do. Your parents still think you study radio astronomy. Learning you've been lying for a decade—and about something this monumental—would devastate them.
+
+There's also the professional betrayal: colleagues who trusted you with data, who believed you were working toward disclosure, who don't know you've been analyzing recovered technology while publicly dismissing UFO claims.`,
+        privateWant: `You want to be the one who reveals the truth to the world—not as a whistleblower fleeing to Moscow, but as a scientist presenting peer-reviewed evidence that changes human history forever.
+
+You dream of the press conference: standing at a podium, showing the data, watching humanity's cosmic perspective shift in real-time. You want your name in history books not as a pariah, but as the person who proved we're not alone.
+
+But that fantasy requires a level of institutional support that may never come. So perhaps what you really want is simply permission—official clearance to tell your parents, your colleagues, the world. You're tired of being brilliant and burdened and silent.`,
+        disclosureBelief: `"Disclosure is inevitable, but control over its timing is power. The question isn't whether humanity can handle the truth—it's whether those in power can handle losing their monopoly on it.
+
+Every day we wait, we make the eventual revelation more catastrophic. The longer the lie, the deeper the betrayal. We're not protecting people from the truth—we're protecting institutions from accountability for decades of deception."`,
+        canDiscuss: [
+          'The existence of unexplained aerial phenomena and recovered materials',
+          'Technical aspects of propulsion systems beyond current human capability',
+          'Timeline of government awareness and investigation programs',
+          'Scientific implications for physics and consciousness',
+        ],
+        mustConceal: [
+          'Specific locations of recovered craft and ongoing analysis facilities',
+          'Names of other scientists and military personnel involved in programs',
+          'Communication attempts and any potential responses received',
+          'Your personal doubts about whether disclosure should happen',
+        ],
+      },
+    });
+    console.log('✓ Created character for Alice Johnson');
+  }
+
   // Create EXAMPLE test clues
   const clues = [
     // Phase 1 - Released to all

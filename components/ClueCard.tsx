@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Clue } from '@prisma/client';
 import { LEGITIMACY_DISPLAY, CONFIDENTIALITY_DISPLAY, CONFIDENCE_DISPLAY } from '@/lib/constants';
 
@@ -36,51 +39,76 @@ const getConfidenceWidth = (level: string) => {
 };
 
 export default function ClueCard({ clue }: ClueCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="bg-gray-800 border-2 border-gray-700 rounded-lg overflow-hidden">
-      {/* Header */}
-      <div className="bg-gray-900 border-b border-gray-700 p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="text-2xl">🌍</div>
-            <div>
-              <h3 className="text-xl font-bold text-white">{clue.title}</h3>
-              <p className="text-sm text-gray-400">{clue.eventDate}</p>
+    <div className="bg-gray-800 rounded-lg overflow-hidden card-container-thick">
+      {/* Header - Clickable */}
+      <div 
+        className="bg-gray-900 border-b card-separator dynamic-card-padding cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex items-center justify-between" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <div className="flex items-center flex-1" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
+            <div className="dynamic-text-2xl">🌍</div>
+            <div className="flex-1">
+              <h3 className="dynamic-text-xl font-bold" style={{ color: 'white' }}>
+                {clue.title}
+              </h3>
+              <p className="dynamic-text-base" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                Origin: {clue.originCountry} | {clue.eventDate}
+              </p>
             </div>
           </div>
-          <div className="text-xs text-gray-500">
-            Origin: {clue.originCountry}
+          <div className="flex items-center" style={{ transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+            <svg
+              style={{ width: 'clamp(1.95rem, 5.2vw, 2.6rem)', height: 'clamp(1.95rem, 5.2vw, 2.6rem)', minWidth: '31px', color: 'white' }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
+      {/* Content - Collapsible with Animation */}
+      <div 
+        className="overflow-hidden transition-all duration-300 ease-in-out"
+        style={{ 
+          maxHeight: isOpen ? '5000px' : '0',
+          opacity: isOpen ? 1 : 0
+        }}
+      >
+        <div className="dynamic-card-padding">
         {/* Backstory with optional image */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex" style={{ gap: 'clamp(1rem, 3vw, 1.5rem)', marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}>
           {clue.imageUrl && (
             <div className="flex-shrink-0">
               <img
                 src={clue.imageUrl}
                 alt={clue.title}
-                className="w-32 h-32 object-cover rounded border border-gray-700"
+                className="object-cover rounded card-container"
+                style={{ width: 'clamp(8rem, 20vw, 10rem)', height: 'clamp(8rem, 20vw, 10rem)' }}
               />
             </div>
           )}
           <div className="flex-1">
-            <p className="text-gray-300 leading-relaxed">{clue.backstory}</p>
+            <p className="dynamic-text-base leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{clue.backstory}</p>
           </div>
         </div>
 
         {/* Confidence Meter */}
-        <div className="mb-4">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-400">CONFIDENCE:</span>
-            <span className="text-gray-200 uppercase">
+        <div style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <div className="flex justify-between dynamic-text-base mb-2">
+            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>CONFIDENCE:</span>
+            <span className="uppercase" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               {CONFIDENCE_DISPLAY[clue.confidenceLevel as keyof typeof CONFIDENCE_DISPLAY]}
             </span>
           </div>
-          <div className="bg-gray-900 rounded-full h-2 overflow-hidden">
+          <div className="bg-gray-900 rounded-full overflow-hidden" style={{ height: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}>
             <div
               className={`bg-blue-500 h-full ${getConfidenceWidth(clue.confidenceLevel)}`}
             />
@@ -88,18 +116,18 @@ export default function ClueCard({ clue }: ClueCardProps) {
         </div>
 
         {/* Source */}
-        <div className="mb-4 text-sm">
-          <span className="text-gray-400">SOURCE: </span>
-          <span className="text-gray-200">{clue.source}</span>
+        <div className="dynamic-text-base" style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+          <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>SOURCE: </span>
+          <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{clue.source}</span>
         </div>
 
         {/* Supporting Intel */}
         {clue.supportingIntel && (
-          <div className="mb-4 bg-gray-900 border border-gray-700 rounded p-4">
-            <h4 className="text-sm font-semibold text-gray-400 mb-2">
+          <div className="bg-gray-900 rounded dynamic-card-padding card-container" style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+            <h4 className="dynamic-text-base font-semibold mb-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               SUPPORTING INTEL:
             </h4>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="dynamic-text-base leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
               {clue.supportingIntel}
             </p>
           </div>
@@ -107,24 +135,25 @@ export default function ClueCard({ clue }: ClueCardProps) {
 
         {/* Takeaways */}
         {clue.takeaways.length > 0 && (
-          <div className="mb-4">
-            <h4 className="text-sm font-semibold text-gray-400 mb-2">
+          <div style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+            <h4 className="dynamic-text-base font-semibold mb-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               TAKEAWAYS:
             </h4>
-            <ul className="space-y-1">
+            <ul style={{ gap: 'clamp(0.5rem, 1.5vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
               {clue.takeaways.map((takeaway, idx) => (
-                <li key={idx} className="text-gray-300 text-sm flex gap-2">
-                  <span className="text-blue-400">•</span>
+                <li key={idx} className="dynamic-text-base flex" style={{ gap: 'clamp(0.5rem, 1.5vw, 0.75rem)', color: 'rgba(255, 255, 255, 0.7)' }}>
+                  <span style={{ color: '#60a5fa' }}>•</span>
                   <span>{takeaway}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-700 p-4 flex gap-3">
+      <div className="border-t card-separator dynamic-card-padding flex" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
         <span
           className={`px-3 py-1 rounded text-xs font-semibold ${getLegitimacyColor(clue.legitimacy)}`}
         >

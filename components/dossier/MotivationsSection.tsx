@@ -12,13 +12,13 @@ export default function MotivationsSection({
 }: MotivationsSectionProps) {
   return (
     <>
-      <p className="text-xs font-bold tracking-widest mb-3 sm:mb-4 typewriter-font" style={{ color: '#2d1810' }}>
+      <p className="text-xs font-bold tracking-widest typewriter-font" style={{ color: '#2d1810', marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
         MOTIVATIONAL DRIVERS:
       </p>
-      <div className="space-y-3 sm:space-y-4">
+      <div style={{ gap: 'clamp(1rem, 3vw, 1.5rem)', display: 'flex', flexDirection: 'column' }}>
         {motivations.map((motivation, index) => (
-          <div key={index} className="border-2 border-amber-800 bg-amber-50/30 rounded-lg p-3 sm:p-4">
-            <div className="border-b border-amber-700 pb-2 mb-2 sm:mb-3">
+          <div key={index} className="border-2 border-amber-800 bg-amber-50/30 rounded-lg" style={{ padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
+            <div className="border-b border-amber-700" style={{ paddingBottom: 'clamp(0.75rem, 2vw, 1rem)', marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
               <h3 className="typewriter-font font-bold text-base sm:text-lg uppercase tracking-wide" style={{ color: '#2d1810' }}>
                 ─ {motivation.label} ─
               </h3>
