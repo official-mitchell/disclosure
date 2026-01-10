@@ -12,8 +12,10 @@ import ReleaseControls from './ReleaseControls';
 interface Clue {
   id: string;
   title: string;
-  targetType: string;
-  targetValue: string | null;
+  targetCountry?: string | null;
+  targetArchetype?: string | null;
+  targetDemeanor?: string | null;
+  targetPlayer?: string | null;
   originCountry: string;
   released: boolean;
   retracted: boolean;
@@ -31,6 +33,22 @@ interface CollapsibleClueCardProps {
 
 export default function CollapsibleClueCard({ clue }: CollapsibleClueCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Convert new schema fields to display string
+  const getTargetDisplay = () => {
+    if (clue.targetCountry) {
+      return { type: 'Country', value: clue.targetCountry };
+    } else if (clue.targetArchetype) {
+      return { type: 'Archetype', value: clue.targetArchetype };
+    } else if (clue.targetDemeanor) {
+      return { type: 'Demeanor', value: clue.targetDemeanor };
+    } else if (clue.targetPlayer) {
+      return { type: 'Player', value: clue.targetPlayer };
+    }
+    return { type: 'All', value: null };
+  };
+
+  const targetDisplay = getTargetDisplay();
 
   return (
     <div 
@@ -84,8 +102,8 @@ export default function CollapsibleClueCard({ clue }: CollapsibleClueCardProps) 
         </div>
         <div className="flex flex-wrap" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
           <span className="dynamic-text-base" style={{ color: 'white' }}>
-            Target: <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{clue.targetType}</span>
-            {clue.targetValue && ` (${clue.targetValue})`}
+            Target: <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{targetDisplay.type}</span>
+            {targetDisplay.value && ` (${targetDisplay.value})`}
           </span>
           {clue.released && (
             <span className="bg-green-900/50 text-green-300 px-2 py-1 rounded dynamic-text-base">
