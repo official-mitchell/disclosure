@@ -17,31 +17,31 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 
 ### Generative Character Dossiers
 
-![Character Dossier](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20character%20dossier.jpg)
+![Character Dossier](https://raw.githubusercontent.com/official-mitchell/disclosure/main/images/preview%20images/catastrophic%20disclosure%20%20mobile%20preview%20-%20character%20dossier.jpg)
 
 Cold-War Spy Style, of course.
 
 ### Game Master Control Panel
 
-![Game Master Control Panel](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20game%20master%20control%20panel.jpg)
+![Game Master Control Panel](https://raw.githubusercontent.com/official-mitchell/disclosure/main/images/preview%20images/catastrophic%20disclosure%20%20mobile%20preview%20-%20game%20master%20control%20panel.jpg)
 
 Game Master can see all released clues and see players.
 
 ### Clue Management
 
-![Clue Management](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20clue%20management.jpg)
+![Clue Management](https://raw.githubusercontent.com/official-mitchell/disclosure/main/images/preview%20images/catastrophic%20disclosure%20%20mobile%20preview%20-%20clue%20management.jpg)
 
 Game Master can release new clues.
 
 ### Player Management
 
-![Player Management](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20player%20management.jpg)
+![Player Management](https://raw.githubusercontent.com/official-mitchell/disclosure/main/images/preview%20images/catastrophic%20disclosure%20%20mobile%20preview%20-%20player%20management.jpg)
 
 You can see all player details from here.
 
 ### Visible Intelligence
 
-![Visible Intelligence](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20visible%20intelligence.jpg)
+![Visible Intelligence](https://raw.githubusercontent.com/official-mitchell/disclosure/main/images/preview%20images/catastrophic%20disclosure%20%20mobile%20preview%20-%20visible%20intelligence.jpg)
 
 See what each player knows from here.
 
