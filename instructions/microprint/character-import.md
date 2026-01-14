@@ -95,7 +95,7 @@ Use `cheerio` (jQuery-like HTML parser for Node) to:
 ```bash
 npm run sync:characters
 # or
-pnpm exec tsx scripts/sync-characters.ts
+pnpm exec tsx scripts/characters/sync-characters.ts
 ```
 
 ### Script Location
@@ -329,7 +329,7 @@ export function parseCharacterHtml(filePath: string): CharacterData {
 
 ## Main Sync Script
 
-### scripts/sync-characters.ts
+### scripts/characters/sync-characters.ts
 
 ```typescript
 import fs from "fs";
@@ -422,7 +422,7 @@ main()
 ```json
 {
   "scripts": {
-    "sync:characters": "tsx scripts/sync-characters.ts"
+    "sync:characters": "tsx scripts/characters/sync-characters.ts"
   }
 }
 ```

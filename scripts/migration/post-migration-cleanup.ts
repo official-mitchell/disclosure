@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Post-migration cleanup script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+import { prisma } from "../lib/db";
 
 async function main() {
   console.log("🧹 Cleaning up old schema structures...\n");

@@ -1,7 +1,7 @@
 # Changes Made
 
-1. Removed Sample Clues - Deleted all 6 example clues from the database in scripts/remove-sample-clues.ts:58
-2. Created Evidence Import System - Built scripts/import-evidence.ts:1 that:
+1. Removed Sample Clues - Deleted all 6 example clues from the database in scripts/cleanup/remove-sample-clues.ts:58
+2. Created Evidence Import System - Built scripts/import-export/import-evidence.ts:1 that:
 
    - Parses markdown files from the evidence/ directory
    - Extracts structured data (Title, Origin, Date, Summary, Confidence, Source, Supporting Intel, Takeaways)
@@ -24,7 +24,7 @@ The evidence import script:
 To Add More Evidence
 
 1. Create new .md files in evidence/ directory using the same format as welcome-messsage.md
-2. Run: npx tsx scripts/import-evidence.ts
+2. Run: npx tsx scripts/import-export/import-evidence.ts
 3. Review in GM dashboard and adjust phase/target/release settings as needed
 
 The welcome message is now live and will be shown to all players when they sign in.

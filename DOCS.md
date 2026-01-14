@@ -422,8 +422,8 @@ if ($authority.length === 1 && $authority.first().hasClass("indented")) {
 
 ### Files Modified
 
-- `scripts/parse-character-html.ts` - Section 4 parsing logic (lines 162-310)
-- `scripts/import-characters-with-codes.ts` - Character import script
+- `scripts/characters/parse-character-html.ts` - Section 4 parsing logic (lines 162-310)
+- `scripts/import-export/import-characters-with-codes.ts` - Character import script
 - `components/dossier/AuthoritySection.tsx` - Display component
 
 ### Related Components
@@ -500,7 +500,7 @@ CHANGES MADE
 - If both targetCountry and targetArchetypes are set, player must match both
 - Uses { has: session.archetype } to check if player's archetype is in the array
 
-3. Import Script (scripts/import-evidence.ts)
+3. Import Script (scripts/import-export/import-evidence.ts)
 
 - Updated to parse multiple archetypes from Recipients field
 - Changed targetArchetype to targetArchetypes array throughout

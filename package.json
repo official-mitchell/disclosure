@@ -9,7 +9,7 @@
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
-    "sync:characters": "tsx scripts/sync-characters.ts"
+    "sync:characters": "tsx scripts/characters/sync-characters.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

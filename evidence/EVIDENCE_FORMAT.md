@@ -300,7 +300,7 @@ TAKEAWAYS
 1. Place your markdown files in the `evidence/` directory
 2. Run the import script:
    ```bash
-   npx tsx scripts/import-evidence.ts
+   npx tsx scripts/import-export/import-evidence.ts
    ```
 3. Review imported evidence in the GM dashboard
 4. Adjust phase, target, and release settings if needed

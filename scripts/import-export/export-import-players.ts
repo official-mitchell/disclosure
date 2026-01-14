@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-
+// Export/import players script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
 // This script exports players from one database and imports to another
 // Usage:
 //   Step 1: node export-import-players.ts export
 //   Step 2: DATABASE_URL=<production-url> node export-import-players.ts import
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/db";
 
 async function exportPlayers() {
   const players = await prisma.player.findMany({
@@ -20,7 +20,7 @@ async function exportPlayers() {
 
   console.log(`✓ Exported ${players.length} players to players-export.json`);
   console.log('\nNext step:');
-  console.log('DATABASE_URL=<your-production-url> tsx scripts/export-import-players.ts import');
+  console.log('DATABASE_URL=<your-production-url> tsx scripts/import-export/export-import-players.ts import');
 }
 
 async function importPlayers() {
@@ -77,8 +77,8 @@ async function main() {
     await importPlayers();
   } else {
     console.log('Usage:');
-    console.log('  tsx scripts/export-import-players.ts export');
-    console.log('  DATABASE_URL=<prod-url> tsx scripts/export-import-players.ts import');
+    console.log('  tsx scripts/import-export/export-import-players.ts export');
+    console.log('  DATABASE_URL=<prod-url> tsx scripts/import-export/export-import-players.ts import');
   }
 }
 

@@ -13,6 +13,45 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 - **Styling**: Tailwind CSS
 - **Authentication**: Session-based with cookies
 
+## Mobile Preview
+
+### Generative Character Dossiers
+
+![Character Dossier](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20character%20dossier.jpg)
+
+Cold-War Spy Style, of course.
+
+### Game Master Control Panel
+
+![Game Master Control Panel](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20game%20master%20control%20panel.jpg)
+
+Game Master can see all released clues and see players.
+
+### Clue Management
+
+![Clue Management](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20clue%20management.jpg)
+
+Game Master can release new clues.
+
+### Player Management
+
+![Player Management](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20player%20management.jpg)
+
+You can see all player details from here.
+
+### Visible Intelligence
+
+![Visible Intelligence](images/preview%20images/catastrophic%20disclosure%20mobile%20preview%20-%20visible%20intelligence.jpg)
+
+See what each player knows from here.
+
+## Changes/Roadmap
+
+- The single biggest feature would be if players could roll a DND style dice on decisions, then have their actions affect other players' statuses and clue release.
+- There could be improvement to the game's context on the decision tree and better integration with an LLM to adjust evidence and player criteria on the fly
+- There could be better in app summaries for players to review evidence they went through
+- GPTing the evidence was fine but it produced too much per each doc still.
+
 ## Getting Started
 
 ### Prerequisites
@@ -25,37 +64,44 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 
 1. Clone the repository
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Copy `.env.example` to `.env` and configure:
+
    ```bash
    cp .env.example .env
    ```
 
 4. Update `.env` with your credentials:
+
    - `DATABASE_URL`: Your PostgreSQL connection string
    - `GM_PASSWORD`: Choose a secure GM password
    - `SESSION_SECRET`: Generate a secure random string (32+ chars)
    - `BLOB_READ_WRITE_TOKEN`: Your Vercel Blob token (optional)
 
 5. Generate Prisma client:
+
    ```bash
    npx prisma generate
    ```
 
 6. Run database migrations:
+
    ```bash
    npx prisma migrate dev --name init
    ```
 
 7. Seed the database with test data:
+
    ```bash
    npm run db:seed
    ```
 
 8. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -100,34 +146,40 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 ## Development Status
 
 **Phase 1.1 Complete** ✓
+
 - Next.js 14 project scaffolded
 - Tailwind CSS configured
 - Prisma schema initialized
 - Database connection configured
 
 **Phase 1.2 Complete** ✓
+
 - Player login page and authentication
 - Session management with JWT
 - Protected routes middleware
 - Player dashboard with connection confirmation
 
 **Phase 1.3 Complete** ✓
+
 - GM login page and authentication
 - GM dashboard with navigation
 - Placeholder pages for clue and player management
 - Logout functionality
 
 **Phase 2 Complete** ✓
+
 - Clue visibility API with filtering
 - ClueCard component with HOI4-style design
 - Auto-refresh polling (15s)
 
 **Phase 3 Complete** ✓
+
 - GM clue list view (grouped by phase)
 - Create/edit clue forms
 - Clue CRUD APIs
 
 **Phase 4 Complete** ✓
+
 - Release/retract individual clues
 - Phase-wide release (bulk)
 - Randomize assignments (1 or 50%)
@@ -135,6 +187,7 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 - Live stats on GM dashboard
 
 **Phase 5 Complete** ✓
+
 - Player list view with stats
 - Add/edit/delete players
 - Inline editing
@@ -147,9 +200,10 @@ A web application enabling a Game Master to selectively reveal evidence/clues to
 After running `npm run db:seed`:
 
 **Players:**
+
 - Test players will be created with the `[EXAMPLE]` prefix
 - Use the migration scripts to populate with actual game players
-- Remove example players before production deployment: `npx tsx scripts/remove-example-players.ts`
+- Remove example players before production deployment: `npx tsx scripts/cleanup/remove-example-players.ts`
 
 **GM:** Password set via `GM_PASSWORD` environment variable
 
@@ -164,22 +218,26 @@ The application is deployed on Vercel at: **https://disclosure-alluminate.vercel
 #### Initial Setup
 
 1. **Install Vercel CLI**:
+
    ```bash
    npm i -g vercel
    ```
 
 2. **Login to Vercel**:
+
    ```bash
    vercel login
    ```
 
 3. **Create Vercel Postgres Database**:
+
    - Go to your Vercel project dashboard
    - Navigate to the **Storage** tab
    - Create a new **Postgres Database**
    - This automatically sets `DATABASE_URL`, `POSTGRES_URL`, and `PRISMA_DATABASE_URL`
 
 4. **Set Environment Variables**:
+
    ```bash
    vercel env add GM_PASSWORD production
    vercel env add SESSION_SECRET production
@@ -187,6 +245,7 @@ The application is deployed on Vercel at: **https://disclosure-alluminate.vercel
    ```
 
 5. **Deploy**:
+
    ```bash
    vercel --prod
    ```
@@ -200,6 +259,7 @@ The application is deployed on Vercel at: **https://disclosure-alluminate.vercel
 #### Subsequent Deployments
 
 Simply push changes and deploy:
+
 ```bash
 git add .
 git commit -m "Your commit message"
@@ -207,6 +267,7 @@ vercel --prod
 ```
 
 If schema changes are made, sync the database:
+
 ```bash
 DATABASE_URL=$(grep POSTGRES_URL .env.production | cut -d '=' -f2- | tr -d '"') npx prisma db push
 ```
@@ -216,11 +277,13 @@ DATABASE_URL=$(grep POSTGRES_URL .env.production | cut -d '=' -f2- | tr -d '"') 
 ### Naming Conventions
 
 **Player Names**:
+
 - Production player names should NEVER have an `[EXAMPLE]` prefix
 - Example players are for testing only and should be removed before deployment
 - Player names must match exactly (case-sensitive) across all imports and scripts
 
 **Database Enums**:
+
 - **Country**: `US`, `RUSSIA`, `CHINA`
 - **Demeanor**: `ANTI_DISCLOSURE`, `AGNOSTIC`, `PRO_DISCLOSURE`
 - **Archetype**: `MILITARY_DEFENSE_CONTRACTOR`, `HIGH_RANKING_POLITICIAN`, `INTEL_OLIGARCH`, `JOURNALIST_MEDIA`, `HIGH_RANKING_SCIENTIST`
@@ -231,17 +294,17 @@ Located in `/scripts/`:
 
 ```bash
 # Migrate player attributes (country, demeanor, archetype)
-npx tsx scripts/migrate-players.ts
+npx tsx scripts/migration/migrate-players.ts
 
 # Migrate clue targeting system
-npx tsx scripts/migrate-clues.ts
+npx tsx scripts/migration/migrate-clues.ts
 
 # Remove example/test players
-npx tsx scripts/remove-example-players.ts
+npx tsx scripts/cleanup/remove-example-players.ts
 
 # Check migration status
-npx tsx scripts/check-db-status.ts
-npx tsx scripts/check-unmigrated.ts
+npx tsx scripts/database/check-db-status.ts
+npx tsx scripts/database/check-unmigrated.ts
 ```
 
 ### Evidence Import
@@ -250,10 +313,11 @@ Import evidence files from markdown format:
 
 ```bash
 # Import evidence from /evidence directory
-npx tsx scripts/import-evidence.ts
+npx tsx scripts/import-export/import-evidence.ts
 ```
 
 **Evidence File Naming Convention**:
+
 - Files should be in markdown format (`.md`)
 - Place in `/evidence/` directory
 - See `/evidence/EVIDENCE_FORMAT.md` for structure requirements
@@ -267,6 +331,7 @@ Import character sheets from Notion HTML exports into the database.
 **CRITICAL**: HTML files must be named **exactly** as the player's login name.
 
 Examples:
+
 - If the player login name is `Kassidy Neville`, the file must be `Kassidy Neville.html`
 - If the player login name is `Sarah Fierce`, the file must be `Sarah Fierce.html`
 
@@ -275,26 +340,31 @@ The filename (without `.html`) must match the `name` field in the Player table e
 ### Step-by-Step Instructions
 
 1. **Export from Notion**
+
    - Open the character sheet page in Notion
    - Click `...` (More actions) → `Export`
    - Select format: `HTML`
    - Click `Export`
 
 2. **Name the file correctly**
+
    - Find the player's login name in the GM Players panel or database
    - Rename the exported HTML file to match exactly: `[PLAYER_NAME].html`
    - Example: `[EXAMPLE] Alice Johnson.html`
 
 3. **Place in /characters directory**
+
    - Move or copy the HTML file to `/characters/` folder in the project root
    - Repeat for all character sheets
 
 4. **Run the import**
+
    ```bash
    npm run sync:characters
    ```
 
 5. **Review the output**
+
    ```
    Found 12 HTML files
 
@@ -336,13 +406,13 @@ npm run db:seed                          # Seed test data
 
 # Imports
 npm run sync:characters                  # Import character sheets from HTML
-npx tsx scripts/import-evidence.ts       # Import evidence from markdown
+npx tsx scripts/import-export/import-evidence.ts       # Import evidence from markdown
 
 # Migrations
-npx tsx scripts/migrate-players.ts       # Migrate player attributes
-npx tsx scripts/migrate-clues.ts         # Migrate clue targeting
-npx tsx scripts/remove-example-players.ts # Remove example players
-npx tsx scripts/check-db-status.ts       # Check migration status
+npx tsx scripts/migration/migrate-players.ts       # Migrate player attributes
+npx tsx scripts/migration/migrate-clues.ts         # Migrate clue targeting
+npx tsx scripts/cleanup/remove-example-players.ts # Remove example players
+npx tsx scripts/database/check-db-status.ts       # Check migration status
 ```
 
 ## Routes

@@ -40,3 +40,6 @@ next-env.d.ts
 /characters/*.html
 /characters/*.pdf
 /characters/
+/characters/CHARACTER_CODES.md
+
+

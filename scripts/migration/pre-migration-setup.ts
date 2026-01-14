@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Pre-migration setup script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+import { prisma } from "../lib/db";
 
 async function main() {
   console.log("🔧 Setting up database for migration...\n");
@@ -60,8 +61,8 @@ async function main() {
 
     console.log("✅ Pre-migration setup complete!");
     console.log("\n📝 Next steps:");
-    console.log("1. Run: npx tsx scripts/migrate-players.ts");
-    console.log("2. Run: npx tsx scripts/migrate-clues.ts");
+    console.log("1. Run: npx tsx scripts/migration/migrate-players.ts");
+    console.log("2. Run: npx tsx scripts/migration/migrate-clues.ts");
     console.log("3. Run: npx tsx scripts/post-migration-cleanup.ts");
   } catch (error) {
     console.error("❌ Error during pre-migration setup:", error);

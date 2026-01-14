@@ -1,6 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Migrate clues script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+// - Fixed: SQL injection vulnerabilities by using Prisma client methods instead of raw SQL
+import { prisma } from "../lib/db";
 
 // Map old archetype enum values to new ones
 const ARCHETYPE_MAPPING: Record<string, string> = {
@@ -53,23 +55,16 @@ async function main() {
         targetPlayer = clue.targetValue;
       }
 
-      // Build SQL with proper casting
-      const countrySQL = targetCountry ? `'${targetCountry}'::"Country"` : "NULL";
-      const archetypeSQL = targetArchetype
-        ? `'${targetArchetype}'::"Archetype"`
-        : "NULL";
-      const demeanorSQL = targetDemeanor ? `'${targetDemeanor}'::"Demeanor"` : "NULL";
-      const playerSQL = targetPlayer ? `'${targetPlayer.replace(/'/g, "''")}'` : "NULL";
-
-      await prisma.$executeRawUnsafe(`
-        UPDATE "Clue"
-        SET
-          "targetCountry" = ${countrySQL},
-          "targetArchetype" = ${archetypeSQL},
-          "targetDemeanor" = ${demeanorSQL},
-          "targetPlayer" = ${playerSQL}
-        WHERE "id" = '${clue.id}'
-      `);
+      // Update using Prisma client with proper type casting
+      await prisma.clue.update({
+        where: { id: clue.id },
+        data: {
+          targetCountry: targetCountry as any,
+          targetArchetypes: targetArchetype ? [targetArchetype as any] : [],
+          targetDemeanor: targetDemeanor as any,
+          targetPlayer: targetPlayer,
+        },
+      });
 
       const targetDesc =
         clue.targetType === "all"

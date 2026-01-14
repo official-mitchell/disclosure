@@ -1,3 +1,6 @@
+// GM Clues Page
+// Changes:
+// - 2024-12-XX: Fixed Phase 0 clues not displaying - now includes Phase 0 and dynamically shows all phases that have clues
 import { redirect } from 'next/navigation';
 import { getGMSession } from '@/lib/auth';
 import { prisma } from '@/lib/db';
@@ -23,6 +26,11 @@ export default async function GMCluesPage() {
     acc[clue.phase].push(clue);
     return acc;
   }, {} as Record<number, typeof clues>);
+
+  // Get all phases that have clues, sorted numerically
+  const phasesWithClues = Object.keys(cluesByPhase)
+    .map(Number)
+    .sort((a, b) => a - b);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
@@ -81,7 +89,7 @@ export default async function GMCluesPage() {
           </div>
         ) : (
           <div>
-            {[1, 2, 3, 4, 5].map((phase) => {
+            {phasesWithClues.map((phase) => {
               const phaseClues = cluesByPhase[phase] || [];
               if (phaseClues.length === 0) return null;
 

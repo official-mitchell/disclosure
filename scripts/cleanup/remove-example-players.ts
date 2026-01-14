@@ -1,6 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Remove example players script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+// - Fixed: SQL injection vulnerability by using parameterized query instead of string interpolation
+import { prisma } from "../lib/db";
 
 async function main() {
   console.log("🗑️  Removing example players...\n");
@@ -24,10 +26,9 @@ async function main() {
 
   for (const player of examplePlayers) {
     try {
-      await prisma.$executeRawUnsafe(`
-        DELETE FROM "Player"
-        WHERE "id" = '${player.id}'
-      `);
+      await prisma.player.delete({
+        where: { id: player.id },
+      });
 
       console.log(`✓ Deleted: ${player.name}`);
       deleted++;

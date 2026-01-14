@@ -1,6 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Migrate example players script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+// - Fixed: SQL injection vulnerabilities by using Prisma client methods instead of raw SQL
+import { prisma } from "../lib/db";
 
 // Map old archetype enum values to new ones
 const ARCHETYPE_MAPPING: Record<string, string> = {
@@ -48,11 +50,12 @@ async function main() {
         continue;
       }
 
-      await prisma.$executeRawUnsafe(`
-        UPDATE "Player"
-        SET "archetype" = '${newArchetype}'::"Archetype"
-        WHERE "id" = '${player.id}'
-      `);
+      await prisma.player.update({
+        where: { id: player.id },
+        data: {
+          archetype: newArchetype as any,
+        },
+      });
 
       console.log(`✓ Updated ${player.name}: ${player.archetype} → ${newArchetype}`);
       updated++;

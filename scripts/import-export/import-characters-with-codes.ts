@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { parseCharacterHtml } from "./parse-character-html";
+import { parseCharacterHtml } from "../characters/parse-character-html";
 import { prisma } from "../lib/db";
 
 const CHARACTERS_DIR = path.join(process.cwd(), "characters");

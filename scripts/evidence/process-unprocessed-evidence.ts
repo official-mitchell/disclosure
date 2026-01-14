@@ -371,7 +371,7 @@ async function main() {
   console.log(`\n📝 Next steps:`);
   console.log(`1. Review the generated files in ${EVIDENCE_DIR}`);
   console.log(`2. Adjust recipients/targeting if needed`);
-  console.log(`3. Run: npx tsx scripts/import-evidence.ts`);
+  console.log(`3. Run: npx tsx scripts/import-export/import-evidence.ts`);
   console.log(`4. Consider renaming or deleting ${path.basename(UNPROCESSED_FILE)}`);
 }
 

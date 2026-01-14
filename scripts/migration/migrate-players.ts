@@ -1,8 +1,10 @@
+// Migrate players script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+// - Fixed: SQL injection vulnerabilities by using parameterized queries
 import fs from "fs";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/db";
 
 interface PlayerMapping {
   name: string;
@@ -156,15 +158,15 @@ async function main() {
         continue;
       }
 
-      // Update using raw SQL since we're migrating between enum values
-      await prisma.$executeRawUnsafe(`
-        UPDATE "Player"
-        SET
-          "country" = '${mapping.country}'::"Country",
-          "demeanor" = '${mapping.demeanor}'::"Demeanor",
-          "archetype" = '${mapping.archetype}'::"Archetype"
-        WHERE "id" = '${player.id}'
-      `);
+      // Update using Prisma client with proper type casting
+      await prisma.player.update({
+        where: { id: player.id },
+        data: {
+          country: mapping.country,
+          demeanor: mapping.demeanor,
+          archetype: mapping.archetype,
+        },
+      });
 
       console.log(
         `✓ Updated ${player.name}: ${mapping.country} ${mapping.demeanor} ${mapping.archetype}`

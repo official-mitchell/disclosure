@@ -20,18 +20,23 @@ export async function POST(
     }
 
     // Get eligible players based on target
-    let players = await prisma.player.findMany();
-
+    // Build query conditions based on targeting criteria
+    const whereConditions: any = {};
+    
     if (clue.targetCountry) {
-      players = players.filter(p => p.country === clue.targetCountry);
+      whereConditions.country = clue.targetCountry;
     } else if (clue.targetArchetypes && clue.targetArchetypes.length > 0) {
-      players = players.filter(p => clue.targetArchetypes.includes(p.archetype));
+      whereConditions.archetype = { in: clue.targetArchetypes };
     } else if (clue.targetDemeanor) {
-      players = players.filter(p => p.demeanor === clue.targetDemeanor);
+      whereConditions.demeanor = clue.targetDemeanor;
     } else if (clue.targetPlayer) {
-      players = players.filter(p => p.id === clue.targetPlayer);
+      whereConditions.id = clue.targetPlayer;
     }
-    // If all target fields are null/empty, all players are eligible
+    // If all target fields are null/empty, whereConditions remains empty and all players are eligible
+
+    const players = await prisma.player.findMany({
+      where: Object.keys(whereConditions).length > 0 ? whereConditions : undefined,
+    });
 
     // Randomize selection
     const shuffled = players.sort(() => 0.5 - Math.random());

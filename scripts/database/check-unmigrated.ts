@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Check unmigrated players script
+// Changes:
+// - Updated: Use singleton prisma instance from lib/db instead of creating new PrismaClient
+import { prisma } from "../lib/db";
 
 async function main() {
   // Get all players with raw query to see actual enum values
